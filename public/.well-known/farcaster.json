@@ -20,16 +20,16 @@
     "imageUrl": "https://basedaily-miniapp.vercel.app/image.png",
 
     "subtitle": "Be loyal to BASE",
-    "description": "Daily check-ins on Base to grow your streak, earn 0xtxn rewards, unlock badges and tip the creator",
+    "description": "Daily check-ins on Base to grow your streak, earn oxtxn rewards, unlock badges and tip the creator",
     "screenshotUrls": [
       "https://basedaily-miniapp.vercel.app/screenshot.png"
     ],
     "primaryCategory": "finance",
-    "tags": ["streaks", "rewards", "loyalty", "base", "0xtxn"],
+    "tags": ["streaks", "rewards", "loyalty", "base", "oxtxn"],
     "heroImageUrl": "https://basedaily-miniapp.vercel.app/hero.png",
     "tagline": "Check in, earn, repeat.",
     "ogTitle": "BaseDaily streaks on Base",
-    "ogDescription": "Check in daily on Base to build streaks, earn 0xtxn rewards and unlock loyalty badges",
+    "ogDescription": "Check in daily on Base to build streaks, earn oxtxn rewards and unlock loyalty badges",
     "ogImageUrl": "https://basedaily-miniapp.vercel.app/og.png",
     "noindex": true
   }
