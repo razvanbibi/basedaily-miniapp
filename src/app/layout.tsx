@@ -1,10 +1,16 @@
 import "@fontsource/geist";        // Regular Geist font
 import "@fontsource/geist-mono";   // Geist Mono font
 import "./globals.css";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "BaseDaily",
-  description: "Daily check-ins, streak rewards, badges and leaderboards on Base.",
+  description:
+    "Daily check-ins, streak rewards, badges and leaderboards on Base.",
+  other: {
+    // 🔵 Base MiniApp এর জন্য দরকারি মেটা ট্যাগ
+    "base:app_id": "basedaily",
+  },
 };
 
 export default function RootLayout({
