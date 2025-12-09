@@ -10,6 +10,8 @@ import {
 
 import { ethers } from "ethers";
 
+import { sdk } from "@farcaster/miniapp-sdk";
+
 
 type Status = string | null;
 
@@ -121,6 +123,23 @@ export default function HomePage() {
       eth.removeListener("chainChanged", handleChainChanged);
     };
   }, []);
+
+  // MiniApp SDK → Base কে জানায় যে অ্যাপ রেডি
+  useEffect(() => {
+    async function markReady() {
+      try {
+        await sdk.actions.ready();
+      } catch (e) {
+        console.error("Miniapp ready() failed", e);
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      void markReady();
+    }
+  }, []);
+
+
 
   // account চেঞ্জ হলে অনচেইন ডাটা + আজকের check-in স্ট্যাটাস লোড
   useEffect(() => {
