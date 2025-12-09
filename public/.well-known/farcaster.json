@@ -1,0 +1,32 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "baseBuilder": {
+    "ownerAddress": "0xb539EdcC1Bf7d07Cc5EFe9f7d9D994Adce31fde0"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "BaseDaily",
+    "homeUrl": "https://basedaily-miniapp.vercel.app",
+    "iconUrl": "https://basedaily-miniapp.vercel.app/icon.png",
+    "splashImageUrl": "https://basedaily-miniapp.vercel.app/icon.png",
+    "splashBackgroundColor": "#020617",
+    "webhookUrl": "",
+    "subtitle": "Be loyal to BASE",
+    "description": "Daily check-ins on Base to grow your streak, earn 0xtxn rewards, unlock badges, and tip the creator.",
+    "screenshotUrls": [
+      "https://basedaily-miniapp.vercel.app/screenshot.png"
+    ],
+    "primaryCategory": "rewards",
+    "tags": ["streaks", "rewards", "base", "0xtxn"],
+    "heroImageUrl": "https://basedaily-miniapp.vercel.app/hero.png",
+    "tagline": "Check in, earn, repeat.",
+    "ogTitle": "BaseDaily – Daily streaks on Base",
+    "ogDescription": "BaseDaily lets you check in every day on Base to build streaks, earn 0xtxn, and unlock onchain loyalty badges.",
+    "ogImageUrl": "https://basedaily-miniapp.vercel.app/og.png",
+    "noindex": true
+  }
+}
