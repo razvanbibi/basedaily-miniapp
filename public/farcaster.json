@@ -1,0 +1,17 @@
+{
+  "id": "basedaily",
+  "name": "BaseDaily",
+  "description": "Daily check-ins, streak rewards, badges and leaderboards on Base.",
+  "icon": "https://basedaily-miniapp.vercel.app/icon.png",
+  "homepage": "https://basedaily-miniapp.vercel.app",
+  "permissions": {
+    "wallet": "required",
+    "chain": ["base"]
+  },
+  "entrypoints": [
+    {
+      "path": "/",
+      "name": "Home"
+    }
+  ]
+}
