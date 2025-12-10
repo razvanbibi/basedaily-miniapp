@@ -78,6 +78,61 @@ export default function HomePage() {
 
   const [topSupporters, setTopSupporters] = useState<Supporter[]>([]);
 
+  // MiniApp onboarding overlay দেখা হয়েছে কিনা
+  const [showOnboarding, setShowOnboarding] = useState(false);
+    // Theme (day / night)
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+
+  // MiniApp SDK → Base-কে জানানো যে app ready
+  useEffect(() => {
+    async function markReady() {
+      try {
+        await sdk.actions.ready();
+      } catch (e) {
+        console.error("Miniapp ready() failed", e);
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      void markReady();
+    }
+  }, []);
+
+  // একবারই ছোট onboarding দেখাবে
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const seen = window.localStorage.getItem("basedaily_onboarding_v1");
+    if (!seen) {
+      setShowOnboarding(true);
+      window.localStorage.setItem("basedaily_onboarding_v1", "1");
+    }
+  }, []);
+
+  const closeOnboarding = () => {
+    setShowOnboarding(false);
+  };
+
+
+
+    // প্রথমবার লোড হলে থিম পড়ে আনা
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("basedaily_theme");
+    if (stored === "light") {
+      setIsDarkMode(false);
+    } else {
+      setIsDarkMode(true);
+    }
+  }, []);
+
+  // থিম পরিবর্তন হলে localStorage এ সেভ
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("basedaily_theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
+
 
   useEffect(() => {
     if (typeof window !== "undefined" && (window as any).ethereum) {
@@ -573,27 +628,30 @@ export default function HomePage() {
 
 
   function handleShare() {
-    const APP_URL = "https://base.app"; // TODO: later replace with real BaseDaily link
+    const APP_URL = "https://basedaily-miniapp.vercel.app/";
+
     const text =
-      "I'm using BaseDaily to check in on Base and earn 0xtxn rewards and badges. Join me on Base 🟦\n\n" +
+      "Checking in daily on Base using BaseDaily 🟦\n" +
+      "Growing my streak & earning 0xtxn rewards.\n\n" +
       APP_URL;
 
+    // If device supports native share
     if (navigator.share) {
       navigator
         .share({
-          title: "BaseDaily",
+          title: "BaseDaily — Check-in on Base",
           text,
           url: APP_URL,
         })
-        .catch(() => {
-          // user cancelled
-        });
+        .catch(() => { });
     } else {
+      // Fallback → Twitter / X share
       const tweetUrl =
         "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
       window.open(tweetUrl, "_blank");
     }
   }
+
 
 
   async function loadDonationLeaderboard() {
@@ -671,10 +729,19 @@ export default function HomePage() {
   const badgeProgress =
     streakNumber <= 0 ? 0 : Math.min(streakNumber / 100, 1);
 
+        const mainBgClass = isDarkMode
+      ? "bg-slate-950 text-slate-50"
+      : "bg-sky-50 text-slate-900";
+
+    const gradientClass = isDarkMode
+      ? "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#020617_55%)] opacity-70"
+      : "bg-[radial-gradient(circle_at_top,_#93c5fd_0,_#e0f2fe_55%)] opacity-60";
+
+
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden">
+          <main className={`min-h-screen ${mainBgClass} relative overflow-hidden`}>
       {/* subtle background gradient */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#020617_55%)] opacity-70" />
+              <div className={`pointer-events-none absolute inset-0 ${gradientClass}`} />
       <div className="relative mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
         {/* Header */}
         <header className="flex items-center justify-between mb-3">
@@ -1032,6 +1099,54 @@ export default function HomePage() {
         </footer>
       </div>
 
+      {/* Onboarding overlay */}
+      {showOnboarding && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div
+            className="
+    w-[90%] max-w-sm rounded-3xl
+    bg-slate-950/80 backdrop-blur-xl
+    border border-sky-400/50
+    shadow-[0_0_25px_rgba(56,189,248,0.45),0_0_60px_rgba(56,189,248,0.25)]
+    p-5 space-y-3
+    animate-[overlayFade_0.55s_ease-out]
+  "
+          >
+
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full overflow-hidden flex items-center justify-center">
+                <img
+                  src="/logo-0x.png"
+                  alt="0x logo"
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold">Welcome to BaseDaily</span>
+                <span className="text-[11px] text-slate-300">
+                  Check in every day on Base, grow your streak and earn 0xtxn rewards.
+                </span>
+              </div>
+            </div>
+
+            <ul className="text-[11px] text-slate-200 space-y-1 pl-4 list-disc">
+              <li>Tap <span className="font-semibold">Check-in</span> once per day to keep your streak alive.</li>
+              <li>Claim your <span className="font-semibold">0xtxn</span> rewards when the button turns pink.</li>
+              <li>Tip in Base USDC to climb the supporter leaderboard.</li>
+            </ul>
+
+            <button
+              onClick={closeOnboarding}
+              className="mt-2 w-full rounded-full bg-sky-500 text-xs font-semibold text-slate-950 py-2 hover:bg-sky-400 transition"
+            >
+              Got it, let&apos;s start
+            </button>
+          </div>
+        </div>
+      )}
+
+
+
       {/* Toast popup */}
       {toast && (
         <div className="pointer-events-none fixed top-6 left-0 right-0 flex justify-center z-40">
@@ -1101,22 +1216,56 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Neynar profile */}
-          <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-2.5 flex items-center gap-3">
-            <img
-              src={fcPfp || "/raihan-avatar.png"}
-              alt="User avatar"
-              className="h-10 w-10 rounded-full object-cover"
-            />
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-100">
-                {fcDisplayName || "Base user"}
-              </span>
-              <span className="text-[11px] text-slate-400">
-                @{fcUsername || "handle"}
-              </span>
+                      {/* Neynar profile + theme toggle */}
+            <div
+              className={`rounded-2xl px-3 py-2.5 flex items-center justify-between gap-3 border 
+              ${isDarkMode ? "bg-slate-950/60 border-white/5" : "bg-white/80 border-sky-100/60"}`}
+            >
+              <div className="flex items-center gap-3">
+                <img
+                  src={fcPfp || "/raihan-avatar.png"}
+                  alt="User avatar"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold">
+                    {fcDisplayName || "Base user"}
+                  </span>
+                  <span className="text-[11px] text-slate-400">
+                    @{fcUsername || "handle"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Theme toggle button */}
+              <button
+                type="button"
+                onClick={() => setIsDarkMode((prev) => !prev)}
+                aria-label="Toggle theme"
+                className={`relative inline-flex items-center justify-between w-14 h-7 rounded-full px-1 border text-[13px] select-none overflow-hidden
+                ${isDarkMode ? "bg-slate-900/90 border-slate-600" : "bg-sky-100 border-sky-300"}`}
+              >
+                <span
+                  className={`z-10 transition-opacity ${
+                    isDarkMode ? "opacity-100" : "opacity-40"
+                  }`}
+                >
+                  🌙
+                </span>
+                <span
+                  className={`z-10 transition-opacity ${
+                    isDarkMode ? "opacity-40" : "opacity-100"
+                  }`}
+                >
+                  ☀️
+                </span>
+                <span
+                  className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow-md transform transition-transform duration-200
+                  ${isDarkMode ? "translate-x-0" : "translate-x-7"}`}
+                />
+              </button>
             </div>
-          </div>
+
 
           {/* FID + Neynar score */}
           <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3 space-y-1 text-[11px] text-slate-300">
@@ -1285,6 +1434,8 @@ export default function HomePage() {
           </div>
         </div>
       )}
+
+
 
 
     </main>
