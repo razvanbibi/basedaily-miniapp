@@ -748,18 +748,28 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-full overflow-hidden flex items-center justify-center">
               <img
-                src="/logo-0x.png"
-                alt="0x logo"
-                className="h-full w-full object-contain"
-              />
+  src={isDarkMode ? "/logo-0x.png" : "/logo-0x-day.png"}
+  alt="0x logo"
+  className="h-full w-full object-contain transition-opacity duration-200"
+/>
+
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-base font-semibold tracking-tight text-sky-100">
-                BaseDaily
-              </span>
-              <span className="text-[11px] text-slate-300">
-                Be loyal to BASE 🟦 Earn rewards
-              </span>
+              <span
+  className={`text-base font-semibold tracking-tight ${
+    isDarkMode ? "text-sky-100" : "text-slate-900 drop-shadow-sm"
+  }`}
+>
+  BaseDaily
+</span>
+<span
+  className={`text-[11px] ${
+    isDarkMode ? "text-slate-300" : "text-slate-700"
+  }`}
+>
+  Be loyal to BASE 🟦 Earn rewards
+</span>
+
             </div>
           </div>
           <button
@@ -794,9 +804,16 @@ export default function HomePage() {
             {account ? (
               <div className="flex flex-col items-end gap-1">
                 <span className="text-[11px] text-slate-500">Wallet</span>
-                <span className="text-[11px] bg-slate-950/70 px-2 py-1 rounded-full shadow-inner shadow-slate-900">
-                  {account.slice(0, 4)}…{account.slice(-4)}
-                </span>
+                <span
+  className={`text-[11px] px-2 py-1 rounded-full shadow-inner ${
+    isDarkMode
+      ? "bg-slate-950/70 text-slate-100 shadow-slate-900"
+      : "bg-white text-slate-900 shadow-slate-300"
+  }`}
+>
+  {account.slice(0, 4)}…{account.slice(-4)}
+</span>
+
                 <span className="text-[11px] text-emerald-400 flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Base
@@ -1012,7 +1029,11 @@ export default function HomePage() {
                   min={0}
                   value={donationAmount}
                   onChange={(e) => setDonationAmount(e.target.value)}
-                  className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-sky-400"
+                  className={`flex-1 rounded-xl px-3 py-2 text-xs outline-none focus:border-sky-400 ${
+    isDarkMode
+      ? "bg-slate-900 border border-slate-700 text-slate-100"
+      : "bg-white border border-slate-300 text-slate-900"
+  }`}
                   placeholder="Custom amount"
                 />
                 <button
