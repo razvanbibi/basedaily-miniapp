@@ -726,8 +726,63 @@ export default function HomePage() {
   const totalLegendaryCount = totalLegendary ? Number(totalLegendary) : 0;
 
 
-  const badgeProgress =
-    streakNumber <= 0 ? 0 : Math.min(streakNumber / 100, 1);
+  function getBadgeProgress(streak: number) {
+  if (streak <= 0) return 0.05; // start একটু বামে
+
+  // milestones
+  const silver = 7;
+  const gold = 15;
+  const diamond = 30;
+  const legendary = 100;
+
+  // UI positions (MATCHING YOUR SKETCH)
+  const pStart = 0.05;
+  const pSilver = 0.28;
+  const pGold = 0.52;
+  const pDiamond = 0.74;
+  const pLegendary = 0.92;
+
+  // 0 → 7 (fast + visible)
+  if (streak < silver) {
+    return (
+      pStart +
+      (streak / silver) * (pSilver - pStart)
+    );
+  }
+
+  // 7 → 15
+  if (streak < gold) {
+    return (
+      pSilver +
+      ((streak - silver) / (gold - silver)) * (pGold - pSilver)
+    );
+  }
+
+  // 15 → 30 (slower)
+  if (streak < diamond) {
+    return (
+      pGold +
+      ((streak - gold) / (diamond - gold)) * (pDiamond - pGold)
+    );
+  }
+
+  // 30 → 100 (slowest)
+  if (streak < legendary) {
+    return (
+      pDiamond +
+      ((streak - diamond) / (legendary - diamond)) *
+        (pLegendary - pDiamond)
+    );
+  }
+
+  return pLegendary;
+}
+
+
+
+
+  const badgeProgress = getBadgeProgress(streakNumber);
+
 
         const mainBgClass = isDarkMode
       ? "bg-slate-950 text-slate-50"
@@ -935,27 +990,33 @@ export default function HomePage() {
 
           {/* progress path */}
           <div className="relative mt-1 mb-2">
-            <div className="h-[2px] w-full rounded-full bg-slate-700/80" />
-            <div className="absolute inset-x-0 -top-3 flex justify-between text-lg">
-              <span>🥈</span>
-              <span>🥇</span>
-              <span>💎</span>
-              <span>🌟</span>
-            </div>
-            <div
-              className="absolute -top-5 h-7 w-7 rounded-full ring-2 ring-sky-400 bg-slate-900 overflow-hidden shadow-lg shadow-sky-900 transition-all"
-              style={{
-                left: `${badgeProgress * 100}%`,
-                transform: "translateX(-50%)",
-              }}
-            >
-              <img
-                src={fcPfp || "/avatar.png"}
-                alt="User avatar"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
+  {/* base line */}
+  <div className="h-[2px] w-full rounded-full bg-slate-700/80" />
+
+  {/* badge icons – SKETCH BASED POSITIONS */}
+  <div className="absolute inset-0 -top-3 text-lg">
+    <span className="absolute left-[28%] -translate-x-1/2">🥈</span>
+    <span className="absolute left-[52%] -translate-x-1/2">🥇</span>
+    <span className="absolute left-[74%] -translate-x-1/2">💎</span>
+    <span className="absolute left-[92%] -translate-x-1/2">🌟</span>
+  </div>
+
+  {/* avatar progress */}
+  <div
+    className="absolute -top-5 h-7 w-7 rounded-full ring-2 ring-sky-400 bg-slate-900 overflow-hidden shadow-lg shadow-sky-900 transition-all"
+    style={{
+      left: `${badgeProgress * 100}%`,
+      transform: "translateX(-50%)",
+    }}
+  >
+    <img
+      src={fcPfp || "/avatar.png"}
+      alt="User avatar"
+      className="h-full w-full object-cover"
+    />
+  </div>
+</div>
+
 
           <p className="text-[11px] text-slate-500">
             As your streak grows, your avatar moves along the badge path. Silver,
