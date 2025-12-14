@@ -8,6 +8,7 @@ import {
   formatToken,
 } from "@/lib/contract";
 
+
 import { ethers } from "ethers";
 
 import { sdk } from "@farcaster/miniapp-sdk";
@@ -80,7 +81,7 @@ export default function HomePage() {
 
   // MiniApp onboarding overlay দেখা হয়েছে কিনা
   const [showOnboarding, setShowOnboarding] = useState(false);
-    // Theme (day / night)
+  // Theme (day / night)
   const [isDarkMode, setIsDarkMode] = useState(true);
 
 
@@ -116,7 +117,7 @@ export default function HomePage() {
 
 
 
-    // প্রথমবার লোড হলে থিম পড়ে আনা
+  // প্রথমবার লোড হলে থিম পড়ে আনা
   useEffect(() => {
     if (typeof window === "undefined") return;
     const stored = window.localStorage.getItem("basedaily_theme");
@@ -427,6 +428,8 @@ export default function HomePage() {
     }
   }
 
+
+
   async function handleCheckIn() {
     try {
       if (!account) {
@@ -727,56 +730,56 @@ export default function HomePage() {
 
 
   function getBadgeProgress(streak: number) {
-  if (streak <= 0) return 0.05; // start একটু বামে
+    if (streak <= 0) return 0.05; // start একটু বামে
 
-  // milestones
-  const silver = 7;
-  const gold = 15;
-  const diamond = 30;
-  const legendary = 100;
+    // milestones
+    const silver = 7;
+    const gold = 15;
+    const diamond = 30;
+    const legendary = 100;
 
-  // UI positions (MATCHING YOUR SKETCH)
-  const pStart = 0.05;
-  const pSilver = 0.28;
-  const pGold = 0.52;
-  const pDiamond = 0.74;
-  const pLegendary = 0.92;
+    // UI positions (MATCHING YOUR SKETCH)
+    const pStart = 0.05;
+    const pSilver = 0.28;
+    const pGold = 0.52;
+    const pDiamond = 0.74;
+    const pLegendary = 0.92;
 
-  // 0 → 7 (fast + visible)
-  if (streak < silver) {
-    return (
-      pStart +
-      (streak / silver) * (pSilver - pStart)
-    );
-  }
+    // 0 → 7 (fast + visible)
+    if (streak < silver) {
+      return (
+        pStart +
+        (streak / silver) * (pSilver - pStart)
+      );
+    }
 
-  // 7 → 15
-  if (streak < gold) {
-    return (
-      pSilver +
-      ((streak - silver) / (gold - silver)) * (pGold - pSilver)
-    );
-  }
+    // 7 → 15
+    if (streak < gold) {
+      return (
+        pSilver +
+        ((streak - silver) / (gold - silver)) * (pGold - pSilver)
+      );
+    }
 
-  // 15 → 30 (slower)
-  if (streak < diamond) {
-    return (
-      pGold +
-      ((streak - gold) / (diamond - gold)) * (pDiamond - pGold)
-    );
-  }
+    // 15 → 30 (slower)
+    if (streak < diamond) {
+      return (
+        pGold +
+        ((streak - gold) / (diamond - gold)) * (pDiamond - pGold)
+      );
+    }
 
-  // 30 → 100 (slowest)
-  if (streak < legendary) {
-    return (
-      pDiamond +
-      ((streak - diamond) / (legendary - diamond)) *
+    // 30 → 100 (slowest)
+    if (streak < legendary) {
+      return (
+        pDiamond +
+        ((streak - diamond) / (legendary - diamond)) *
         (pLegendary - pDiamond)
-    );
-  }
+      );
+    }
 
-  return pLegendary;
-}
+    return pLegendary;
+  }
 
 
 
@@ -784,46 +787,44 @@ export default function HomePage() {
   const badgeProgress = getBadgeProgress(streakNumber);
 
 
-        const mainBgClass = isDarkMode
-      ? "bg-slate-950 text-slate-50"
-      : "bg-sky-50 text-slate-900";
+  const mainBgClass = isDarkMode
+    ? "bg-slate-950 text-slate-50"
+    : "bg-sky-50 text-slate-900";
 
-    const gradientClass = isDarkMode
-      ? "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#020617_55%)] opacity-70"
-      : "bg-[radial-gradient(circle_at_top,_#93c5fd_0,_#e0f2fe_55%)] opacity-60";
+  const gradientClass = isDarkMode
+    ? "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#020617_55%)] opacity-70"
+    : "bg-[radial-gradient(circle_at_top,_#93c5fd_0,_#e0f2fe_55%)] opacity-60";
 
 
   return (
-          <main className={`min-h-screen ${mainBgClass} relative overflow-hidden`}>
+    <main className={`min-h-screen ${mainBgClass} relative overflow-hidden`}>
       {/* subtle background gradient */}
-              <div className={`pointer-events-none absolute inset-0 ${gradientClass}`} />
+      <div className={`pointer-events-none absolute inset-0 ${gradientClass}`} />
       <div className="relative mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
         {/* Header */}
         <header className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-full overflow-hidden flex items-center justify-center">
               <img
-  src={isDarkMode ? "/logo-0x.png" : "/logo-0x-day.png"}
-  alt="0x logo"
-  className="h-full w-full object-contain transition-opacity duration-200"
-/>
+                src={isDarkMode ? "/logo-0x.png" : "/logo-0x-day.png"}
+                alt="0x logo"
+                className="h-full w-full object-contain transition-opacity duration-200"
+              />
 
             </div>
             <div className="flex flex-col leading-tight">
               <span
-  className={`text-base font-semibold tracking-tight ${
-    isDarkMode ? "text-sky-100" : "text-slate-900 drop-shadow-sm"
-  }`}
->
-  BaseDaily
-</span>
-<span
-  className={`text-[11px] ${
-    isDarkMode ? "text-slate-300" : "text-slate-700"
-  }`}
->
-  Be loyal to BASE 🟦 Earn rewards
-</span>
+                className={`text-base font-semibold tracking-tight ${isDarkMode ? "text-sky-100" : "text-slate-900 drop-shadow-sm"
+                  }`}
+              >
+                BaseDaily
+              </span>
+              <span
+                className={`text-[11px] ${isDarkMode ? "text-slate-300" : "text-slate-700"
+                  }`}
+              >
+                Be loyal to BASE 🟦 Earn rewards
+              </span>
 
             </div>
           </div>
@@ -860,14 +861,13 @@ export default function HomePage() {
               <div className="flex flex-col items-end gap-1">
                 <span className="text-[11px] text-slate-500">Wallet</span>
                 <span
-  className={`text-[11px] px-2 py-1 rounded-full shadow-inner ${
-    isDarkMode
-      ? "bg-slate-950/70 text-slate-100 shadow-slate-900"
-      : "bg-white text-slate-900 shadow-slate-300"
-  }`}
->
-  {account.slice(0, 4)}…{account.slice(-4)}
-</span>
+                  className={`text-[11px] px-2 py-1 rounded-full shadow-inner ${isDarkMode
+                    ? "bg-slate-950/70 text-slate-100 shadow-slate-900"
+                    : "bg-white text-slate-900 shadow-slate-300"
+                    }`}
+                >
+                  {account.slice(0, 4)}…{account.slice(-4)}
+                </span>
 
                 <span className="text-[11px] text-emerald-400 flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -990,32 +990,32 @@ export default function HomePage() {
 
           {/* progress path */}
           <div className="relative mt-1 mb-2">
-  {/* base line */}
-  <div className="h-[2px] w-full rounded-full bg-slate-700/80" />
+            {/* base line */}
+            <div className="h-[2px] w-full rounded-full bg-slate-700/80" />
 
-  {/* badge icons – SKETCH BASED POSITIONS */}
-  <div className="absolute inset-0 -top-3 text-lg">
-    <span className="absolute left-[28%] -translate-x-1/2">🥈</span>
-    <span className="absolute left-[52%] -translate-x-1/2">🥇</span>
-    <span className="absolute left-[74%] -translate-x-1/2">💎</span>
-    <span className="absolute left-[92%] -translate-x-1/2">🌟</span>
-  </div>
+            {/* badge icons – SKETCH BASED POSITIONS */}
+            <div className="absolute inset-0 -top-3 text-lg">
+              <span className="absolute left-[28%] -translate-x-1/2">🥈</span>
+              <span className="absolute left-[52%] -translate-x-1/2">🥇</span>
+              <span className="absolute left-[74%] -translate-x-1/2">💎</span>
+              <span className="absolute left-[92%] -translate-x-1/2">🌟</span>
+            </div>
 
-  {/* avatar progress */}
-  <div
-    className="absolute -top-5 h-7 w-7 rounded-full ring-2 ring-sky-400 bg-slate-900 overflow-hidden shadow-lg shadow-sky-900 transition-all"
-    style={{
-      left: `${badgeProgress * 100}%`,
-      transform: "translateX(-50%)",
-    }}
-  >
-    <img
-      src={fcPfp || "/avatar.png"}
-      alt="User avatar"
-      className="h-full w-full object-cover"
-    />
-  </div>
-</div>
+            {/* avatar progress */}
+            <div
+              className="absolute -top-5 h-7 w-7 rounded-full ring-2 ring-sky-400 bg-slate-900 overflow-hidden shadow-lg shadow-sky-900 transition-all"
+              style={{
+                left: `${badgeProgress * 100}%`,
+                transform: "translateX(-50%)",
+              }}
+            >
+              <img
+                src={fcPfp || "/avatar.png"}
+                alt="User avatar"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
 
 
           <p className="text-[11px] text-slate-500">
@@ -1090,11 +1090,10 @@ export default function HomePage() {
                   min={0}
                   value={donationAmount}
                   onChange={(e) => setDonationAmount(e.target.value)}
-                  className={`flex-1 rounded-xl px-3 py-2 text-xs outline-none focus:border-sky-400 ${
-    isDarkMode
-      ? "bg-slate-900 border border-slate-700 text-slate-100"
-      : "bg-white border border-slate-300 text-slate-900"
-  }`}
+                  className={`flex-1 rounded-xl px-3 py-2 text-xs outline-none focus:border-sky-400 ${isDarkMode
+                    ? "bg-slate-900 border border-slate-700 text-slate-100"
+                    : "bg-white border border-slate-300 text-slate-900"
+                    }`}
                   placeholder="Custom amount"
                 />
                 <button
@@ -1298,55 +1297,53 @@ export default function HomePage() {
             </button>
           </div>
 
-                      {/* Neynar profile + theme toggle */}
-            <div
-              className={`rounded-2xl px-3 py-2.5 flex items-center justify-between gap-3 border 
+          {/* Neynar profile + theme toggle */}
+          <div
+            className={`rounded-2xl px-3 py-2.5 flex items-center justify-between gap-3 border 
               ${isDarkMode ? "bg-slate-950/60 border-white/5" : "bg-white/80 border-sky-100/60"}`}
-            >
-              <div className="flex items-center gap-3">
-                <img
-                  src={fcPfp || "/raihan-avatar.png"}
-                  alt="User avatar"
-                  className="h-10 w-10 rounded-full object-cover"
-                />
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold">
-                    {fcDisplayName || "Base user"}
-                  </span>
-                  <span className="text-[11px] text-slate-400">
-                    @{fcUsername || "handle"}
-                  </span>
-                </div>
+          >
+            <div className="flex items-center gap-3">
+              <img
+                src={fcPfp || "/raihan-avatar.png"}
+                alt="User avatar"
+                className="h-10 w-10 rounded-full object-cover"
+              />
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold">
+                  {fcDisplayName || "Base user"}
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  @{fcUsername || "handle"}
+                </span>
               </div>
-
-              {/* Theme toggle button */}
-              <button
-                type="button"
-                onClick={() => setIsDarkMode((prev) => !prev)}
-                aria-label="Toggle theme"
-                className={`relative inline-flex items-center justify-between w-14 h-7 rounded-full px-1 border text-[13px] select-none overflow-hidden
-                ${isDarkMode ? "bg-slate-900/90 border-slate-600" : "bg-sky-100 border-sky-300"}`}
-              >
-                <span
-                  className={`z-10 transition-opacity ${
-                    isDarkMode ? "opacity-100" : "opacity-40"
-                  }`}
-                >
-                  🌙
-                </span>
-                <span
-                  className={`z-10 transition-opacity ${
-                    isDarkMode ? "opacity-40" : "opacity-100"
-                  }`}
-                >
-                  ☀️
-                </span>
-                <span
-                  className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow-md transform transition-transform duration-200
-                  ${isDarkMode ? "translate-x-0" : "translate-x-7"}`}
-                />
-              </button>
             </div>
+
+            {/* Theme toggle button */}
+            <button
+              type="button"
+              onClick={() => setIsDarkMode((prev) => !prev)}
+              aria-label="Toggle theme"
+              className={`relative inline-flex items-center justify-between w-14 h-7 rounded-full px-1 border text-[13px] select-none overflow-hidden
+                ${isDarkMode ? "bg-slate-900/90 border-slate-600" : "bg-sky-100 border-sky-300"}`}
+            >
+              <span
+                className={`z-10 transition-opacity ${isDarkMode ? "opacity-100" : "opacity-40"
+                  }`}
+              >
+                🌙
+              </span>
+              <span
+                className={`z-10 transition-opacity ${isDarkMode ? "opacity-40" : "opacity-100"
+                  }`}
+              >
+                ☀️
+              </span>
+              <span
+                className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow-md transform transition-transform duration-200
+                  ${isDarkMode ? "translate-x-0" : "translate-x-7"}`}
+              />
+            </button>
+          </div>
 
 
           {/* FID + Neynar score */}

@@ -3,6 +3,7 @@
 
 import { BrowserProvider, Contract, formatUnits } from "ethers";
 
+
 export const OXTXN_STREAK_CONTRACT =
   "0x9D028f81d30C366079882aBb7255Edba0d34Ea80" as const;
 
@@ -138,6 +139,10 @@ export const OXTXN_STREAK_ABI = [
 
 ] as const;
 
+
+
+
+
 // MetaMask আছে কিনা চেক
 export function getEthereum() {
   if (typeof window === "undefined") return null;
@@ -194,3 +199,6 @@ export function formatToken(amount: bigint): string {
     return amount.toString();
   }
 }
+
+
+
