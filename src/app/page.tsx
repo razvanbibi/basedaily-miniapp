@@ -629,30 +629,24 @@ export default function HomePage() {
   }
 
 
-  function handleShare() {
-    const APP_URL = "https://basedaily-miniapp.vercel.app/";
+  async function handleShare() {
+  const APP_URL = "https://basedaily-miniapp.vercel.app";
 
-    const text =
-      "Checking in daily on Base using BaseDaily 🟦\n" +
-      "Growing my streak & earning 0xtxn rewards.\n\n" +
-      APP_URL;
+  const text =
+    "🟦 BaseDaily — Be loyal to Base\n\n" +
+    "I’m checking in daily on Base, growing my streak and earning 0xtxn rewards.\n\n" +
+    "Join here 👇\n" +
+    APP_URL;
 
-    // If device supports native share
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "BaseDaily — Check-in on Base",
-          text,
-          url: APP_URL,
-        })
-        .catch(() => { });
-    } else {
-      // Fallback → Twitter / X share
-      const tweetUrl =
-        "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
-      window.open(tweetUrl, "_blank");
-    }
+  try {
+    await sdk.actions.composeCast({
+      text,
+    });
+  } catch (err) {
+    console.error("Share failed", err);
   }
+}
+
 
 
 
