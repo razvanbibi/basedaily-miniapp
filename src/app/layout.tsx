@@ -5,11 +5,29 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "BaseDaily",
-  description: "Daily check-ins, streak rewards, badges and leaderboards on Base.",
+  description: "Daily check-ins on Base to grow your streak and earn rewards",
   other: {
-    "base:app_id": "693871ce237206d0623c7a9f", 
+    "fc:miniapp": JSON.stringify({
+      version: "1",
+      imageUrl: "https://basedaily-miniapp.vercel.app/image.png", // 3:2 image
+      button: {
+        title: "Launch BaseDaily",
+        action: {
+          type: "launch_frame",
+          name: "BaseDaily",
+          url: "https://basedaily-miniapp.vercel.app",
+          splashImageUrl: "https://basedaily-miniapp.vercel.app/icon.png",
+          splashBackgroundColor: "#020617",
+        },
+      },
+    }),
+
+    "base:app_id": "693871ce237206d0623c7a9f",
+
   },
 };
+
+
 
 export default function RootLayout({
   children,

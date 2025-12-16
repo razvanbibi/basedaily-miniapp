@@ -13,7 +13,6 @@ import { ethers } from "ethers";
 
 import { sdk } from "@farcaster/miniapp-sdk";
 
-
 type Status = string | null;
 
 type Toast =
