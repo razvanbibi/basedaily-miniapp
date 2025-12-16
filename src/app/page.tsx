@@ -1430,11 +1430,27 @@ export default function HomePage() {
               <span>📒</span>
             </button>
             <button
-              onClick={handleShare}
-              className="hover:text-sky-400"
-            >
-              Share
-            </button>
+  onClick={handleShare}
+  className="
+    relative
+    px-3 py-1.5
+    rounded-full
+    text-[11px]
+    font-medium
+    text-sky-300
+    bg-sky-500/10
+    border border-sky-400/30
+    shadow-[0_0_12px_rgba(56,189,248,0.25)]
+    hover:text-sky-200
+    hover:bg-sky-400/20
+    hover:shadow-[0_0_18px_rgba(56,189,248,0.45)]
+    transition-all
+    duration-300
+  "
+>
+  Share
+</button>
+
           </div>
 
 
