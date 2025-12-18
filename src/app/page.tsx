@@ -630,22 +630,22 @@ export default function HomePage() {
 
 
   async function handleShare() {
-  const APP_URL = "https://basedaily-miniapp.vercel.app";
+    const APP_URL = "https://basedaily-miniapp.vercel.app";
 
-  const text =
-    "🟦 BaseDaily — Be loyal to Base\n\n" +
-    "I’m checking in daily on Base, growing my streak and earning 0xtxn rewards.\n\n" +
-    "Join here 👇\n" +
-    APP_URL;
+    const text =
+      "🟦 BaseDaily — Be loyal to Base\n\n" +
+      "I’m checking in daily on Base, growing my streak and earning 0xtxn rewards.\n\n" +
+      "Join here 👇\n" +
+      APP_URL;
 
-  try {
-    await sdk.actions.composeCast({
-      text,
-    });
-  } catch (err) {
-    console.error("Share failed", err);
+    try {
+      await sdk.actions.composeCast({
+        text,
+      });
+    } catch (err) {
+      console.error("Share failed", err);
+    }
   }
-}
 
 
 
@@ -1424,32 +1424,45 @@ export default function HomePage() {
           <div className="mt-auto flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
             <button
               onClick={() => setAboutOpen(true)}
-              className="hover:text-slate-100 flex items-center gap-1"
+              className="relative
+                 px-3 py-1.5
+                  rounded-full
+                    text-[11px]
+                      font-medium
+                        text-sky-300
+                          bg-sky-500/10
+                            border border-sky-400/30
+                              shadow-[0_0_12px_rgba(56,189,248,0.25)]
+                                hover:text-sky-200
+                                  hover:bg-sky-400/20
+                                    hover:shadow-[0_0_18px_rgba(56,189,248,0.45)]
+                                      transition-all
+                                        duration-300"
             >
               <span>About us</span>
               <span>📒</span>
             </button>
             <button
-  onClick={handleShare}
-  className="
-    relative
-    px-3 py-1.5
-    rounded-full
-    text-[11px]
-    font-medium
-    text-sky-300
-    bg-sky-500/10
-    border border-sky-400/30
-    shadow-[0_0_12px_rgba(56,189,248,0.25)]
-    hover:text-sky-200
-    hover:bg-sky-400/20
-    hover:shadow-[0_0_18px_rgba(56,189,248,0.45)]
-    transition-all
-    duration-300
-  "
->
-  Share
-</button>
+              onClick={handleShare}
+              className="
+                relative
+                 px-3 py-1.5
+                  rounded-full
+                    text-[11px]
+                      font-medium
+                        text-sky-300
+                          bg-sky-500/10
+                            border border-sky-400/30
+                              shadow-[0_0_12px_rgba(56,189,248,0.25)]
+                                hover:text-sky-200
+                                  hover:bg-sky-400/20
+                                    hover:shadow-[0_0_18px_rgba(56,189,248,0.45)]
+                                      transition-all
+                                        duration-300
+                                          "
+            >
+              Share
+            </button>
 
           </div>
 
@@ -1460,7 +1473,7 @@ export default function HomePage() {
               href="https://base.app/profile/0xb539EdcC1Bf7d07Cc5EFe9f7d9D994Adce31fde0"
               target="_blank"
               rel="noreferrer"
-              className="text-sky-400 hover:underline"
+              className="text-sky-500 hover:underline"
             >
               0xtxn
             </a>{" "}
