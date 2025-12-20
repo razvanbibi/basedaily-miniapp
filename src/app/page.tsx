@@ -78,6 +78,9 @@ export default function HomePage() {
 
   const [topSupporters, setTopSupporters] = useState<Supporter[]>([]);
 
+  const [taglineAnim, setTaglineAnim] = useState(true);
+
+
   // MiniApp onboarding overlay দেখা হয়েছে কিনা
   const [showOnboarding, setShowOnboarding] = useState(false);
   // Theme (day / night)
@@ -146,6 +149,25 @@ export default function HomePage() {
     const d = new Date();
     return `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`;
   }
+
+  function getTimeUntilTomorrowUTC() {
+  const now = new Date();
+  const tomorrow = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 1,
+      0, 0, 0
+    )
+  );
+  const diff = tomorrow.getTime() - now.getTime();
+
+  const hours = Math.floor(diff / 36e5);
+  const minutes = Math.floor((diff % 36e5) / 6e4);
+
+  return `${hours}h ${minutes}m`;
+}
+
 
   function getStorageKey(acc: string) {
     return `basedaily:checkin:${acc.toLowerCase()}`;
@@ -219,6 +241,21 @@ export default function HomePage() {
     void loadNeynarProfile(account);
   }, [account]);
 
+
+  useEffect(() => {
+    // initial animation already true
+
+    const interval = setInterval(() => {
+      setTaglineAnim(false);
+
+      // re-trigger animation
+      setTimeout(() => {
+        setTaglineAnim(true);
+      }, 50);
+    }, 6000); // 6 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
 
 
@@ -540,6 +577,23 @@ export default function HomePage() {
     }
   }
 
+
+  const rewardTier = getRewardTier(pendingTokens);
+
+
+  function getRewardTier(amount: bigint | null) {
+  if (!amount || amount === BigInt(0)) return "none";
+
+  // thresholds (tune later)
+  const small = BigInt(5) * BigInt(1e18);
+  const big = BigInt(50) * BigInt(1e18);
+
+  if (amount < small) return "low";
+  if (amount < big) return "mid";
+  return "big";
+}
+
+
   function handleSelectDonation(amount: number) {
     setDonationAmount(amount.toString());
   }
@@ -807,25 +861,35 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col leading-tight">
               <span
-                className={`text-base font-semibold tracking-tight ${isDarkMode ? "text-sky-100" : "text-slate-900 drop-shadow-sm"
+                className={`text-base font-semibold tracking-tight ${isDarkMode ? "text-sky-100" : "text-slate-900"
                   }`}
               >
                 BaseDaily
               </span>
+
               <span
-                className={`text-[11px] ${isDarkMode ? "text-slate-300" : "text-slate-700"
-                  }`}
+                className={`text-[11px] ${isDarkMode ? "text-slate-300" : "text-slate-600"
+                  } ${taglineAnim ? "animate-[fade-up_0.6s_ease-out]" : ""}`}
               >
+
                 Be loyal to BASE 🟦 Earn rewards
               </span>
-
             </div>
+
           </div>
           <button
             onClick={() => setDrawerOpen(true)}
-            className="h-9 w-9 inline-flex items-center justify-center rounded-xl bg-slate-900/90 shadow-lg shadow-black/40 hover:bg-slate-800 transition"
-            aria-label="Open profile"
+            className="
+    h-9 w-9 inline-flex items-center justify-center
+    rounded-xl bg-slate-900/90
+    shadow-lg shadow-black/40
+    transition
+    hover:scale-105
+    active:scale-95
+    hover:bg-slate-800
+  "
           >
+
             <span className="inline-block w-3.5 space-y-[3px]">
               <span className="block h-[2px] rounded bg-slate-200" />
               <span className="block h-[2px] rounded bg-slate-200" />
@@ -912,23 +976,53 @@ export default function HomePage() {
           </p>
 
           {account && (
-            <div className="flex justify-center mt-1">
-              <button
-                onClick={handleCheckIn}
-                disabled={loading || hasCheckedInToday || paused === true}
-                className={`inline-flex items-center justify-center px-6 py-2.5 rounded-full text-sm font-semibold transition shadow-md shadow-emerald-900/60 ${hasCheckedInToday || paused
-                  ? "bg-emerald-900/40 text-emerald-300/70 cursor-not-allowed"
-                  : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 text-slate-950 hover:brightness-110"
-                  } ${loading ? "opacity-70" : ""}`}
-              >
-                {hasCheckedInToday
-                  ? "Checked-in"
-                  : loading
-                    ? "Processing…"
-                    : "Check-in"}
-              </button>
-            </div>
-          )}
+  <div className="flex justify-center mt-2">
+    {hasCheckedInToday ? (
+      <div className="flex flex-col items-center gap-1">
+  <button
+    disabled
+    className="
+      inline-flex items-center justify-center
+      px-8 py-3 rounded-full
+      text-base font-semibold
+      text-emerald-600
+      bg-emerald-500/10
+      border border-emerald-400/5
+      shadow-inner shadow-emerald-900/40
+      cursor-not-allowed
+    "
+  >
+    Checked-in
+  </button>
+
+  <span className="text-[11px] text-slate-400">
+    Next check-in in {getTimeUntilTomorrowUTC()}
+  </span>
+</div>
+
+
+    ) : (
+      <button
+        onClick={handleCheckIn}
+        disabled={loading || paused === true}
+        className={`
+          inline-flex items-center justify-center
+          px-8 py-3 rounded-full
+          text-base font-semibold
+          transition
+          shadow-lg shadow-emerald-900/70
+          animate-[breathe_4.2s_ease-in-out_infinite]
+          bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500
+          text-slate-950 hover:brightness-110 active:scale-95
+          ${loading ? "opacity-70" : ""}
+        `}
+      >
+        {loading ? "Processing…" : "Check-in"}
+      </button>
+    )}
+  </div>
+)}
+
           {paused && (
             <p className="text-[11px] text-amber-300 mt-1">
               The contract is currently paused. Please try again later.
@@ -942,14 +1036,16 @@ export default function HomePage() {
             <span className="text-lg">💰</span> Rewards
           </h2>
           <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-slate-400">
-                Unclaimed 0xtxn
-              </span>
-              <span className="font-semibold text-sky-300">
-                {unclaimedReadable ?? "-"}
-              </span>
-            </div>
+            <div className="flex flex-col items-center gap-1 py-2">
+  <span className="text-[11px] text-slate-400 uppercase tracking-wide">
+    Unclaimed 0xtxn
+  </span>
+
+  <span className="text-3xl font-bold tracking-tight text-sky-200">
+    {unclaimedReadable ?? "0"}
+  </span>
+</div>
+
             <p className="text-[11px] text-slate-500">
               Badges and total earned 0xtxn will be displayed here soon.
             </p>
