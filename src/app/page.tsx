@@ -151,22 +151,22 @@ export default function HomePage() {
   }
 
   function getTimeUntilTomorrowUTC() {
-  const now = new Date();
-  const tomorrow = new Date(
-    Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() + 1,
-      0, 0, 0
-    )
-  );
-  const diff = tomorrow.getTime() - now.getTime();
+    const now = new Date();
+    const tomorrow = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1,
+        0, 0, 0
+      )
+    );
+    const diff = tomorrow.getTime() - now.getTime();
 
-  const hours = Math.floor(diff / 36e5);
-  const minutes = Math.floor((diff % 36e5) / 6e4);
+    const hours = Math.floor(diff / 36e5);
+    const minutes = Math.floor((diff % 36e5) / 6e4);
 
-  return `${hours}h ${minutes}m`;
-}
+    return `${hours}h ${minutes}m`;
+  }
 
 
   function getStorageKey(acc: string) {
@@ -582,16 +582,16 @@ export default function HomePage() {
 
 
   function getRewardTier(amount: bigint | null) {
-  if (!amount || amount === BigInt(0)) return "none";
+    if (!amount || amount === BigInt(0)) return "none";
 
-  // thresholds (tune later)
-  const small = BigInt(5) * BigInt(1e18);
-  const big = BigInt(50) * BigInt(1e18);
+    // thresholds (tune later)
+    const small = BigInt(5) * BigInt(1e18);
+    const big = BigInt(50) * BigInt(1e18);
 
-  if (amount < small) return "low";
-  if (amount < big) return "mid";
-  return "big";
-}
+    if (amount < small) return "low";
+    if (amount < big) return "mid";
+    return "big";
+  }
 
 
   function handleSelectDonation(amount: number) {
@@ -764,6 +764,12 @@ export default function HomePage() {
   const pendingGoldCount = pendingGold ? Number(pendingGold) : 0;
   const pendingDiamondCount = pendingDiamond ? Number(pendingDiamond) : 0;
   const pendingLegendaryCount = pendingLegendary ? Number(pendingLegendary) : 0;
+  const hasUnclaimedBadges =
+  pendingSilverCount > 0 ||
+  pendingGoldCount > 0 ||
+  pendingDiamondCount > 0 ||
+  pendingLegendaryCount > 0;
+
 
 
   const totalEarnedNumber = totalEarned ? Number(totalEarned) : 0;
@@ -832,6 +838,8 @@ export default function HomePage() {
 
 
   const badgeProgress = getBadgeProgress(streakNumber);
+
+
 
 
   const mainBgClass = isDarkMode
@@ -976,12 +984,12 @@ export default function HomePage() {
           </p>
 
           {account && (
-  <div className="flex justify-center mt-2">
-    {hasCheckedInToday ? (
-      <div className="flex flex-col items-center gap-1">
-  <button
-    disabled
-    className="
+            <div className="flex justify-center mt-2">
+              {hasCheckedInToday ? (
+                <div className="flex flex-col items-center gap-1">
+                  <button
+                    disabled
+                    className="
       inline-flex items-center justify-center
       px-8 py-3 rounded-full
       text-base font-semibold
@@ -991,21 +999,21 @@ export default function HomePage() {
       shadow-inner shadow-emerald-900/40
       cursor-not-allowed
     "
-  >
-    Checked-in
-  </button>
+                  >
+                    Checked-in
+                  </button>
 
-  <span className="text-[11px] text-slate-400">
-    Next check-in in {getTimeUntilTomorrowUTC()}
-  </span>
-</div>
+                  <span className="text-[11px] text-slate-400">
+                    Next check-in in {getTimeUntilTomorrowUTC()}
+                  </span>
+                </div>
 
 
-    ) : (
-      <button
-        onClick={handleCheckIn}
-        disabled={loading || paused === true}
-        className={`
+              ) : (
+                <button
+                  onClick={handleCheckIn}
+                  disabled={loading || paused === true}
+                  className={`
           inline-flex items-center justify-center
           px-8 py-3 rounded-full
           text-base font-semibold
@@ -1016,12 +1024,12 @@ export default function HomePage() {
           text-slate-950 hover:brightness-110 active:scale-95
           ${loading ? "opacity-70" : ""}
         `}
-      >
-        {loading ? "Processing…" : "Check-in"}
-      </button>
-    )}
-  </div>
-)}
+                >
+                  {loading ? "Processing…" : "Check-in"}
+                </button>
+              )}
+            </div>
+          )}
 
           {paused && (
             <p className="text-[11px] text-amber-300 mt-1">
@@ -1036,19 +1044,58 @@ export default function HomePage() {
             <span className="text-lg">💰</span> Rewards
           </h2>
           <div className="space-y-2 text-sm">
-            <div className="flex flex-col items-center gap-1 py-2">
-  <span className="text-[11px] text-slate-400 uppercase tracking-wide">
-    Unclaimed 0xtxn
-  </span>
+            <div
+  className={`
+    flex w-full items-start justify-between
+    py-3
+    transition-all duration-500
+  `}
+>
+  {/* LEFT: 0xtxn hero */}
+  <div
+    className={`
+      flex flex-col
+      transition-all duration-500
+      ${hasUnclaimedBadges ? "items-start" : "items-center w-full"}
+    `}
+  >
+    <span className="text-[11px] text-slate-400 uppercase tracking-wide">
+      Unclaimed 0xtxn
+    </span>
 
-  <span className="text-3xl font-bold tracking-tight text-sky-200">
-    {unclaimedReadable ?? "0"}
-  </span>
+    <span className="text-3xl font-bold tracking-tight text-sky-200">
+      {unclaimedReadable ?? "0"}
+    </span>
+  </div>
+
+  {/* RIGHT: Unclaimed badges */}
+  {hasUnclaimedBadges && (
+    <div className="flex flex-col items-end gap-1">
+      <span className="text-[11px] text-slate-400 uppercase">
+        Unclaimed badges
+      </span>
+
+      <div className="flex items-center gap-2">
+        {pendingSilverCount > 0 && (
+          <BadgeGlow icon="🥈" count={pendingSilverCount} />
+        )}
+        {pendingGoldCount > 0 && (
+          <BadgeGlow icon="🥇" count={pendingGoldCount} />
+        )}
+        {pendingDiamondCount > 0 && (
+          <BadgeGlow icon="💎" count={pendingDiamondCount} />
+        )}
+        {pendingLegendaryCount > 0 && (
+          <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
+        )}
+      </div>
+    </div>
+  )}
 </div>
 
-            <p className="text-[11px] text-slate-500">
-              Badges and total earned 0xtxn will be displayed here soon.
-            </p>
+
+
+            
           </div>
 
           {account && (
@@ -1056,17 +1103,29 @@ export default function HomePage() {
               <button
                 onClick={handleClaimAll}
                 disabled={!!(loading || !pendingTokens || pendingTokens === BigInt(0) || paused)}
-
-                className={`inline-flex items-center justify-center px-6 py-2.5 rounded-full text-sm font-semibold transition shadow-md shadow-fuchsia-900/60 ${recentlyClaimed
-                  ? "bg-fuchsia-900/40 text-fuchsia-200/80 cursor-not-allowed"
-                  : "bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 text-slate-50 hover:brightness-110"
-                  } ${loading || !pendingTokens || pendingTokens === BigInt(0) || paused
+                className={`
+    inline-flex items-center justify-center
+    px-8 py-3 rounded-full
+    text-base font-semibold
+    transition
+    shadow-lg
+    ${rewardTier === "low"
+                    ? "bg-gradient-to-r from-purple-500 to-indigo-500 shadow-purple-900/50 text-slate-50"
+                    : rewardTier === "mid"
+                      ? "bg-gradient-to-r from-sky-500 to-blue-500 shadow-blue-900/50 text-slate-50"
+                      : rewardTier === "big"
+                        ? "bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-900 shadow-amber-500/60"
+                        : "bg-fuchsia-900/40 text-fuchsia-200/80"
+                  }
+    ${loading || !pendingTokens || pendingTokens === BigInt(0) || paused
                     ? "opacity-40 cursor-not-allowed"
-                    : ""
-                  }`}
+                    : "hover:brightness-110 active:scale-95"
+                  }
+  `}
               >
                 {pendingTokens && pendingTokens > BigInt(0) ? "Claim all" : "Claimed"}
               </button>
+
             </div>
           )}
         </section>
@@ -1080,7 +1139,20 @@ export default function HomePage() {
           {/* progress path */}
           <div className="relative mt-1 mb-2">
             {/* base line */}
-            <div className="h-[2px] w-full rounded-full bg-slate-700/80" />
+            <div className="relative h-[2px] w-full rounded-full bg-slate-700/70 overflow-hidden">
+              {/* progress fill */}
+              <div
+                className="
+      absolute left-0 top-0 h-full
+      bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500
+      transition-all duration-700 ease-out
+    "
+                style={{
+                  width: `${badgeProgress * 100}%`,
+                }}
+              />
+            </div>
+
 
             {/* badge icons – SKETCH BASED POSITIONS */}
             <div className="absolute inset-0 -top-3 text-lg">
@@ -1651,10 +1723,54 @@ function BadgeCard({
   return (
     <div className="rounded-2xl bg-slate-950/80 px-3 py-2 flex items-center justify-between shadow-inner shadow-slate-950/70">
       <div className="flex items-center gap-2">
-        <span className="text-lg">{icon}</span>
+        <span
+  className={`text-lg ${
+    owned === 0 ? "opacity-40" : ""
+  } ${
+    owned === 0 ? "animate-[badge-pulse_1.8s_ease-in-out_infinite]" : ""
+  }`}
+>
+  {icon}
+</span>
+
         <span className="text-[11px] text-slate-100">{name}</span>
       </div>
       <span className="text-[11px] text-slate-400">x{owned}</span>
     </div>
   );
 }
+
+function BadgeGlow({
+  icon,
+  count,
+}: {
+  icon: string;
+  count: number;
+}) {
+  return (
+    <div className="relative">
+      <span
+        className="
+          text-xl
+          animate-[badge-glow_2.4s_ease-in-out_infinite]
+        "
+      >
+        {icon}
+      </span>
+
+      {count > 1 && (
+        <span
+          className="
+            absolute -top-1 -right-1
+            text-[9px] font-bold
+            bg-sky-500 text-slate-950
+            rounded-full px-1
+          "
+        >
+          {count}
+        </span>
+      )}
+    </div>
+  );
+}
+
