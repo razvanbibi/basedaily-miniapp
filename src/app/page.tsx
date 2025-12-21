@@ -934,7 +934,7 @@ export default function HomePage() {
 
     {/* right wallet compact */}
     {account && (
-      <div className="flex flex-col items-end gap-1 shrink-0">
+      <div className="flex flex-col items-end gap-1 shrink-0 pr-2">
         {/* Wallet + Base inline */}
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] text-slate-500">Wallet</span>
@@ -946,7 +946,7 @@ export default function HomePage() {
         </div>
 
         {/* address only */}
-        <span className="text-[11px] px-2 py-1 rounded-full bg-slate-950/70 text-slate-100">
+        <span className="text-[11px] px-2 py-1 rounded-full bg-slate-950/70 text-slate-100 mt-0.5">
           {account.slice(0, 4)}…{account.slice(-4)}
         </span>
       </div>
