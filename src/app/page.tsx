@@ -86,6 +86,9 @@ export default function HomePage() {
   // Theme (day / night)
   const [isDarkMode, setIsDarkMode] = useState(true);
 
+  const [showBadgeInfo, setShowBadgeInfo] = useState(false);
+
+
 
   // MiniApp SDK → Base-কে জানানো যে app ready
   useEffect(() => {
@@ -765,10 +768,10 @@ export default function HomePage() {
   const pendingDiamondCount = pendingDiamond ? Number(pendingDiamond) : 0;
   const pendingLegendaryCount = pendingLegendary ? Number(pendingLegendary) : 0;
   const hasUnclaimedBadges =
-  pendingSilverCount > 0 ||
-  pendingGoldCount > 0 ||
-  pendingDiamondCount > 0 ||
-  pendingLegendaryCount > 0;
+    pendingSilverCount > 0 ||
+    pendingGoldCount > 0 ||
+    pendingDiamondCount > 0 ||
+    pendingLegendaryCount > 0;
 
 
 
@@ -1045,57 +1048,57 @@ export default function HomePage() {
           </h2>
           <div className="space-y-2 text-sm">
             <div
-  className={`
+              className={`
     flex w-full items-start justify-between
     py-3
     transition-all duration-500
   `}
->
-  {/* LEFT: 0xtxn hero */}
-  <div
-    className={`
+            >
+              {/* LEFT: 0xtxn hero */}
+              <div
+                className={`
       flex flex-col
       transition-all duration-500
       ${hasUnclaimedBadges ? "items-start" : "items-center w-full"}
     `}
-  >
-    <span className="text-[11px] text-slate-400 uppercase tracking-wide">
-      Unclaimed 0xtxn
-    </span>
+              >
+                <span className="text-[11px] text-slate-400 uppercase tracking-wide">
+                  Unclaimed 0xtxn
+                </span>
 
-    <span className="text-3xl font-bold tracking-tight text-sky-200">
-      {unclaimedReadable ?? "0"}
-    </span>
-  </div>
+                <span className="text-3xl font-bold tracking-tight text-sky-200">
+                  {unclaimedReadable ?? "0"}
+                </span>
+              </div>
 
-  {/* RIGHT: Unclaimed badges */}
-  {hasUnclaimedBadges && (
-    <div className="flex flex-col items-end gap-1">
-      <span className="text-[11px] text-slate-400 uppercase">
-        Unclaimed badges
-      </span>
+              {/* RIGHT: Unclaimed badges */}
+              {hasUnclaimedBadges && (
+                <div className="flex flex-col items-end gap-1">
+                  <span className="text-[11px] text-slate-400 uppercase">
+                    Unclaimed badges
+                  </span>
 
-      <div className="flex items-center gap-2">
-        {pendingSilverCount > 0 && (
-          <BadgeGlow icon="🥈" count={pendingSilverCount} />
-        )}
-        {pendingGoldCount > 0 && (
-          <BadgeGlow icon="🥇" count={pendingGoldCount} />
-        )}
-        {pendingDiamondCount > 0 && (
-          <BadgeGlow icon="💎" count={pendingDiamondCount} />
-        )}
-        {pendingLegendaryCount > 0 && (
-          <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
-        )}
-      </div>
-    </div>
-  )}
-</div>
+                  <div className="flex items-center gap-2">
+                    {pendingSilverCount > 0 && (
+                      <BadgeGlow icon="🥈" count={pendingSilverCount} />
+                    )}
+                    {pendingGoldCount > 0 && (
+                      <BadgeGlow icon="🥇" count={pendingGoldCount} />
+                    )}
+                    {pendingDiamondCount > 0 && (
+                      <BadgeGlow icon="💎" count={pendingDiamondCount} />
+                    )}
+                    {pendingLegendaryCount > 0 && (
+                      <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
 
 
-            
+
           </div>
 
           {account && (
@@ -1430,8 +1433,16 @@ export default function HomePage() {
             transition-opacity duration-300
             ${drawerOpen ? "opacity-100" : "opacity-0"}
           `}
-          onClick={() => setDrawerOpen(false)}
+
+
+          onClick={() => {
+            setDrawerOpen(false);
+            setShowBadgeInfo(false);
+          }}
+
+
         />
+
 
         {/* panel */}
         <div
@@ -1459,6 +1470,9 @@ export default function HomePage() {
           </div>
 
           {/* Neynar profile + theme toggle */}
+
+
+
           <div
             className={`rounded-2xl px-3 py-2.5 flex items-center justify-between gap-3 border 
               ${isDarkMode ? "bg-slate-950/60 border-white/5" : "bg-white/80 border-sky-100/60"}`}
@@ -1484,7 +1498,8 @@ export default function HomePage() {
               type="button"
               onClick={() => setIsDarkMode((prev) => !prev)}
               aria-label="Toggle theme"
-              className={`relative inline-flex items-center justify-between w-14 h-7 rounded-full px-1 border text-[13px] select-none overflow-hidden
+              className={`relative inline-flex items-center justify-between w-14 h-7 rounded-full px-1 border text-[13px] select-none overflow-hidden active:scale-95 transition-transform
+
                 ${isDarkMode ? "bg-slate-900/90 border-slate-600" : "bg-sky-100 border-sky-300"}`}
             >
               <span
@@ -1524,26 +1539,60 @@ export default function HomePage() {
           </div>
 
           {/* Your stats (on-chain) */}
-          <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3 space-y-1 text-[11px] text-slate-300">
-            <p className="text-xs font-semibold text-slate-100 mb-1">
-              Your stats
-            </p>
-            <div className="flex justify-between">
-              <span>Total streak days</span>
-              <span>{streakNumber}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Badges earned</span>
-              <span>
-                {totalSilverCount} Silver · {totalGoldCount} Gold ·{" "}
-                {totalDiamondCount} Diamond · {totalLegendaryCount} Legendary
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Total 0xtxn earned</span>
-              <span>{totalEarnedReadable ?? "—"}</span>
+          <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3">
+            <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
+              <div>
+                <p className="text-lg">🔥</p>
+                <p className="text-slate-100 font-semibold">{streakNumber}</p>
+                <p className="text-slate-400">Streak</p>
+              </div>
+
+              <div className="flex flex-col items-center relative">
+                <button
+                  type="button"
+                  onClick={() => setShowBadgeInfo((v) => !v)}
+                  className="flex flex-col items-center active:scale-95 transition"
+                >
+                  <p className="text-lg">🏅</p>
+                  <p className="text-slate-100 font-semibold">
+                    {totalSilverCount + totalGoldCount + totalDiamondCount + totalLegendaryCount}
+                  </p>
+                  <p className="text-slate-400">Badges</p>
+                </button>
+
+                {showBadgeInfo && (
+                  <div
+                    className="
+        absolute top-full mt-2 left-1/2 -translate-x-1/2
+        bg-slate-950/95 backdrop-blur-xl
+        border border-white/10
+        rounded-xl px-3 py-2
+        text-[11px] text-slate-200
+        shadow-2xl z-50
+        animate-[toast-pop_0.18s_ease-out]
+      "
+                  >
+                    <div className="flex flex-col gap-1 whitespace-nowrap">
+                      <span>🥈 Silver: {totalSilverCount}</span>
+                      <span>🥇 Gold: {totalGoldCount}</span>
+                      <span>💎 Diamond: {totalDiamondCount}</span>
+                      <span>🌟 Legendary: {totalLegendaryCount}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+              <div>
+                <p className="text-lg">💰</p>
+                <p className="text-slate-100 font-semibold">
+                  {totalEarnedReadable ?? "—"}
+                </p>
+                <p className="text-slate-400">0xtxn</p>
+              </div>
             </div>
           </div>
+
 
           {/* Contact dev */}
           <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3 space-y-2">
@@ -1724,14 +1773,12 @@ function BadgeCard({
     <div className="rounded-2xl bg-slate-950/80 px-3 py-2 flex items-center justify-between shadow-inner shadow-slate-950/70">
       <div className="flex items-center gap-2">
         <span
-  className={`text-lg ${
-    owned === 0 ? "opacity-40" : ""
-  } ${
-    owned === 0 ? "animate-[badge-pulse_1.8s_ease-in-out_infinite]" : ""
-  }`}
->
-  {icon}
-</span>
+          className={`text-lg ${owned === 0 ? "opacity-40" : ""
+            } ${owned === 0 ? "animate-[badge-pulse_1.8s_ease-in-out_infinite]" : ""
+            }`}
+        >
+          {icon}
+        </span>
 
         <span className="text-[11px] text-slate-100">{name}</span>
       </div>
