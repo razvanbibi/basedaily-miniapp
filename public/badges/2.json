@@ -1,0 +1,9 @@
+{
+  "name": "BaseDaily Gold Badge",
+  "description": "Awarded for 15-day streaks on BaseDaily.",
+  "image": "https://basedaily-miniapp.vercel.app/badges/gold.png",
+  "attributes": [
+    { "trait_type": "Tier", "value": "Gold" },
+    { "trait_type": "Streak Days", "value": 15 }
+  ]
+}

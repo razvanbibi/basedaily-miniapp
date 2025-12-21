@@ -1,0 +1,9 @@
+{
+  "name": "BaseDaily Diamond Badge",
+  "description": "Awarded for 30-day streaks on BaseDaily.",
+  "image": "https://basedaily-miniapp.vercel.app/badges/diamond.png",
+  "attributes": [
+    { "trait_type": "Tier", "value": "Diamond" },
+    { "trait_type": "Streak Days", "value": 30 }
+  ]
+}

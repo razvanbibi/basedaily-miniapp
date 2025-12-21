@@ -1,0 +1,9 @@
+{
+  "name": "BaseDaily Legendary Badge",
+  "description": "Awarded for 100-day streaks on BaseDaily.",
+  "image": "https://basedaily-miniapp.vercel.app/badges/legendary.png",
+  "attributes": [
+    { "trait_type": "Tier", "value": "Legendary" },
+    { "trait_type": "Streak Days", "value": 100 }
+  ]
+}

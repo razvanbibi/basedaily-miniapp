@@ -1,0 +1,9 @@
+{
+  "name": "BaseDaily Silver Badge",
+  "description": "Awarded for 7-day streaks on BaseDaily.",
+  "image": "https://basedaily-miniapp.vercel.app/badges/silver.png",
+  "attributes": [
+    { "trait_type": "Tier", "value": "Silver" },
+    { "trait_type": "Streak Days", "value": 7 }
+  ]
+}
