@@ -88,6 +88,9 @@ export default function HomePage() {
 
   const [showBadgeInfo, setShowBadgeInfo] = useState(false);
 
+  const [flashGlow, setFlashGlow] = useState(false);
+
+
 
 
   // MiniApp SDK → Base-কে জানানো যে app ready
@@ -957,25 +960,28 @@ export default function HomePage() {
         <section className="rounded-3xl bg-slate-900/85 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
-              <span className="text-lg">📆</span> Today
+              <BaseBlockLogo
+                checkedIn={hasCheckedInToday}
+                isDark={isDarkMode}
+              />
             </h2>
-            {streak !== null && (
-              <span className="text-[11px] text-slate-400">
-                Current streak:{" "}
-                <span className="font-semibold text-sky-300">
-                  {streak.toString()} days
-                </span>
-              </span>
-            )}
-          </div>
+            {/* RIGHT: stats */}
+            <div className="flex gap-6 text-center">
 
-          <div className="flex items-center justify-between text-[11px] text-slate-400">
-            <span>
-              Highest streak:{" "}
-              <span className="font-normal text-slate-100">
-                {highestNumber} days
-              </span>
-            </span>
+              <div>
+                <div className="text-xl font-semibold text-sky-300">
+                  {streakNumber}
+                </div>
+                <div className="text-[11px] text-slate-400">Current</div>
+              </div>
+
+              <div>
+                <div className="text-xl font-semibold text-slate-100">
+                  {highestNumber}
+                </div>
+                <div className="text-[11px] text-slate-400">Highest</div>
+              </div>
+            </div>
           </div>
 
           <p className="text-xs text-slate-400">
@@ -1042,6 +1048,7 @@ export default function HomePage() {
         </section>
 
         {/* Rewards card */}
+
         <section className="rounded-3xl bg-slate-900/85 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-3">
           <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
             <span className="text-lg">💰</span> Rewards
@@ -1149,7 +1156,7 @@ export default function HomePage() {
       absolute left-0 top-0 h-full
       bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500
       transition-all duration-700 ease-out
-    "
+               "
                 style={{
                   width: `${badgeProgress * 100}%`,
                 }}
@@ -1218,7 +1225,8 @@ export default function HomePage() {
           <button
             type="button"
             onClick={() => setShowDonate((v) => !v)}
-            className="w-full flex items-center justify-between text-sm font-semibold text-slate-100"
+            className="w-full flex items-center justify-between text-sm font-semibold text-slate-100 active:scale-[0.98] transition-transform
+            "
           >
             <span className="flex items-center gap-2">
               <span className="text-lg">💙</span> Support creator
@@ -1238,9 +1246,10 @@ export default function HomePage() {
                     key={v}
                     type="button"
                     onClick={() => handleSelectDonation(v)}
-                    className={`px-3 py-1.5 rounded-full border text-xs ${donationAmount === v.toString()
-                      ? "border-sky-400 bg-sky-500/10 text-sky-200"
-                      : "border-slate-700 bg-slate-900 text-slate-300"
+                    className={`px-3 py-1.5 rounded-full border text-xs active:scale-[0.98] transition-transform
+                        ${donationAmount === v.toString()
+                        ? "border-sky-400 bg-sky-500/10 text-sky-200"
+                        : "border-slate-700 bg-slate-900 text-slate-300"
                       }`}
                   >
                     {v} USDC
@@ -1263,7 +1272,8 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={handleDonateClick}
-                  className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs transition"
+                  className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs transition active:scale-[0.98] transition-transform
+                  "
                 >
                   Donate
                 </button>
@@ -1355,7 +1365,7 @@ export default function HomePage() {
     shadow-[0_0_25px_rgba(56,189,248,0.45),0_0_60px_rgba(56,189,248,0.25)]
     p-5 space-y-3
     animate-[overlayFade_0.55s_ease-out]
-  "
+            "
           >
 
             <div className="flex items-center gap-3">
@@ -1382,7 +1392,8 @@ export default function HomePage() {
 
             <button
               onClick={closeOnboarding}
-              className="mt-2 w-full rounded-full bg-sky-500 text-xs font-semibold text-slate-950 py-2 hover:bg-sky-400 transition"
+              className="mt-2 w-full rounded-full bg-sky-500 text-xs font-semibold text-slate-950 py-2 hover:bg-sky-400 transition active:scale-[0.98] transition-transform
+              "
             >
               Got it, let&apos;s start
             </button>
@@ -1463,7 +1474,8 @@ export default function HomePage() {
             </h2>
             <button
               onClick={() => setDrawerOpen(false)}
-              className="text-slate-400 text-sm hover:text-slate-100"
+              className="text-slate-400 text-sm hover:text-slate-100 active:scale-[0.98] transition-transform
+              "
             >
               ✕
             </button>
@@ -1551,7 +1563,8 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setShowBadgeInfo((v) => !v)}
-                  className="flex flex-col items-center active:scale-95 transition"
+                  className="flex flex-col items-center active:scale-95 transition active:scale-[0.98] transition-transform
+                  "
                 >
                   <p className="text-lg">🏅</p>
                   <p className="text-slate-100 font-semibold">
@@ -1570,7 +1583,7 @@ export default function HomePage() {
         text-[11px] text-slate-200
         shadow-2xl z-50
         animate-[toast-pop_0.18s_ease-out]
-      "
+                  "
                   >
                     <div className="flex flex-col gap-1 whitespace-nowrap">
                       <span>🥈 Silver: {totalSilverCount}</span>
@@ -1654,7 +1667,8 @@ export default function HomePage() {
                                   hover:bg-sky-400/20
                                     hover:shadow-[0_0_18px_rgba(56,189,248,0.45)]
                                       transition-all
-                                        duration-300"
+                                        duration-300 active:scale-[0.98] transition-transform
+                                        "
             >
               <span>About us</span>
               <span>📒</span>
@@ -1675,7 +1689,8 @@ export default function HomePage() {
                                   hover:bg-sky-400/20
                                     hover:shadow-[0_0_18px_rgba(56,189,248,0.45)]
                                       transition-all
-                                        duration-300
+                                        duration-300 active:scale-[0.98] transition-transform
+
                                           "
             >
               Share
@@ -1709,7 +1724,8 @@ export default function HomePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* overlay */}
           <button
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm active:scale-[0.98] transition-transform
+            "
             onClick={() => setAboutOpen(false)}
           />
 
@@ -1724,7 +1740,8 @@ export default function HomePage() {
               </h3>
               <button
                 onClick={() => setAboutOpen(false)}
-                className="text-slate-400 hover:text-slate-100 text-sm"
+                className="text-slate-400 hover:text-slate-100 text-sm active:scale-[0.98] transition-transform
+                "
               >
                 ✕
               </button>
@@ -1753,6 +1770,15 @@ export default function HomePage() {
         </div>
       )}
 
+      {flashGlow && (
+        <div
+          className="
+      pointer-events-none fixed inset-0 z-40
+      bg-sky-400/20
+      animate-[flashGlow_0.6s_ease-out]
+    "
+        />
+      )}
 
 
 
@@ -1820,4 +1846,51 @@ function BadgeGlow({
     </div>
   );
 }
+
+function BaseBlockLogo({
+  checkedIn,
+  isDark,
+}: {
+  checkedIn: boolean;
+  isDark: boolean;
+}) {
+  const color = isDark ? "bg-slate-300" : "bg-black";
+
+  return (
+    <div className="flex items-center gap-[4px]">
+      {/* b */}
+      <div className="relative w-6 h-6">
+        <div className={`${color} w-6 h-6 rounded-md`} />
+        <div
+          className={`${color} absolute -top-2 left-0 w-4 h-4 rounded-md`}
+        />
+      </div>
+
+      {/* a */}
+      <div className={`${color} w-6 h-6 rounded-md`} />
+
+      {/* s */}
+      <div className={`${color} w-6 h-6 rounded-md`} />
+
+      {/* e */}
+      <div className={`${color} w-6 h-6 rounded-md`} />
+
+      {/* d (after check-in only) */}
+      {checkedIn && (
+        <div className="relative w-6 h-6 animate-[fade-up_0.35s_ease-out]">
+          <div className={`${color} w-6 h-6 rounded-md`} />
+          <div
+            className={`${color} absolute -top-2 right-0 w-4 h-4 rounded-md`}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+
+
+
+
 

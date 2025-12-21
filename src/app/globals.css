@@ -113,3 +113,39 @@ body {
   }
 }
 
+@keyframes flashGlow {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes basedPop {
+  0% {
+    transform: scale(0.9);
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.08);
+    letter-spacing: 0.14em;
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    letter-spacing: 0.12em;
+  }
+}
+
+@keyframes basedBlock {
+  0% {
+    transform: translateX(-8px) scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(2px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
