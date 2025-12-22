@@ -787,6 +787,13 @@ export default function HomePage() {
   const totalDiamondCount = totalDiamond ? Number(totalDiamond) : 0;
   const totalLegendaryCount = totalLegendary ? Number(totalLegendary) : 0;
 
+  const glassCard =
+  "rounded-3xl bg-white/10 dark:bg-slate-900/55 backdrop-blur-md " +
+  "border border-white/15 dark:border-white/10 " +
+  "shadow-[0_20px_50px_rgba(0,0,0,0.45)]";
+
+
+
 
   function getBadgeProgress(streak: number) {
     if (streak <= 0) return 0.05; // start একটু বামে
@@ -847,41 +854,29 @@ export default function HomePage() {
 
 
 
-
-  const mainBgClass = isDarkMode
-    ? "bg-slate-950 text-slate-50"
-    : "bg-sky-50 text-slate-900";
-
-  const gradientClass = isDarkMode
-    ? "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#020617_55%)] opacity-70"
-    : "bg-[radial-gradient(circle_at_top,_#93c5fd_0,_#e0f2fe_55%)] opacity-60";
-
-
   return (
     <main
-  className={`min-h-screen relative overflow-hidden ${
-    isDarkMode ? "text-slate-50" : "text-slate-900"
-  }`}
-  style={{
-    backgroundImage: isDarkMode
-      ? "url('/bg-lamp.jpg')"
-      : "url('/bg-lamp.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center top",
-    backgroundRepeat: "no-repeat",
-  }}
->
-  {/* dark overlay for contrast */}
-  <div
-    className={`absolute inset-0 pointer-events-none ${
-      isDarkMode
-        ? "bg-slate-950/80"
-        : "bg-white/75"
-    }`}
-  />
+      className={`min-h-screen relative overflow-hidden ${isDarkMode ? "text-slate-50" : "text-slate-900"
+        }`}
+      style={{
+        backgroundImage: isDarkMode
+          ? "url('/bg-lamp.jpg')"
+          : "url('/bg-lamp.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* dark overlay for contrast */}
+      <div
+        className={`absolute inset-0 pointer-events-none ${isDarkMode
+          ? "bg-slate-950/80"
+          : "bg-white/75"
+          }`}
+      />
 
-  {/* content */}
-  <div className="relative z-10 mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
+      {/* content */}
+      <div className="relative z-10 mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
         {/* Header */}
         <header className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -919,10 +914,10 @@ export default function HomePage() {
                 shadow-lg shadow-black/40
                 transition
                 hover:scale-105
-                active:scale-95
+                  active:scale-95
                    hover:bg-slate-800
                    "
-                  >
+          >
 
             <span className="inline-block w-3.5 space-y-[3px]">
               <span className="block h-[2px] rounded bg-slate-200" />
@@ -933,50 +928,52 @@ export default function HomePage() {
         </header>
 
         {/* Welcome / wallet card */}
-        <section className="rounded-3xl bg-slate-900/80 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-2">
-  {/* top row */}
-  <div className="flex items-start justify-between gap-3">
-    {/* left text */}
-    <div className="flex-1">
-      <p className="text-sm text-slate-200 leading-tight">
-        Hello{account ? "," : ""}{" "}
-        <span className="font-medium text-sky-200">
-          {account ? "streaker" : "friend"}
-        </span>{" "}
-        👋
-      </p>
+        <section className={`${glassCard} p-4 space-y-3`}>
 
-      {/* description moved UP so it fits in one line */}
-      <p className="text-[11px] text-slate-400 truncate">
-        Check in every day to grow your streak and earn 0xtxn.
-      </p>
-    </div>
+          {/* top row */}
+          <div className="flex items-start justify-between gap-3">
+            {/* left text */}
+            <div className="flex-1">
+              <p className="text-sm text-slate-200 leading-tight">
+                Hello{account ? "," : ""}{" "}
+                <span className="font-medium text-sky-200">
+                  {account ? "streaker" : "friend"}
+                </span>{" "}
+                👋
+              </p>
 
-    {/* right wallet compact */}
-    {account && (
-      <div className="flex flex-col items-end gap-1 shrink-0 pr-2">
-        {/* Wallet + Base inline */}
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-500">Wallet</span>
+              {/* description moved UP so it fits in one line */}
+              <p className="text-[11px] text-slate-400 truncate">
+                Check in every day to grow your streak and earn 0xtxn.
+              </p>
+            </div>
 
-          <span className="flex items-center gap-1 text-[10px] text-emerald-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Base
-          </span>
-        </div>
+            {/* right wallet compact */}
+            {account && (
+              <div className="flex flex-col items-end gap-1 shrink-0 pr-2">
+                {/* Wallet + Base inline */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] text-slate-500">Wallet</span>
 
-        {/* address only */}
-        <span className="text-[11px] px-2 py-1 rounded-full bg-slate-950/70 text-slate-100 mt-0.5">
-          {account.slice(0, 4)}…{account.slice(-4)}
-        </span>
-      </div>
-    )}
-  </div>
-</section>
+                  <span className="flex items-center gap-1 text-[10px] text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                    Base
+                  </span>
+                </div>
+
+                {/* address only */}
+                <span className="text-[11px] px-2 py-1 rounded-full bg-slate-950/70 text-slate-100 mt-0.5">
+                  {account.slice(0, 4)}…{account.slice(-4)}
+                </span>
+              </div>
+            )}
+          </div>
+        </section>
 
 
         {/* Today card */}
-        <section className="rounded-3xl bg-slate-900/85 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-3">
+        <section className={`${glassCard} p-4 space-y-3`}>
+
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
               <BaseBlockLogo
@@ -1069,7 +1066,8 @@ export default function HomePage() {
 
         {/* Rewards card */}
 
-        <section className="rounded-3xl bg-slate-900/85 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-3">
+        <section className={`${glassCard} p-4 space-y-3`}>
+
           <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
             <span className="text-lg">💰</span> Rewards
           </h2>
@@ -1161,7 +1159,8 @@ export default function HomePage() {
         </section>
 
         {/* Badge progress + badge list */}
-        <section className="rounded-3xl bg-slate-900/85 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-4">
+        <section className={`${glassCard} p-4 space-y-3`}>
+
           <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
             <span className="text-lg">🏅</span> Badges
           </h2>
@@ -1241,7 +1240,8 @@ export default function HomePage() {
         </section>
 
         {/* Donation */}
-        <section className="rounded-3xl bg-slate-900/85 backdrop-blur-lg shadow-xl shadow-black/50 p-4 space-y-3">
+        <section className={`${glassCard} p-4 space-y-3`}>
+
           <button
             type="button"
             onClick={() => setShowDonate((v) => !v)}
