@@ -788,9 +788,11 @@ export default function HomePage() {
   const totalLegendaryCount = totalLegendary ? Number(totalLegendary) : 0;
 
   const glassCard =
-  "rounded-3xl bg-white/10 dark:bg-slate-900/55 backdrop-blur-md " +
+  "rounded-3xl bg-white/10 dark:bg-slate-900/55 backdrop-blur-[2px] " +
   "border border-white/15 dark:border-white/10 " +
   "shadow-[0_20px_50px_rgba(0,0,0,0.45)]";
+
+
 
 
 
