@@ -788,9 +788,9 @@ export default function HomePage() {
   const totalLegendaryCount = totalLegendary ? Number(totalLegendary) : 0;
 
   const glassCard =
-  "rounded-3xl bg-white/10 dark:bg-slate-900/55 backdrop-blur-[2px] " +
-  "border border-white/15 dark:border-white/10 " +
-  "shadow-[0_20px_50px_rgba(0,0,0,0.45)]";
+    "rounded-3xl bg-white/10 dark:bg-slate-900/55 backdrop-blur-[2px] " +
+    "border border-white/15 dark:border-white/10 " +
+    "shadow-[0_20px_50px_rgba(0,0,0,0.45)]";
 
   function getBadgeProgress(streak: number) {
     if (streak <= 0) return 0.05; // start একটু বামে
@@ -861,10 +861,9 @@ export default function HomePage() {
     >
       {/* dark overlay for contrast */}
       <div
-  className={`absolute inset-0 pointer-events-none ${
-    isDarkMode ? "bg-slate-950/65" : "bg-white/65"
-  }`}
-/>
+        className={`absolute inset-0 pointer-events-none ${isDarkMode ? "bg-slate-950/65" : "bg-white/65"
+          }`}
+      />
 
 
       {/* content */}
@@ -889,7 +888,7 @@ export default function HomePage() {
               </span>
 
               <span
-                className={`text-[11px] ${isDarkMode ? "text-slate-300" : "text-slate-600"
+                className={`text-[11px] ${isDarkMode ? "text-slate-300" : "text-slate-700"
                   } ${taglineAnim ? "animate-[fade-up_0.6s_ease-out]" : ""}`}
               >
 
@@ -926,16 +925,28 @@ export default function HomePage() {
           <div className="flex items-start justify-between gap-3">
             {/* left text */}
             <div className="flex-1">
-              <p className="text-sm text-slate-200 leading-tight">
+              <p
+                className={`text-sm leading-tight ${isDarkMode ? "text-slate-200" : "text-slate-900"
+                  }`}
+              >
+
                 Hello{account ? "," : ""}{" "}
-                <span className="font-medium text-sky-200">
+                <span
+                  className={`font-medium ${isDarkMode ? "text-sky-200" : "text-slate-900"
+                    }`}
+                >
                   {account ? "streaker" : "friend"}
-                </span>{" "}
+                </span>
+                {" "}
                 👋
               </p>
 
               {/* description moved UP so it fits in one line */}
-              <p className="text-[11px] text-slate-400 truncate">
+              <p
+                className={`text-[11px] truncate ${isDarkMode ? "text-slate-400" : "text-slate-900"
+                  }`}
+              >
+
                 Check in every day to grow your streak and earn 0xtxn.
               </p>
             </div>
@@ -945,7 +956,13 @@ export default function HomePage() {
               <div className="flex flex-col items-end gap-1 shrink-0 pr-2">
                 {/* Wallet + Base inline */}
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] text-slate-500">Wallet</span>
+                  <span
+                    className={`text-[10px] ${isDarkMode ? "text-slate-500" : "text-slate-900"
+                      }`}
+                  >
+                    Wallet
+                  </span>
+
 
                   <span className="flex items-center gap-1 text-[10px] text-emerald-400">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -977,22 +994,46 @@ export default function HomePage() {
             <div className="flex gap-6 text-center">
 
               <div>
-                <div className="text-xl font-semibold text-sky-300">
+                <div
+                  className={`text-xl font-semibold ${isDarkMode ? "text-slate-100" : "text-slate-900"
+                    }`}
+                >
+
                   {streakNumber}
                 </div>
-                <div className="text-[11px] text-slate-400">Current</div>
+                <div
+                  className={`text-[11px] ${isDarkMode ? "text-slate-400" : "text-slate-900"
+                    }`}
+                >
+                  Current
+                </div>
+
               </div>
 
               <div>
-                <div className="text-xl font-semibold text-slate-100">
+                <div
+                  className={`text-xl font-semibold ${isDarkMode ? "text-sky-300" : "text-sky-500"
+                    }`}
+                >
+
                   {highestNumber}
                 </div>
-                <div className="text-[11px] text-slate-400">Highest</div>
+                <div
+                  className={`text-[11px] ${isDarkMode ? "text-slate-400" : "text-slate-900"
+                    }`}
+                >
+                  Highest
+                </div>
+
               </div>
             </div>
           </div>
 
-          <p className="text-xs text-slate-400 -mt-1">
+          <p
+            className={`text-xs -mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-900"
+              }`}
+          >
+
 
             {account
               ? hasCheckedInToday
@@ -1060,7 +1101,11 @@ export default function HomePage() {
 
         <section className={`${glassCard} p-4 space-y-3`}>
 
-          <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+          <h2
+            className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
+              }`}
+          >
+
             <span className="text-lg">💰</span> Rewards
           </h2>
           <div className="space-y-2 text-sm">
@@ -1079,11 +1124,19 @@ export default function HomePage() {
       ${hasUnclaimedBadges ? "items-start" : "items-center w-full"}
     `}
               >
-                <span className="text-[11px] text-slate-400 uppercase tracking-wide">
+                <span
+                  className={`text-[12px] uppercase tracking-wide ${isDarkMode ? "text-slate-400" : "text-slate-900"
+                    }`}
+                >
+
                   Unclaimed 0xtxn
                 </span>
 
-                <span className="text-3xl font-bold tracking-tight text-sky-200">
+                <span
+                  className={`text-3xl font-bold tracking-tight ${isDarkMode ? "text-sky-200" : "text-sky-300"
+                    }`}
+                >
+
                   {unclaimedReadable ?? "0"}
                 </span>
               </div>
@@ -1091,7 +1144,11 @@ export default function HomePage() {
               {/* RIGHT: Unclaimed badges */}
               {hasUnclaimedBadges && (
                 <div className="flex flex-col items-end gap-1">
-                  <span className="text-[11px] text-slate-400 uppercase">
+                  <span
+                    className={`text-[12px] uppercase ${isDarkMode ? "text-slate-400" : "text-slate-900"
+                      }`}
+                  >
+
                     Unclaimed badges
                   </span>
 
@@ -1150,7 +1207,11 @@ export default function HomePage() {
         {/* Badge progress + badge list */}
         <section className={`${glassCard} p-4 space-y-3`}>
 
-          <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+          <h2
+            className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
+              }`}
+          >
+
             <span className="text-lg">🏅</span> Badges
           </h2>
 
@@ -1197,7 +1258,11 @@ export default function HomePage() {
           </div>
 
 
-          <p className="text-[11px] text-slate-500">
+          <p
+            className={`text-[11px] ${isDarkMode ? "text-slate-500" : "text-slate-900"
+              }`}
+          >
+
             As your streak grows, your avatar moves along the badge path. Silver,
             Gold, Diamond and Legendary/Loyalty badges will unlock at different
             milestones.
@@ -1237,10 +1302,16 @@ export default function HomePage() {
             className="w-full flex items-center justify-between text-sm font-semibold text-slate-100 active:scale-[0.98] transition-transform
             "
           >
-            <span className="flex items-center gap-2">
+            <span
+              className={`flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
+                }`}
+            >
               <span className="text-lg">💙</span> Support creator
             </span>
-            <span className="text-[11px] text-slate-400">
+            <span
+              className={`text-[11px] ${isDarkMode ? "text-slate-400" : "text-slate-900"
+                }`}
+            >
               {showDonate ? "Hide" : "Tip in Base USDC"}
             </span>
           </button>
@@ -1336,15 +1407,25 @@ export default function HomePage() {
         )}
 
         {/* Footer */}
-        <footer className="pt-3 mt-4 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Built on Base 🟦</span>
+        <footer
+          className={`pt-3 mt-4 flex items-center justify-between text-[11px] ${isDarkMode ? "text-slate-400" : "text-slate-700"
+            }`}
+        >
+          <span className={isDarkMode ? "" : "text-slate-900"}>
+            Built on Base 🟦
+          </span>
+
           <a
             href="https://base.app/profile/0xb539EdcC1Bf7d07Cc5EFe9f7d9D994Adce31fde0"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 hover:text-sky-300 transition"
+            className={`flex items-center gap-2 transition ${isDarkMode
+              ? "hover:text-sky-300"
+              : "hover:text-sky-700 text-slate-900"
+              }`}
           >
             <span>Powered by</span>
+
             <span className="flex items-center gap-1">
               <img
                 src="https://res.cloudinary.com/coin-nft/image/fetch/q_90,w_40,fl_sanitize/f_auto/https%3A%2F%2Fmetadata.coinbase.com%2Ftoken_icons%2F277cf5807a056555246e412cb368fcdcae4db21d4a267d3128b3febd8899b419.png"
@@ -1355,6 +1436,7 @@ export default function HomePage() {
             </span>
           </a>
         </footer>
+
       </div>
 
       {/* Onboarding overlay */}
@@ -1845,7 +1927,8 @@ function BaseBlockLogo({
   checkedIn: boolean;
   isDark: boolean;
 }) {
-  const color = isDark ? "bg-slate-400" : "bg-black";
+  const color = isDark ? "bg-slate-400" : "bg-slate-900";
+
 
   return (
     <div className="flex items-center gap-[4px]">
