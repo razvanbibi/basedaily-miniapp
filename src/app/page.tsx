@@ -858,10 +858,30 @@ export default function HomePage() {
 
 
   return (
-    <main className={`min-h-screen ${mainBgClass} relative overflow-hidden`}>
-      {/* subtle background gradient */}
-      <div className={`pointer-events-none absolute inset-0 ${gradientClass}`} />
-      <div className="relative mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
+    <main
+  className={`min-h-screen relative overflow-hidden ${
+    isDarkMode ? "text-slate-50" : "text-slate-900"
+  }`}
+  style={{
+    backgroundImage: isDarkMode
+      ? "url('/bg-lamp.jpg')"
+      : "url('/bg-lamp.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center top",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+  {/* dark overlay for contrast */}
+  <div
+    className={`absolute inset-0 pointer-events-none ${
+      isDarkMode
+        ? "bg-slate-950/80"
+        : "bg-white/75"
+    }`}
+  />
+
+  {/* content */}
+  <div className="relative z-10 mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
         {/* Header */}
         <header className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -894,15 +914,15 @@ export default function HomePage() {
           <button
             onClick={() => setDrawerOpen(true)}
             className="
-    h-9 w-9 inline-flex items-center justify-center
-    rounded-xl bg-slate-900/90
-    shadow-lg shadow-black/40
-    transition
-    hover:scale-105
-    active:scale-95
-    hover:bg-slate-800
-  "
-          >
+               h-9 w-9 inline-flex items-center justify-center
+                rounded-xl bg-slate-900/90
+                shadow-lg shadow-black/40
+                transition
+                hover:scale-105
+                active:scale-95
+                   hover:bg-slate-800
+                   "
+                  >
 
             <span className="inline-block w-3.5 space-y-[3px]">
               <span className="block h-[2px] rounded bg-slate-200" />
