@@ -792,11 +792,6 @@ export default function HomePage() {
   "border border-white/15 dark:border-white/10 " +
   "shadow-[0_20px_50px_rgba(0,0,0,0.45)]";
 
-
-
-
-
-
   function getBadgeProgress(streak: number) {
     if (streak <= 0) return 0.05; // start একটু বামে
 
@@ -849,12 +844,7 @@ export default function HomePage() {
     return pLegendary;
   }
 
-
-
-
   const badgeProgress = getBadgeProgress(streakNumber);
-
-
 
   return (
     <main
@@ -871,11 +861,11 @@ export default function HomePage() {
     >
       {/* dark overlay for contrast */}
       <div
-        className={`absolute inset-0 pointer-events-none ${isDarkMode
-          ? "bg-slate-950/80"
-          : "bg-white/75"
-          }`}
-      />
+  className={`absolute inset-0 pointer-events-none ${
+    isDarkMode ? "bg-slate-950/65" : "bg-white/65"
+  }`}
+/>
+
 
       {/* content */}
       <div className="relative z-10 mx-auto max-w-md px-4 pb-10 pt-6 space-y-4">
@@ -1123,9 +1113,6 @@ export default function HomePage() {
               )}
             </div>
 
-
-
-
           </div>
 
           {account && (
@@ -1301,10 +1288,6 @@ export default function HomePage() {
                 </button>
               </div>
 
-
-
-
-
               <div className="space-y-1">
                 <p className="text-[11px] text-slate-500">Top supporters</p>
                 {topSupporters.length === 0 ? (
@@ -1340,8 +1323,6 @@ export default function HomePage() {
                   </ul>
                 )}
               </div>
-
-
 
             </div>
           )}
@@ -1423,8 +1404,6 @@ export default function HomePage() {
         </div>
       )}
 
-
-
       {/* Toast popup */}
       {toast && (
         <div className="pointer-events-none fixed top-6 left-0 right-0 flex justify-center z-40">
@@ -1476,7 +1455,6 @@ export default function HomePage() {
 
         />
 
-
         {/* panel */}
         <div
           className={`
@@ -1504,8 +1482,6 @@ export default function HomePage() {
           </div>
 
           {/* Neynar profile + theme toggle */}
-
-
 
           <div
             className={`rounded-2xl px-3 py-2.5 flex items-center justify-between gap-3 border 
@@ -1554,7 +1530,6 @@ export default function HomePage() {
               />
             </button>
           </div>
-
 
           {/* FID + Neynar score */}
           <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3 space-y-1 text-[11px] text-slate-300">
@@ -1616,7 +1591,6 @@ export default function HomePage() {
                   </div>
                 )}
               </div>
-
 
               <div>
                 <p className="text-lg">💰</p>
@@ -1737,8 +1711,6 @@ export default function HomePage() {
 
         </div>
 
-
-
       </div>
 
       {/* About us modal */}
@@ -1801,9 +1773,6 @@ export default function HomePage() {
     "
         />
       )}
-
-
-
     </main>
   );
 }
@@ -1909,10 +1878,3 @@ function BaseBlockLogo({
     </div>
   );
 }
-
-
-
-
-
-
-
