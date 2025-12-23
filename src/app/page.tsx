@@ -951,31 +951,44 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* right wallet compact */}
-            {account && (
-              <div className="flex flex-col items-end gap-1 shrink-0 pr-2">
-                {/* Wallet + Base inline */}
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className={`text-[10px] ${isDarkMode ? "text-slate-500" : "text-slate-900"
-                      }`}
-                  >
-                    Wallet
-                  </span>
+            {/* right wallet / connect */}
+            <div className="shrink-0">
+              {account ? (
+                <div className="flex flex-col items-end gap-1 pr-2">
+                  {/* Wallet + Base */}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-slate-500">Wallet</span>
+                    <span className="flex items-center gap-1 text-[10px] text-emerald-400">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      Base
+                    </span>
+                  </div>
 
-
-                  <span className="flex items-center gap-1 text-[10px] text-emerald-400">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    Base
+                  {/* address */}
+                  <span className="text-[11px] px-2 py-1 rounded-full bg-slate-950/70 text-slate-100 mt-0.5">
+                    {account.slice(0, 4)}…{account.slice(-4)}
                   </span>
                 </div>
+              ) : (
+                <button
+                  onClick={connectWallet}
+                  className="
+        px-3 py-1.5
+        rounded-full
+        text-[11px] font-semibold
+        bg-sky-500/90
+        text-slate-950
+        shadow-md
+        hover:bg-sky-400
+        active:scale-95
+        transition
+      "
+                >
+                  Connect
+                </button>
+              )}
+            </div>
 
-                {/* address only */}
-                <span className="text-[11px] px-2 py-1 rounded-full bg-slate-950/70 text-slate-100 mt-0.5">
-                  {account.slice(0, 4)}…{account.slice(-4)}
-                </span>
-              </div>
-            )}
           </div>
         </section>
 
