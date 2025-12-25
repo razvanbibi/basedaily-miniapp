@@ -1146,7 +1146,7 @@ export default function HomePage() {
                 </span>
 
                 <span
-                  className={`text-3xl font-bold tracking-tight ${isDarkMode ? "text-sky-200" : "text-sky-300"
+                  className={`text-3xl font-bold tracking-tight ${isDarkMode ? "text-sky-200" : "text-sky-500"
                     }`}
                 >
 
