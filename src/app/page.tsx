@@ -1114,13 +1114,24 @@ export default function HomePage() {
 
         <section className={`${glassCard} p-4 space-y-3`}>
 
-          <h2
-            className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
-              }`}
-          >
+          <div className="relative group inline-flex">
+            <h2
+              className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
+                }`}
+            >
+              <span className="text-lg">💰</span> Rewards
+            </h2>
 
-            <span className="text-lg">💰</span> Rewards
-          </h2>
+            <HoverInfo title="How rewards work">
+              <ul className="list-disc pl-4 space-y-1">
+                <li>Check-in once per day</li>
+                <li>Each streak day increases reward (n*10) </li>
+                <li>Miss a day → streak resets</li>
+                <li>Rewards stack until you claim</li>
+              </ul>
+            </HoverInfo>
+          </div>
+
           <div className="space-y-2 text-sm">
             <div
               className={`
@@ -1220,13 +1231,24 @@ export default function HomePage() {
         {/* Badge progress + badge list */}
         <section className={`${glassCard} p-4 space-y-3`}>
 
-          <h2
-            className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
-              }`}
-          >
+          <div className="relative group inline-flex">
+            <h2
+              className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
+                }`}
+            >
+              <span className="text-lg">🏅</span> Badges
+            </h2>
 
-            <span className="text-lg">🏅</span> Badges
-          </h2>
+            <HoverInfo title="Badge milestones">
+              <ul className="list-disc pl-4 space-y-1">
+                <li>🥈 Silver — 7 days</li>
+                <li>🥇 Gold — 15 days</li>
+                <li>💎 Diamond — 30 days</li>
+                <li>🌟 Legendary — 100 days</li>
+              </ul>
+            </HoverInfo>
+          </div>
+
 
           {/* progress path */}
           <div className="relative mt-1 mb-2">
@@ -1974,3 +1996,34 @@ function BaseBlockLogo({
     </div>
   );
 }
+
+function HoverInfo({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="
+        absolute z-40 top-full mt-2 left-0
+        w-64
+        rounded-2xl
+        bg-slate-950/95 backdrop-blur-xl
+        border border-white/10
+        shadow-2xl
+        px-3 py-2
+        text-[11px] text-slate-200
+        opacity-0 scale-95
+        group-hover:opacity-100 group-hover:scale-100
+        transition-all duration-200
+        pointer-events-none
+      "
+    >
+      <p className="font-semibold text-sky-300 mb-1">{title}</p>
+      {children}
+    </div>
+  );
+}
+
