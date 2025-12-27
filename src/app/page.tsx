@@ -90,6 +90,10 @@ export default function HomePage() {
 
   const [flashGlow, setFlashGlow] = useState(false);
 
+  const [showRewardsTip, setShowRewardsTip] = useState(false);
+  const [showBadgesTip, setShowBadgesTip] = useState(false);
+
+
 
 
 
@@ -1115,12 +1119,34 @@ export default function HomePage() {
         <section className={`${glassCard} p-4 space-y-3`}>
 
           <div className="relative group inline-flex">
-            <h2
-              className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
-                }`}
-            >
-              <span className="text-lg">💰</span> Rewards
-            </h2>
+            <div className="relative inline-flex">
+              <button
+                className={`text-sm font-semibold flex items-center gap-2 select-none ${isDarkMode ? "text-slate-100" : "text-slate-900"
+                  }`}
+                onClick={() => {
+                  setShowRewardsTip(true);
+                  setTimeout(() => setShowRewardsTip(false), 2000);
+                }}
+              >
+                <span className="text-lg">💰</span> Rewards
+              </button>
+
+              {showRewardsTip && (
+                <div className="absolute z-50 top-full mt-2 w-64 rounded-2xl
+                    bg-slate-950/95 backdrop-blur-xl
+                    border border-white/10 shadow-2xl
+                    px-3 py-2 text-[11px] text-slate-200">
+                  <p className="font-semibold text-sky-300 mb-1">How rewards work</p>
+                  <ul className="list-disc pl-4 space-y-1">
+                    <li>Check-in once per day</li>
+                    <li>Each streak day increases reward(n*10)</li>
+                    <li>Miss a day → streak resets</li>
+                    <li>Rewards stack until you claim</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
 
             <HoverInfo title="How rewards work">
               <ul className="list-disc pl-4 space-y-1">
@@ -1232,12 +1258,34 @@ export default function HomePage() {
         <section className={`${glassCard} p-4 space-y-3`}>
 
           <div className="relative group inline-flex">
-            <h2
-              className={`text-sm font-semibold flex items-center gap-2 ${isDarkMode ? "text-slate-100" : "text-slate-900"
-                }`}
-            >
-              <span className="text-lg">🏅</span> Badges
-            </h2>
+            <div className="relative inline-flex">
+              <button
+                className={`text-sm font-semibold flex items-center gap-2 select-none ${isDarkMode ? "text-slate-100" : "text-slate-900"
+                  }`}
+                onClick={() => {
+                  setShowBadgesTip(true);
+                  setTimeout(() => setShowBadgesTip(false), 2000);
+                }}
+              >
+                <span className="text-lg">🏅</span> Badges
+              </button>
+
+              {showBadgesTip && (
+                <div className="absolute z-50 top-full mt-2 w-64 rounded-2xl
+                    bg-slate-950/95 backdrop-blur-xl
+                    border border-white/10 shadow-2xl
+                    px-3 py-2 text-[11px] text-slate-200">
+                  <p className="font-semibold text-sky-300 mb-1">Badge milestones</p>
+                  <ul className="list-disc pl-4 space-y-1">
+                    <li>🥈 Silver — 7 days</li>
+                    <li>🥇 Gold — 15 days</li>
+                    <li>💎 Diamond — 30 days</li>
+                    <li>🌟 Legendary — 100 days</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
 
             <HoverInfo title="Badge milestones">
               <ul className="list-disc pl-4 space-y-1">
