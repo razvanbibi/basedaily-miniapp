@@ -1125,7 +1125,7 @@ export default function HomePage() {
             <HoverInfo title="How rewards work">
               <ul className="list-disc pl-4 space-y-1">
                 <li>Check-in once per day</li>
-                <li>Each streak day increases reward (n*10) </li>
+                <li>Each streak day increases reward (n*10)</li>
                 <li>Miss a day → streak resets</li>
                 <li>Rewards stack until you claim</li>
               </ul>
@@ -1251,7 +1251,28 @@ export default function HomePage() {
 
 
           {/* progress path */}
-          <div className="relative mt-1 mb-2">
+          <div className="relative mt-1 mb-2"
+            onClick={() => {
+              const runner = document.getElementById("avatar-runner");
+              if (!runner) return;
+
+              runner.style.setProperty(
+                "--target-x",
+                `${badgeProgress * 100}%`
+              );
+
+              runner.classList.remove("hidden");
+              runner.style.animation = "avatar-run 3s ease-out forwards";
+
+              // hide original avatar briefly
+              const originals = document.querySelectorAll("[data-avatar-main]");
+              originals.forEach(el => {
+                (el as HTMLElement).style.opacity = "0";
+              });
+
+
+            }}
+          >
             {/* base line */}
             <div className="relative h-[2px] w-full rounded-full bg-slate-700/70 overflow-hidden">
               {/* progress fill */}
@@ -1278,6 +1299,7 @@ export default function HomePage() {
 
             {/* avatar progress */}
             <div
+              data-avatar-main
               className="absolute -top-5 h-7 w-7 rounded-full ring-2 ring-sky-400 bg-slate-900 overflow-hidden shadow-lg shadow-sky-900 transition-all"
               style={{
                 left: `${badgeProgress * 100}%`,
@@ -1290,6 +1312,43 @@ export default function HomePage() {
                 className="h-full w-full object-cover"
               />
             </div>
+
+            {/* RUN ANIMATION OVERLAY (visual only) */}
+            <div
+              id="avatar-runner"
+              onAnimationEnd={() => {
+                const runner = document.getElementById("avatar-runner");
+                if (!runner) return;
+
+                runner.classList.add("hidden");
+                runner.style.animation = "none";
+
+                const originals = document.querySelectorAll("[data-avatar-main]");
+                originals.forEach(el => {
+                  (el as HTMLElement).style.opacity = "1";
+                });
+              }}
+
+              className="pointer-events-none absolute -top-8 hidden"
+              style={{ left: "5%", transform: "translateX(-50%)" }}
+            >
+              {/* avatar bubble */}
+              <div className="relative h-7 w-7 rounded-full overflow-hidden ring-2 ring-sky-400 bg-slate-900 z-10">
+                <img
+                  src={fcPfp || "/avatar.png"}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+
+              {/* legs — OUTSIDE avatar */}
+              <div className="absolute top-[28px] left-1/2 -translate-x-1/2 flex gap-[4px]">
+                <span className="leg leg-left" />
+                <span className="leg leg-right" />
+              </div>
+            </div>
+
+
+
           </div>
 
 
