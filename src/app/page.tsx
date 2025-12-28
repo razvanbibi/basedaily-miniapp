@@ -529,6 +529,11 @@ export default function HomePage() {
           2000
         );
       }
+
+      triggerAvatarRun(badgeProgress);
+
+
+
     } catch (err: any) {
       console.error(err);
       setStatus(
@@ -541,6 +546,21 @@ export default function HomePage() {
       setLoading(false);
     }
   }
+
+  function triggerAvatarRun(badgeProgress: number) {
+  const runner = document.getElementById("avatar-runner");
+  if (!runner) return;
+
+  runner.style.setProperty("--target-x", `${badgeProgress * 100}%`);
+  runner.classList.remove("hidden");
+  runner.style.animation = "avatar-run 3s ease-out forwards";
+
+  const originals = document.querySelectorAll("[data-avatar-main]");
+  originals.forEach((el) => {
+    (el as HTMLElement).style.opacity = "0";
+  });
+}
+
 
   async function handleClaimAll() {
     try {
