@@ -36,7 +36,7 @@
     "ogTitle": "BaseDaily streaks on Base",
     "ogDescription": "Check in daily on Base to build streaks, earn oxtxn rewards and unlock loyalty badges",
     "ogImageUrl": "https://basedaily-miniapp.vercel.app/og.png",
-    "noindex": true
+    "noindex": false
   },
   "baseBuilder": {
     "ownerAddress": "0xb539EdcC1Bf7d07Cc5EFe9f7d9D994Adce31fde0"
