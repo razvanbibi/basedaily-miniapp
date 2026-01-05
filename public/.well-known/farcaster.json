@@ -12,7 +12,7 @@
     "splashImageUrl": "https://basedaily-miniapp.vercel.app/icon.png",
     "splashBackgroundColor": "#020617",
     "webhookUrl": "https://basedaily-miniapp.vercel.app/api/webhook",
-    "imageUrl": "https://basedaily-miniapp.vercel.app/image.png",
+    "imageUrl": "https://basedaily-miniapp.vercel.app/image-v2.png",
     "subtitle": "Be loyal to BASE",
     "description": "Daily check-ins on Base to grow your streak, earn oxtxn rewards, unlock badges and tip the creator",
     "screenshotUrls": [

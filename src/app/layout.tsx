@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   other: {
     "fc:miniapp": JSON.stringify({
       version: "1",
-      imageUrl: "https://basedaily-miniapp.vercel.app/image.png", // 3:2 image
+      imageUrl: "https://basedaily-miniapp.vercel.app/image-v2.png", // 3:2 image
       button: {
         title: "Launch BaseDaily",
         action: {
