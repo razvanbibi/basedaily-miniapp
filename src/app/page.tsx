@@ -93,6 +93,12 @@ export default function HomePage() {
   const [showRewardsTip, setShowRewardsTip] = useState(false);
   const [showBadgesTip, setShowBadgesTip] = useState(false);
 
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+const [leaderboard, setLeaderboard] = useState<
+  { address: string; highestStreak: number; name?: string | null; avatar?: string | null }[]
+>([]);
+const [leaderboardLoading, setLeaderboardLoading] = useState(false);
 
 
 
@@ -529,6 +535,11 @@ export default function HomePage() {
           2000
         );
       }
+await fetch("/api/leaderboard/register", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ address: account }),
+});
 
       triggerAvatarRun(badgeProgress);
 
@@ -547,19 +558,32 @@ export default function HomePage() {
     }
   }
 
-  function triggerAvatarRun(badgeProgress: number) {
-  const runner = document.getElementById("avatar-runner");
-  if (!runner) return;
-
-  runner.style.setProperty("--target-x", `${badgeProgress * 100}%`);
-  runner.classList.remove("hidden");
-  runner.style.animation = "avatar-run 3s ease-out forwards";
-
-  const originals = document.querySelectorAll("[data-avatar-main]");
-  originals.forEach((el) => {
-    (el as HTMLElement).style.opacity = "0";
-  });
+  async function loadLeaderboard() {
+  try {
+    setLeaderboardLoading(true);
+    const res = await fetch("/api/leaderboard/lifetime");
+    if (!res.ok) return;
+    const data = await res.json();
+    setLeaderboard(data);
+  } finally {
+    setLeaderboardLoading(false);
+  }
 }
+
+
+  function triggerAvatarRun(badgeProgress: number) {
+    const runner = document.getElementById("avatar-runner");
+    if (!runner) return;
+
+    runner.style.setProperty("--target-x", `${badgeProgress * 100}%`);
+    runner.classList.remove("hidden");
+    runner.style.animation = "avatar-run 3s ease-out forwards";
+
+    const originals = document.querySelectorAll("[data-avatar-main]");
+    originals.forEach((el) => {
+      (el as HTMLElement).style.opacity = "0";
+    });
+  }
 
 
   async function handleClaimAll() {
@@ -1047,22 +1071,76 @@ export default function HomePage() {
 
               </div>
 
-              <div>
+              <div className="relative">
                 <div
                   className={`text-xl font-semibold ${isDarkMode ? "text-sky-300" : "text-sky-500"
                     }`}
                 >
-
                   {highestNumber}
                 </div>
+
                 <div
                   className={`text-[11px] ${isDarkMode ? "text-slate-400" : "text-slate-900"
                     }`}
                 >
                   Highest
                 </div>
+{showLeaderboard && (
+  <div className="mt-3 rounded-2xl bg-slate-950/80 p-3 text-xs">
+    {leaderboardLoading && <p className="text-slate-400">Loading…</p>}
 
+    {!leaderboardLoading && leaderboard.length === 0 && (
+      <p className="text-slate-400">No data yet</p>
+    )}
+
+    <ul className="space-y-2">
+      {leaderboard.map((u, i) => (
+        <li key={u.address} className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {u.avatar ? (
+              <img src={u.avatar} className="h-5 w-5 rounded-full" />
+            ) : (
+              <div className="h-5 w-5 rounded-full bg-slate-700" />
+            )}
+            <span>
+              #{i + 1} {u.name ?? `${u.address.slice(0, 6)}…`}
+            </span>
+          </div>
+          <span>{u.highestStreak}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+                {/* 🏆 Leaderboard button — EXACT RED BOX POSITION */}
+                <button
+                  onClick={() => {
+  setShowLeaderboard(true);
+  loadLeaderboard();
+}}
+
+                  className="
+      absolute
+ mt-1 left-1/2 -translate-x-1/2
+
+      h-7 w-7
+      rounded-full
+      flex items-center justify-center
+      bg-slate-900/70
+      border border-white/10
+      shadow-md
+      text-sm
+      hover:bg-slate-800
+      active:scale-95
+      transition
+    "
+                >
+                  🏆
+                </button>
+                
               </div>
+
             </div>
           </div>
 

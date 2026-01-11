@@ -13,6 +13,7 @@
     "@farcaster/miniapp-sdk": "^0.2.1",
     "@fontsource/geist": "^5.2.8",
     "@fontsource/geist-mono": "^5.2.7",
+    "@upstash/redis": "^1.36.1",
     "ethers": "^6.15.0",
     "next": "14.2.11",
     "permissionless": "^0.3.2",
