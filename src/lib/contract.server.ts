@@ -1,8 +1,10 @@
 // src/lib/contract.server.ts
 import { JsonRpcProvider, Contract } from "ethers";
-import { OXTXN_STREAK_ABI, OXTXN_STREAK_CONTRACT } from "./contract";
+import { OXTXN_STREAK_CONTRACT } from "./contract.abi";
+import { OXTXN_STREAK_ABI } from "./contract.abi";
 
-const RPC_URL = "https://mainnet.base.org"; // public Base RPC
+// Base mainnet public RPC (simple & safe)
+const RPC_URL = "https://mainnet.base.org";
 
 export function getReadOnlyContractServer() {
   const provider = new JsonRpcProvider(RPC_URL);
@@ -13,5 +15,5 @@ export function getReadOnlyContractServer() {
     provider
   );
 
-  return { provider, contract };
+  return { contract };
 }
