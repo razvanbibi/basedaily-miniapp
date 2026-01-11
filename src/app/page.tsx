@@ -307,6 +307,14 @@ const [leaderboardLoading, setLeaderboardLoading] = useState(false);
     void loadDonationLeaderboard();
   }, []);
 
+useEffect(() => {
+  if (!showLeaderboard) return;
+
+  const close = () => setShowLeaderboard(false);
+  window.addEventListener("click", close);
+
+  return () => window.removeEventListener("click", close);
+}, [showLeaderboard]);
 
 
   async function getUsdcContractWithSigner() {
@@ -1086,7 +1094,22 @@ await fetch("/api/leaderboard/register", {
                   Highest
                 </div>
 {showLeaderboard && (
-  <div className="mt-3 rounded-2xl bg-slate-950/80 p-3 text-xs">
+  <div
+    className="
+      absolute
+      right-3
+      top-[58px]
+      w-[180px]
+      max-h-[120px]
+      rounded-xl
+      bg-slate-950/90
+      p-2
+      text-xs
+      overflow-y-auto
+      z-20
+    "
+  >
+
     {leaderboardLoading && <p className="text-slate-400">Loading…</p>}
 
     {!leaderboardLoading && leaderboard.length === 0 && (
@@ -1103,8 +1126,9 @@ await fetch("/api/leaderboard/register", {
               <div className="h-5 w-5 rounded-full bg-slate-700" />
             )}
             <span>
-              #{i + 1} {u.name ?? `${u.address.slice(0, 6)}…`}
-            </span>
+  #{i + 1} {u.name ? u.name : `${u.address.slice(0, 6)}…`}
+</span>
+
           </div>
           <span>{u.highestStreak}</span>
         </li>
@@ -1115,26 +1139,28 @@ await fetch("/api/leaderboard/register", {
 
                 {/* 🏆 Leaderboard button — EXACT RED BOX POSITION */}
                 <button
-                  onClick={() => {
-  setShowLeaderboard(true);
-  loadLeaderboard();
-}}
+  onClick={(e) => {
+    e.stopPropagation();
+    setShowLeaderboard(true);
+    loadLeaderboard();
+  }}
 
-                  className="
-      absolute
- mt-1 left-1/2 -translate-x-1/2
+                  className={`
+  absolute
+  mt-1 left-1/2 -translate-x-1/2
+  h-7 w-7
+  rounded-full
+  flex items-center justify-center
+  bg-slate-900/70
+  border border-white/10
+  shadow-md
+  text-sm
+  hover:bg-slate-800
+  active:scale-95
+  transition
+  ${showLeaderboard ? "opacity-0 pointer-events-none" : ""}
+`}
 
-      h-7 w-7
-      rounded-full
-      flex items-center justify-center
-      bg-slate-900/70
-      border border-white/10
-      shadow-md
-      text-sm
-      hover:bg-slate-800
-      active:scale-95
-      transition
-    "
                 >
                   🏆
                 </button>
