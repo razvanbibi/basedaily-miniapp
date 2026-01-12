@@ -11,7 +11,13 @@ export async function GET() {
 
   const rows = await Promise.all(
     addresses.map(async (addr: string) => {
-      const hs = await contract.highestStreak(addr);
+      let hs = 0;
+try {
+  hs = Number(await contract.highestStreak(addr));
+} catch {
+  hs = 0; // RPC fail হলেও API ভাঙবে না
+}
+
       const profile = await getProfile(addr);
 
       return {
