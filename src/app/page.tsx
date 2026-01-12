@@ -510,6 +510,12 @@ useEffect(() => {
       setStatus("Check-in pending... waiting for confirmation.");
       await tx.wait();
 
+await fetch("/api/leaderboard/register", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ address: account }),
+});
+
       // আজকের দিন localStorage এ সেভ + UI state সেট
       const key = getStorageKey(account);
       try {
@@ -543,11 +549,7 @@ useEffect(() => {
           2000
         );
       }
-await fetch("/api/leaderboard/register", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ address: account }),
-});
+
 
       triggerAvatarRun(badgeProgress);
 
