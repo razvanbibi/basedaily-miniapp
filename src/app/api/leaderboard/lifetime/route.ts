@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { getReadOnlyContractServer } from "@/lib/contract.server";
 import { getAllAddresses } from "@/lib/leaderboardStore";
