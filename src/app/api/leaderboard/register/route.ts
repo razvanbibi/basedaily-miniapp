@@ -28,7 +28,8 @@ await saveStats(address, {
 console.log("REGISTER HIT", address);
 
 const profile = await getNeynarProfile(address);
-console.log("NEYNAR PROFILE", profile);
+console.log("NEY PROFILE RESULT", address, profile);
+
 
 if (profile) {
   await saveProfile(address, {
