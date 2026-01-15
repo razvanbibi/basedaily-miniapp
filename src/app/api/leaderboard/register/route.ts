@@ -25,6 +25,20 @@ await saveStats(address, {
 });
 
 
+console.log("REGISTER HIT", address);
+
+const profile = await getNeynarProfile(address);
+console.log("NEYNAR PROFILE", profile);
+
+if (profile) {
+  await saveProfile(address, {
+    name: profile.display_name ?? null,
+    avatar: profile.pfp_url ?? null,
+  });
+  console.log("PROFILE SAVED");
+}
+
+
   // 2️⃣ Neynar fetch (one-time best effort)
   try {
     const profile = await getNeynarProfile(address);
