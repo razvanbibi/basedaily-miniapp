@@ -1,17 +1,20 @@
-// src/lib/neynar.ts
 export async function getNeynarProfile(address: string) {
   const res = await fetch(
-    `https://api.neynar.com/v2/farcaster/user/by-address?address=${address}`,
+    "https://api.neynar.com/v2/farcaster/user/bulk-by-address",
     {
+      method: "POST",
       headers: {
-        api_key: process.env.NEYNAR_API_KEY!,
+        "Content-Type": "application/json",
+        "api_key": process.env.NEYNAR_API_KEY!,
       },
-      cache: "no-store",
+      body: JSON.stringify({
+        addresses: [address.toLowerCase()],
+      }),
     }
   );
 
   if (!res.ok) return null;
 
   const data = await res.json();
-  return data.user ?? null;
+  return data.users?.[0] ?? null;
 }
