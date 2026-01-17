@@ -18,3 +18,4 @@ export async function getNeynarProfile(address: string) {
   const data = await res.json();
   return data.users?.[0] ?? null;
 }
+ 
