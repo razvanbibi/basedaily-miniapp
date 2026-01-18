@@ -8,7 +8,7 @@ export async function getNeynarProfile(address: string) {
         "api_key": process.env.NEYNAR_API_KEY!,
       },
       body: JSON.stringify({
-        addresses: [address],
+        addresses: [address.toLowerCase()],
       }),
     }
   );
@@ -19,5 +19,12 @@ export async function getNeynarProfile(address: string) {
   }
 
   const data = await res.json();
-  return data.users?.[0] ?? null;
+
+  const user = data.users_by_address?.[address.toLowerCase()];
+  if (!user) return null;
+
+  return {
+    display_name: user.display_name ?? null,
+    pfp_url: user.pfp_url ?? null,
+  };
 }
