@@ -334,6 +334,21 @@ useEffect(() => {
     return { provider, signer, usdc };
   }
 
+  useEffect(() => {
+  if (!account) return;
+  if (!fcDisplayName && !fcPfp) return;
+
+  fetch("/api/profile/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      address: account,
+      name: fcDisplayName,
+      avatar: fcPfp,
+    }),
+  });
+}, [account, fcDisplayName, fcPfp]);
+
 
   async function ensureBaseNetwork() {
     const eth = getEthereum();
