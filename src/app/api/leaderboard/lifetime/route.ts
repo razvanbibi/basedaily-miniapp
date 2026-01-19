@@ -11,8 +11,6 @@ export async function GET() {
     addresses.map(async (addr) => {
       const profile = await getProfile(addr);
 
-      console.log("PROFILE FROM REDIS", addr, profile);
-
       return {
         address: addr,
         highestStreak: profile?.highestStreak ?? 0,

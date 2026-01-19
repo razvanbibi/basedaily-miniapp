@@ -13,10 +13,7 @@ export async function getNeynarProfile(address: string) {
     }
   );
 
-  if (!res.ok) {
-    console.log("NEY FAILED", res.status);
-    return null;
-  }
+  if (!res.ok) return null;
 
   const data = await res.json();
 

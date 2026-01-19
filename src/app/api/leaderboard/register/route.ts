@@ -24,22 +24,6 @@ await saveStats(address, {
   highestStreak: hs,
 });
 
-
-console.log("REGISTER HIT", address);
-
-const profile = await getNeynarProfile(address);
-console.log("NEY PROFILE RESULT", address, profile);
-
-
-if (profile) {
-  await saveProfile(address, {
-    name: profile.display_name ?? null,
-    avatar: profile.pfp_url ?? null,
-  });
-  console.log("PROFILE SAVED");
-}
-
-
   // 2️⃣ Neynar fetch (one-time best effort)
   try {
     const profile = await getNeynarProfile(address);
