@@ -15,16 +15,22 @@ export async function saveStats(
 
 export async function saveProfile(
   address: string,
-  data: { name: string | null; avatar: string | null }
+  data: { name: string | null; avatar: string | null; fid?: string | null }
 ) {
-  await redis.hset(KEY_PREFIX + address.toLowerCase(), data);
+  await redis.hset(KEY_PREFIX + address.toLowerCase(), {
+    name: data.name,
+    avatar: data.avatar,
+    fid: data.fid ?? null,
+  });
 }
+
 
 export async function getProfile(address: string) {
   const res = await redis.hgetall<{
     name?: string;
     avatar?: string;
     highestStreak?: string;
+    fid?: string;
   }>(KEY_PREFIX + address.toLowerCase());
 
   if (!res) return null;
@@ -32,9 +38,11 @@ export async function getProfile(address: string) {
   return {
     name: res.name ?? null,
     avatar: res.avatar ?? null,
+    fid: res.fid ?? null,
     highestStreak: res.highestStreak
       ? Number(res.highestStreak)
       : null,
   };
 }
+
 
