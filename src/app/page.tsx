@@ -100,8 +100,9 @@ const [leaderboard, setLeaderboard] = useState<
 >([]);
 const [leaderboardLoading, setLeaderboardLoading] = useState(false);
 
+const [showMintIdentity, setShowMintIdentity] = useState(false);
 
-
+const IDENTITY_NFT_ADDRESS = "0xe56bF68c390f3761fa3707D8Dbb411bACBa0fa96";
 
   // MiniApp SDK → Base-কে জানানো যে app ready
   useEffect(() => {
@@ -316,7 +317,46 @@ useEffect(() => {
   return () => window.removeEventListener("click", close);
 }, [showLeaderboard]);
 
+const IDENTITY_NFT_ABI = [
+  "function mint() external",
+];
 
+async function handleMintIdentity() {
+  try {
+    if (!account) {
+      setStatus("Connect wallet first");
+      return;
+    }
+
+    await ensureBaseNetwork();
+
+    const eth = getEthereum();
+    if (!eth) return;
+
+    const provider = new ethers.BrowserProvider(eth as any);
+    const signer = await provider.getSigner();
+
+    const nft = new ethers.Contract(
+      IDENTITY_NFT_ADDRESS,
+      IDENTITY_NFT_ABI,
+      signer
+    );
+
+    setStatus("Minting identity NFT...");
+    const tx = await nft.mint();
+    await tx.wait();
+
+    setStatus("Identity NFT minted 🎉");
+    setShowMintIdentity(false);
+  } catch (err: any) {
+    console.error(err);
+    setStatus(
+      err?.shortMessage ??
+      err?.message ??
+      "Mint failed"
+    );
+  }
+}
   async function getUsdcContractWithSigner() {
     const eth = getEthereum();
     if (!eth) throw new Error("Wallet not found");
@@ -345,6 +385,7 @@ useEffect(() => {
       address: account,
       name: fcDisplayName,
       avatar: fcPfp,
+      fid: fcFid,
     }),
   });
 }, [account, fcDisplayName, fcPfp]);
@@ -1357,9 +1398,30 @@ await fetch("/api/leaderboard/register", {
                       <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
                     )}
                   </div>
+                  <button
+  onClick={() => setShowMintIdentity(true)}
+  className="
+    mt-2
+    px-3 py-1.5
+    rounded-xl
+    bg-gradient-to-r from-indigo-500 via-sky-500 to-blue-500
+    text-slate-950
+    font-semibold
+    text-[11px]
+    shadow-md shadow-sky-900/30
+    hover:brightness-110
+    active:scale-[0.97]
+    transition
+  "
+>
+  Mint Identity
+</button>
+
                 </div>
               )}
+              
             </div>
+            
 
           </div>
 
@@ -2138,6 +2200,129 @@ await fetch("/api/leaderboard/register", {
     "
         />
       )}
+
+{showMintIdentity && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center">
+    {/* overlay */}
+    <div
+      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      onClick={() => setShowMintIdentity(false)}
+    />
+
+    {/* modal */}
+    <div className="
+      relative z-10 w-[90%] max-w-sm
+      rounded-3xl
+      bg-slate-950/90 backdrop-blur-xl
+      border border-sky-400/30
+      shadow-2xl shadow-black/70
+      p-4 space-y-3
+      animate-[toast-pop_0.28s_ease-out]
+    ">
+      <h3 className="text-sm font-semibold text-slate-100 text-center">
+        Mint Your BaseDaily Identity
+      </h3>
+
+      {/* NFT preview card */}
+      <div
+  className="
+    relative
+    rounded-2xl
+    p-4 space-y-3
+    overflow-hidden
+    bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#020617]
+    border border-white/10
+    shadow-[0_0_40px_rgba(56,189,248,0.15)]
+  "
+>
+
+        {/* glow blob */}
+<div className="
+  absolute -top-10 -right-10
+  h-32 w-32
+  rounded-full
+  bg-sky-500/20
+  blur-3xl
+" />
+
+{/* subtle grid texture */}
+<div className="
+  absolute inset-0
+  opacity-[0.06]
+  bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)]
+  bg-[size:24px_24px]
+  pointer-events-none
+" />
+
+        
+        <div className="flex items-center gap-3">
+          <img
+            src={fcPfp || "/avatar.png"}
+            className="h-12 w-12 rounded-full ring-2 ring-sky-400 animate-[breath_3.6s_ease-in-out_infinite]"
+
+
+          />
+          <div>
+            <p className="text-sm font-semibold text-slate-100">
+              {fcDisplayName || "Base user"}
+            </p>
+            <p className="text-[11px] text-slate-400">
+              FID: {fcFid ?? "—"}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+          <span className="text-[11px] uppercase tracking-wider text-slate-400">🔥 Highest streak</span>
+          <span className=" text-right
+    text-xl font-extrabold
+    bg-gradient-to-r from-amber-300 to-yellow-400
+    bg-clip-text text-transparent
+    drop-shadow-[0_0_12px_rgba(251,191,36,0.35)]
+  ">
+    {highestNumber}
+  </span>
+
+          <span className="text-[11px] uppercase tracking-wider text-slate-400">⭐ Neynar score</span>
+          <span className="text-right text-sm font-semibold text-sky-300">
+    {fcScore ?? "—"}
+  </span>
+        </div>
+
+        <div className="flex items-center justify-center gap-2 pt-2 text-[10px] text-slate-400 text-center">
+          <img src="/logo-0x.png" className="h-4 w-4" />
+          BaseDaily Identity NFT
+        </div>
+      </div>
+
+      {/* mint button */}
+      <div className="flex justify-center mt-3">
+      <button onClick={handleMintIdentity}
+  className="
+    mx-auto
+    px-6 py-2
+    rounded-full
+    border border-sky-400/40
+    bg-sky-500/10
+    backdrop-blur-md
+    text-sky-300
+    text-sm font-semibold
+    shadow-[0_0_20px_rgba(56,189,248,0.25)]
+    hover:bg-sky-500/20
+    hover:shadow-[0_0_30px_rgba(56,189,248,0.45)]
+    active:scale-[0.97]
+    transition-all
+  "
+>
+  Mint
+</button>
+</div>
+
+    </div>
+  </div>
+)}
+
+
     </main>
   );
 }
