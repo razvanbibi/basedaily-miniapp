@@ -20,6 +20,10 @@ export async function GET(
   const { contract } = getReadOnlyContractServer();
   const streak = Number(await contract.highestStreak(owner));
 
+const avatar =
+  profile?.avatar ?? "https://basedaily-miniapp.vercel.app/avatar.png";
+
+
   const svg = `
 <svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -29,6 +33,21 @@ export async function GET(
     </linearGradient>
   </defs>
   <rect width="100%" height="100%" fill="url(#bg)"/>
+  <defs>
+  <clipPath id="avatarClip">
+    <circle cx="300" cy="200" r="60" />
+  </clipPath>
+</defs>
+
+<image
+  href="${avatar}"
+  x="240"
+  y="140"
+  width="120"
+  height="120"
+  clip-path="url(#avatarClip)"
+/>
+
   <text x="50%" y="120" fill="#38bdf8" font-size="32" text-anchor="middle">
     BaseDaily Identity
   </text>
