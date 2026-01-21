@@ -10,10 +10,11 @@ const NFT_ABI = [
 ];
 
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: { tokenId: string } }
 ) {
   const tokenId = Number(params.tokenId);
+  const { origin } = new URL(req.url);
 
   const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
   const nft = new ethers.Contract(NFT_CONTRACT, NFT_ABI, provider);
@@ -34,7 +35,8 @@ export async function GET(
       ? `BaseDaily Identity — ${profile.name}`
       : "BaseDaily Identity",
     description: "Dynamic BaseDaily Identity NFT",
-    image: `${process.env.NEXT_PUBLIC_APP_URL}/api/nft/image/${tokenId}`,
+    image: `${origin}/api/nft/image/${tokenId}`,
+    image_url: `${origin}/api/nft/image/${tokenId}`,
     attributes: [
       {
         trait_type: "Highest Streak",
