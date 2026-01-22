@@ -44,7 +44,7 @@ export async function GET(
 
     <!-- glow -->
     <filter id="softGlow">
-      <feGaussianBlur stdDeviation="36"/>
+      <feGaussianBlur stdDeviation="42"/>
     </filter>
 
     <!-- avatar clip -->
@@ -65,9 +65,10 @@ export async function GET(
     fill="url(#bg)"/>
 
   <!-- glow corner -->
-  <circle cx="560" cy="24" r="120"
-    fill="rgba(56,189,248,0.22)"
-    filter="url(#softGlow)"/>
+  <circle cx="560" cy="0" r="140"
+  fill="rgba(56,189,248,0.18)"
+  filter="url(#softGlow)"/>
+
 
   <!-- grid -->
   <rect x="40" y="24" rx="18" ry="18"
@@ -75,11 +76,20 @@ export async function GET(
     fill="url(#grid)"/>
 
   <!-- avatar -->
+  <g transform="translate(96 72)">
+  <circle r="26"
+    fill="rgba(56,189,248,0.25)"/>
+  <circle r="24"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="2"/>
   <image
     href="${avatar}"
-    x="72" y="48"
+    x="-24" y="-24"
     width="48" height="48"
     clip-path="url(#avatarClip)"/>
+</g>
+
 
   <!-- name -->
   <text x="132" y="66"
@@ -127,17 +137,19 @@ export async function GET(
   </text>
 
   <!-- footer -->
+<g transform="translate(300 300)">
   <image
     href="https://basedaily-miniapp.vercel.app/logo-0x.png"
-    x="268" y="290"
-    width="14" height="14"/>
-
-  <text x="300" y="302"
+    x="-28" y="-8"
+    width="16" height="16"/>
+  <text x="0" y="4"
     fill="#94a3b8"
     font-size="10"
-    text-anchor="middle">
+    text-anchor="start">
     BaseDaily Identity NFT
   </text>
+</g>
+
 
 </svg>
 `;
