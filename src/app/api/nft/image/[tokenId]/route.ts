@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+export const runtime = "nodejs";
+
+import { ImageResponse } from "@vercel/og";
 import { getProfile } from "@/lib/profileStore";
 import { getReadOnlyContractServer } from "@/lib/contract.server";
 import { ethers } from "ethers";
-import { Resvg } from "@resvg/resvg-js";
 
 const NFT_CONTRACT = "0xe56bF68c390f3761fa3707D8Dbb411bACBa0fa96";
 const NFT_ABI = ["function ownerOf(uint256) view returns (address)"];
@@ -23,9 +24,9 @@ export async function GET(
 
   const avatar =
     profile?.avatar ?? "https://basedaily-miniapp.vercel.app/avatar.png";
-const fcScore = null;
 
-  // ---------- SVG TEMPLATE ----------
+  const fcScore = "—";
+
   const svg = `
 <svg width="600" height="600" viewBox="0 0 600 600"
   xmlns="http://www.w3.org/2000/svg">
@@ -40,29 +41,30 @@ const fcScore = null;
 
     <!-- glow -->
     <filter id="glow">
-      <feGaussianBlur stdDeviation="24" result="coloredBlur"/>
+      <feGaussianBlur stdDeviation="28" result="blur"/>
       <feMerge>
-        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <!-- subtle grid -->
+    <!-- grid -->
     <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
       <path d="M24 0H0V24" fill="none" stroke="white" stroke-width="1" opacity="0.06"/>
     </pattern>
 
     <!-- avatar clip -->
     <clipPath id="avatarClip">
-      <circle cx="96" cy="120" r="24"/>
+      <circle cx="96" cy="112" r="24"/>
     </clipPath>
 
-    <!-- avatar glow -->
+    <!-- avatar ring -->
     <filter id="avatarGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#38bdf8" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="6"
+        flood-color="#38bdf8" flood-opacity="0.8"/>
     </filter>
 
-    <!-- gradient text -->
+    <!-- gold text -->
     <linearGradient id="goldText" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#fcd34d"/>
       <stop offset="100%" stop-color="#fbbf24"/>
@@ -70,19 +72,26 @@ const fcScore = null;
   </defs>
 
   <!-- card -->
-  <rect x="40" y="40" rx="24" ry="24" width="520" height="520" fill="url(#bg)" stroke="rgba(255,255,255,0.1)"/>
+  <rect x="40" y="40" rx="24" ry="24"
+    width="520" height="520"
+    fill="url(#bg)"
+    stroke="rgba(255,255,255,0.1)"/>
 
   <!-- glow blob -->
-  <circle cx="500" cy="60" r="80" fill="rgba(56,189,248,0.2)" filter="url(#glow)"/>
+  <circle cx="520" cy="60" r="90"
+    fill="rgba(56,189,248,0.25)"
+    filter="url(#glow)"/>
 
   <!-- grid overlay -->
-  <rect x="40" y="40" rx="24" ry="24" width="520" height="520" fill="url(#grid)"/>
+  <rect x="40" y="40" rx="24" ry="24"
+    width="520" height="520"
+    fill="url(#grid)"/>
 
   <!-- avatar -->
   <image
     href="${avatar}"
     x="72"
-    y="96"
+    y="88"
     width="48"
     height="48"
     clip-path="url(#avatarClip)"
@@ -90,25 +99,36 @@ const fcScore = null;
   />
 
   <!-- name -->
-  <text x="132" y="116" fill="#e5e7eb" font-size="16" font-weight="600">
+  <text x="132" y="110"
+    fill="#e5e7eb"
+    font-size="16"
+    font-weight="600">
     ${profile?.name ?? "Base user"}
   </text>
 
   <!-- fid -->
-  <text x="132" y="134" fill="#94a3b8" font-size="11">
+  <text x="132" y="128"
+    fill="#94a3b8"
+    font-size="11">
     FID: ${profile?.fid ?? "—"}
   </text>
 
-  <!-- stats labels -->
-  <text x="72" y="210" fill="#94a3b8" font-size="11" letter-spacing="0.08em">
+  <!-- labels -->
+  <text x="72" y="210"
+    fill="#94a3b8"
+    font-size="11"
+    letter-spacing="0.08em">
     🔥 HIGHEST STREAK
   </text>
 
-  <text x="72" y="262" fill="#94a3b8" font-size="11" letter-spacing="0.08em">
+  <text x="72" y="262"
+    fill="#94a3b8"
+    font-size="11"
+    letter-spacing="0.08em">
     ⭐ NEYNAR SCORE
   </text>
 
-  <!-- stats values -->
+  <!-- values -->
   <text x="488" y="214"
     fill="url(#goldText)"
     font-size="28"
@@ -123,14 +143,16 @@ const fcScore = null;
     font-size="16"
     font-weight="600"
     text-anchor="end">
-    ${fcScore ?? "—"}
+    —
   </text>
 
   <!-- footer -->
-  <image href="https://basedaily-miniapp.vercel.app/logo-0x.png"
-    x="210" y="420" width="16" height="16"/>
+  <image
+    href="https://basedaily-miniapp.vercel.app/logo-0x.png"
+    x="210" y="420"
+    width="16" height="16"/>
 
-  <text x="238" y="432"
+  <text x="300" y="432"
     fill="#94a3b8"
     font-size="10"
     text-anchor="middle">
@@ -141,20 +163,10 @@ const fcScore = null;
 `;
 
 
-  // ---------- SVG → PNG ----------
-  const resvg = new Resvg(svg, {
-    fitTo: { mode: "width", value: 600 },
-  });
-
-  const pngData = resvg.render();
-  const pngBuffer = new Uint8Array(pngData.asPng());
-
-return new Response(pngBuffer, {
+return new Response(svg, {
   headers: {
-    "Content-Type": "image/png",
+    "Content-Type": "image/svg+xml",
     "Cache-Control": "public, max-age=300",
   },
 });
-
-
 }
