@@ -27,43 +27,32 @@ export async function GET(
   const fcScore = "—";
 
   const svg = `
-<svg width="600" height="600" viewBox="0 0 600 600"
+<svg width="600" height="360" viewBox="0 0 600 360"
   xmlns="http://www.w3.org/2000/svg">
 
   <defs>
-    <!-- background gradient -->
+    <!-- bg -->
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="60%" stop-color="#020617"/>
+      <stop offset="0%" stop-color="#0b1220"/>
       <stop offset="100%" stop-color="#020617"/>
     </linearGradient>
 
-    <!-- glow -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="28" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
     <!-- grid -->
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="white" stroke-width="1" opacity="0.035"/>
+    <pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse">
+      <path d="M22 0H0V22" fill="none" stroke="white" stroke-width="1" opacity="0.04"/>
     </pattern>
+
+    <!-- glow -->
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="36"/>
+    </filter>
 
     <!-- avatar clip -->
     <clipPath id="avatarClip">
-      <circle cx="96" cy="112" r="24"/>
+      <circle cx="96" cy="72" r="24"/>
     </clipPath>
 
-    <!-- avatar ring -->
-    <filter id="avatarGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6"
-        flood-color="#38bdf8" flood-opacity="0.8"/>
-    </filter>
-
-    <!-- gold text -->
+    <!-- gold -->
     <linearGradient id="goldText" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#fcd34d"/>
       <stop offset="100%" stop-color="#fbbf24"/>
@@ -71,76 +60,67 @@ export async function GET(
   </defs>
 
   <!-- card -->
-  <rect x="50" y="60" rx="22" ry="22"
-  width="500" height="460"
-    fill="url(#bg)"
-    stroke="rgba(255,255,255,0.1)"/>
+  <rect x="40" y="24" rx="18" ry="18"
+    width="520" height="312"
+    fill="url(#bg)"/>
 
-  <!-- glow blob -->
-  <circle cx="575" cy="35" r="110"
+  <!-- glow corner -->
+  <circle cx="560" cy="24" r="120"
+    fill="rgba(56,189,248,0.22)"
+    filter="url(#softGlow)"/>
 
-    fill="rgba(56,189,248,0.25)"
-    filter="url(#glow)"/>
-
-  <!-- grid overlay -->
-  <rect x="40" y="40" rx="24" ry="24"
-    width="520" height="520"
+  <!-- grid -->
+  <rect x="40" y="24" rx="18" ry="18"
+    width="520" height="312"
     fill="url(#grid)"/>
 
   <!-- avatar -->
   <image
     href="${avatar}"
-    x="72"
-    y="88"
-    width="48"
-    height="48"
-    clip-path="url(#avatarClip)"
-    filter="url(#avatarGlow)"
-  />
+    x="72" y="48"
+    width="48" height="48"
+    clip-path="url(#avatarClip)"/>
 
   <!-- name -->
-  <text x="132" y="110"
+  <text x="132" y="66"
     fill="#e5e7eb"
-    font-size="16"
+    font-size="15"
     font-weight="600">
     ${profile?.name ?? "Base user"}
   </text>
 
   <!-- fid -->
-  <text x="132" y="128"
+  <text x="132" y="82"
     fill="#94a3b8"
     font-size="11">
     FID: ${profile?.fid ?? "—"}
   </text>
 
   <!-- labels -->
-  <text x="72" y="195"
+  <text x="72" y="138"
     fill="#94a3b8"
-    font-size="11"
-    letter-spacing="0.08em">
+    font-size="11">
     🔥 HIGHEST STREAK
   </text>
 
-  <text x="72" y="240"
+  <text x="72" y="182"
     fill="#94a3b8"
-    font-size="11"
-    letter-spacing="0.08em">
+    font-size="11">
     ⭐ NEYNAR SCORE
   </text>
 
   <!-- values -->
-  <text x="488" y="200"
+  <text x="520" y="142"
     fill="url(#goldText)"
-    font-size="28"
+    font-size="26"
     font-weight="800"
-    text-anchor="end"
-    style="filter: drop-shadow(0 0 12px rgba(251,191,36,0.35));">
+    text-anchor="end">
     ${highestStreak}
   </text>
 
-  <text x="488" y="245"
+  <text x="520" y="186"
     fill="#38bdf8"
-    font-size="16"
+    font-size="15"
     font-weight="600"
     text-anchor="end">
     —
@@ -149,10 +129,10 @@ export async function GET(
   <!-- footer -->
   <image
     href="https://basedaily-miniapp.vercel.app/logo-0x.png"
-    x="210" y="360"
-    width="16" height="16"/>
+    x="268" y="290"
+    width="14" height="14"/>
 
-  <text x="300" y="372"
+  <text x="300" y="302"
     fill="#94a3b8"
     font-size="10"
     text-anchor="middle">
@@ -161,6 +141,7 @@ export async function GET(
 
 </svg>
 `;
+
 
 
 return new Response(svg, {
