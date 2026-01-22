@@ -1,6 +1,5 @@
 export const runtime = "nodejs";
 
-import { ImageResponse } from "@vercel/og";
 import { getProfile } from "@/lib/profileStore";
 import { getReadOnlyContractServer } from "@/lib/contract.server";
 import { ethers } from "ethers";
@@ -50,7 +49,7 @@ export async function GET(
 
     <!-- grid -->
     <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="white" stroke-width="1" opacity="0.06"/>
+      <path d="M24 0H0V24" fill="none" stroke="white" stroke-width="1" opacity="0.035"/>
     </pattern>
 
     <!-- avatar clip -->
@@ -72,13 +71,14 @@ export async function GET(
   </defs>
 
   <!-- card -->
-  <rect x="40" y="40" rx="24" ry="24"
-    width="520" height="520"
+  <rect x="50" y="60" rx="22" ry="22"
+  width="500" height="460"
     fill="url(#bg)"
     stroke="rgba(255,255,255,0.1)"/>
 
   <!-- glow blob -->
-  <circle cx="520" cy="60" r="90"
+  <circle cx="575" cy="35" r="110"
+
     fill="rgba(56,189,248,0.25)"
     filter="url(#glow)"/>
 
@@ -114,14 +114,14 @@ export async function GET(
   </text>
 
   <!-- labels -->
-  <text x="72" y="210"
+  <text x="72" y="195"
     fill="#94a3b8"
     font-size="11"
     letter-spacing="0.08em">
     🔥 HIGHEST STREAK
   </text>
 
-  <text x="72" y="262"
+  <text x="72" y="240"
     fill="#94a3b8"
     font-size="11"
     letter-spacing="0.08em">
@@ -129,7 +129,7 @@ export async function GET(
   </text>
 
   <!-- values -->
-  <text x="488" y="214"
+  <text x="488" y="200"
     fill="url(#goldText)"
     font-size="28"
     font-weight="800"
@@ -138,7 +138,7 @@ export async function GET(
     ${highestStreak}
   </text>
 
-  <text x="488" y="266"
+  <text x="488" y="245"
     fill="#38bdf8"
     font-size="16"
     font-weight="600"
@@ -149,10 +149,10 @@ export async function GET(
   <!-- footer -->
   <image
     href="https://basedaily-miniapp.vercel.app/logo-0x.png"
-    x="210" y="420"
+    x="210" y="360"
     width="16" height="16"/>
 
-  <text x="300" y="432"
+  <text x="300" y="372"
     fill="#94a3b8"
     font-size="10"
     text-anchor="middle">
