@@ -23,6 +23,7 @@ export async function GET(
 
   const avatar =
     profile?.avatar ?? "https://basedaily-miniapp.vercel.app/avatar.png";
+const fcScore = null;
 
   // ---------- SVG TEMPLATE ----------
   const svg = `
@@ -30,49 +31,115 @@ export async function GET(
   xmlns="http://www.w3.org/2000/svg">
 
   <defs>
+    <!-- background gradient -->
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="60%" stop-color="#020617"/>
       <stop offset="100%" stop-color="#020617"/>
     </linearGradient>
+
+    <!-- glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="24" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- subtle grid -->
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="white" stroke-width="1" opacity="0.06"/>
+    </pattern>
+
+    <!-- avatar clip -->
     <clipPath id="avatarClip">
-      <circle cx="300" cy="220" r="70" />
+      <circle cx="96" cy="120" r="24"/>
     </clipPath>
+
+    <!-- avatar glow -->
+    <filter id="avatarGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#38bdf8" flood-opacity="0.6"/>
+    </filter>
+
+    <!-- gradient text -->
+    <linearGradient id="goldText" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fcd34d"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
   </defs>
 
-  <rect width="600" height="600" fill="url(#bg)"/>
+  <!-- card -->
+  <rect x="40" y="40" rx="24" ry="24" width="520" height="520" fill="url(#bg)" stroke="rgba(255,255,255,0.1)"/>
 
+  <!-- glow blob -->
+  <circle cx="500" cy="60" r="80" fill="rgba(56,189,248,0.2)" filter="url(#glow)"/>
+
+  <!-- grid overlay -->
+  <rect x="40" y="40" rx="24" ry="24" width="520" height="520" fill="url(#grid)"/>
+
+  <!-- avatar -->
   <image
     href="${avatar}"
-    x="230"
-    y="150"
-    width="140"
-    height="140"
+    x="72"
+    y="96"
+    width="48"
+    height="48"
     clip-path="url(#avatarClip)"
+    filter="url(#avatarGlow)"
   />
 
-  <text x="300" y="80"
-    fill="#38bdf8"
-    font-size="34"
-    text-anchor="middle"
-    font-weight="600">
-    BaseDaily Identity
-  </text>
-
-  <text x="300" y="320"
-    fill="#e5e7eb"
-    font-size="26"
-    text-anchor="middle">
+  <!-- name -->
+  <text x="132" y="116" fill="#e5e7eb" font-size="16" font-weight="600">
     ${profile?.name ?? "Base user"}
   </text>
 
-  <text x="300" y="370"
-    fill="#facc15"
-    font-size="22"
-    text-anchor="middle">
-    🔥 Highest streak: ${highestStreak}
+  <!-- fid -->
+  <text x="132" y="134" fill="#94a3b8" font-size="11">
+    FID: ${profile?.fid ?? "—"}
   </text>
+
+  <!-- stats labels -->
+  <text x="72" y="210" fill="#94a3b8" font-size="11" letter-spacing="0.08em">
+    🔥 HIGHEST STREAK
+  </text>
+
+  <text x="72" y="262" fill="#94a3b8" font-size="11" letter-spacing="0.08em">
+    ⭐ NEYNAR SCORE
+  </text>
+
+  <!-- stats values -->
+  <text x="488" y="214"
+    fill="url(#goldText)"
+    font-size="28"
+    font-weight="800"
+    text-anchor="end"
+    style="filter: drop-shadow(0 0 12px rgba(251,191,36,0.35));">
+    ${highestStreak}
+  </text>
+
+  <text x="488" y="266"
+    fill="#38bdf8"
+    font-size="16"
+    font-weight="600"
+    text-anchor="end">
+    ${fcScore ?? "—"}
+  </text>
+
+  <!-- footer -->
+  <image href="https://basedaily-miniapp.vercel.app/logo-0x.png"
+    x="210" y="420" width="16" height="16"/>
+
+  <text x="238" y="432"
+    fill="#94a3b8"
+    font-size="10"
+    text-anchor="middle">
+    BaseDaily Identity NFT
+  </text>
+
 </svg>
 `;
+
 
   // ---------- SVG → PNG ----------
   const resvg = new Resvg(svg, {
