@@ -104,6 +104,10 @@ const [showMintIdentity, setShowMintIdentity] = useState(false);
 
 const IDENTITY_NFT_ADDRESS = "0xe56bF68c390f3761fa3707D8Dbb411bACBa0fa96";
 
+const [hasIdentityNFT, setHasIdentityNFT] = useState<boolean | null>(null);
+const [identityTokenId, setIdentityTokenId] = useState<number | null>(null);
+
+
   // MiniApp SDK → Base-কে জানানো যে app ready
   useEffect(() => {
     async function markReady() {
@@ -391,6 +395,68 @@ async function handleMintIdentity() {
     }),
   });
 }, [account, fcDisplayName, fcPfp, fcFid, fcScore, highestStreak]);
+
+useEffect(() => {
+  if (!account || !ethReady) return;
+
+  async function checkIdentityMinted() {
+    try {
+      const eth = getEthereum();
+      if (!eth) return;
+
+      const provider = new ethers.BrowserProvider(eth as any);
+      const nft = new ethers.Contract(
+        IDENTITY_NFT_ADDRESS,
+        ["function balanceOf(address owner) view returns (uint256)"],
+        provider
+      );
+
+      const balance = Number(await nft.balanceOf(account));
+      setHasIdentityNFT(balance > 0);
+    } catch (err) {
+      console.error("Failed to check identity NFT", err);
+      setHasIdentityNFT(false);
+    }
+  }
+
+  checkIdentityMinted();
+}, [account, ethReady]);
+
+
+useEffect(() => {
+  if (!account || !ethReady) return;
+
+  async function checkIdentityNFT() {
+    try {
+      const provider = new ethers.BrowserProvider(getEthereum() as any);
+      const nft = new ethers.Contract(
+        IDENTITY_NFT_ADDRESS,
+        [
+          "function balanceOf(address owner) view returns (uint256)",
+          "function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)"
+        ],
+        provider
+      );
+
+      const balance = Number(await nft.balanceOf(account));
+
+      if (balance > 0) {
+        const tokenId = Number(
+          await nft.tokenOfOwnerByIndex(account, 0)
+        );
+        setHasIdentityNFT(true);
+        setIdentityTokenId(tokenId);
+      } else {
+        setHasIdentityNFT(false);
+      }
+    } catch (e) {
+      console.error("Identity NFT check failed", e);
+      setHasIdentityNFT(false);
+    }
+  }
+
+  checkIdentityNFT();
+}, [account, ethReady]);
 
 
   async function ensureBaseNetwork() {
@@ -1416,8 +1482,9 @@ await fetch("/api/leaderboard/register", {
     transition
   "
 >
-  Mint Identity
+  {hasIdentityNFT ? "View Identity" : "Mint Identity"}
 </button>
+
 
                 </div>
               )}
@@ -2299,25 +2366,40 @@ await fetch("/api/leaderboard/register", {
 
       {/* mint button */}
       <div className="flex justify-center mt-3">
-      <button onClick={handleMintIdentity}
-  className="
+      <button
+  onClick={handleMintIdentity}
+  disabled={hasIdentityNFT === true}
+  className={`
     mx-auto
     px-6 py-2
     rounded-full
     border border-sky-400/40
-    bg-sky-500/10
     backdrop-blur-md
-    text-sky-300
     text-sm font-semibold
     shadow-[0_0_20px_rgba(56,189,248,0.25)]
-    hover:bg-sky-500/20
-    hover:shadow-[0_0_30px_rgba(56,189,248,0.45)]
-    active:scale-[0.97]
     transition-all
-  "
+
+    ${
+      hasIdentityNFT
+        ? `
+          bg-emerald-500/10
+          text-emerald-300
+          cursor-not-allowed
+          shadow-[0_0_20px_rgba(16,185,129,0.25)]
+        `
+        : `
+          bg-sky-500/10
+          text-sky-300
+          hover:bg-sky-500/20
+          hover:shadow-[0_0_30px_rgba(56,189,248,0.45)]
+          active:scale-[0.97]
+        `
+    }
+  `}
 >
-  Mint
+  {hasIdentityNFT ? "Minted ✓" : "Mint"}
 </button>
+
 </div>
 
     </div>
