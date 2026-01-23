@@ -386,9 +386,11 @@ async function handleMintIdentity() {
       name: fcDisplayName,
       avatar: fcPfp,
       fid: fcFid,
+      neynarScore: fcScore,
+      highestStreak: highestStreak ? Number(highestStreak) : 0,
     }),
   });
-}, [account, fcDisplayName, fcPfp]);
+}, [account, fcDisplayName, fcPfp, fcFid, fcScore, highestStreak]);
 
 
   async function ensureBaseNetwork() {
