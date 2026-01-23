@@ -24,7 +24,25 @@ export async function GET(
   const avatar =
     profile?.avatar ?? "https://basedaily-miniapp.vercel.app/avatar.png";
 
-  
+  async function fetchAsBase64(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const buf = Buffer.from(await res.arrayBuffer());
+    const mime = res.headers.get("content-type") || "image/png";
+    return `data:${mime};base64,${buf.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+const avatarUrl =
+  profile?.avatar ?? "https://basedaily-miniapp.vercel.app/avatar.png";
+
+const avatarBase64 = await fetchAsBase64(avatarUrl);
+const logoBase64 = await fetchAsBase64(
+  "https://basedaily-miniapp.vercel.app/logo-0x.png"
+);
+
 
   const svg = `
 <svg width="600" height="360" viewBox="0 0 600 360"
@@ -77,12 +95,11 @@ export async function GET(
 
   <!-- avatar -->
   <image
-  xlink:href="${avatar}"
-  href="${avatar}"
+  xlink:href="${avatarBase64 ?? ""}"
   x="72" y="48"
   width="48" height="48"
-  clip-path="url(#avatarClip)"
-  crossorigin="anonymous"/>
+  clip-path="url(#avatarClip)"/>
+
 
 
   <!-- name -->
@@ -138,11 +155,10 @@ export async function GET(
   <!-- footer -->
 <g transform="translate(300 300)">
   <image
-  xlink:href="https://basedaily-miniapp.vercel.app/logo-0x.png"
-  href="https://basedaily-miniapp.vercel.app/logo-0x.png"
+  xlink:href="${logoBase64 ?? ""}"
   x="-28" y="-8"
-  width="16" height="16"
-  crossorigin="anonymous"/>
+  width="16" height="16"/>
+
 
   <text x="0" y="4"
     fill="#94a3b8"
