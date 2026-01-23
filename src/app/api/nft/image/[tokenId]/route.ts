@@ -76,10 +76,13 @@ export async function GET(
 
   <!-- avatar -->
   <image
-    href="${avatar}"
-    x="72" y="48"
-    width="48" height="48"
-    clip-path="url(#avatarClip)"/>
+  xlink:href="${avatar}"
+  href="${avatar}"
+  x="72" y="48"
+  width="48" height="48"
+  clip-path="url(#avatarClip)"
+  crossorigin="anonymous"/>
+
 
   <!-- name -->
   <text x="132" y="66"
@@ -134,9 +137,12 @@ export async function GET(
   <!-- footer -->
 <g transform="translate(300 300)">
   <image
-    href="https://basedaily-miniapp.vercel.app/logo-0x.png"
-    x="-28" y="-8"
-    width="16" height="16"/>
+  xlink:href="https://basedaily-miniapp.vercel.app/logo-0x.png"
+  href="https://basedaily-miniapp.vercel.app/logo-0x.png"
+  x="-28" y="-8"
+  width="16" height="16"
+  crossorigin="anonymous"/>
+
   <text x="0" y="4"
     fill="#94a3b8"
     font-size="10"
@@ -153,8 +159,9 @@ export async function GET(
 
 return new Response(svg, {
   headers: {
-    "Content-Type": "image/svg+xml",
+    "Content-Type": "image/svg+xml; charset=utf-8",
     "Cache-Control": "public, max-age=300",
   },
 });
+
 }
