@@ -24,7 +24,7 @@ export async function GET(
   const avatar =
     profile?.avatar ?? "https://basedaily-miniapp.vercel.app/avatar.png";
 
-  const fcScore = "—";
+  
 
   const svg = `
 <svg width="600" height="360" viewBox="0 0 600 360"
@@ -119,12 +119,17 @@ export async function GET(
   </text>
 
   <text x="520" y="186"
-    fill="#38bdf8"
-    font-size="15"
-    font-weight="600"
-    text-anchor="end">
-    —
-  </text>
+  fill="#38bdf8"
+  font-size="15"
+  font-weight="600"
+  text-anchor="end">
+  ${
+    profile?.neynarScore !== null && profile?.neynarScore !== undefined
+      ? profile.neynarScore.toFixed(2)
+      : "—"
+  }
+</text>
+
 
   <!-- footer -->
 <g transform="translate(300 300)">

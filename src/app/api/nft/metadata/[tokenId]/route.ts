@@ -46,6 +46,10 @@ export async function GET(
         trait_type: "FID",
         value: profile?.fid ?? "—",
       },
+      {
+  trait_type: "Neynar Score",
+  value: profile?.neynarScore ?? "—",
+},
     ],
   });
 }
