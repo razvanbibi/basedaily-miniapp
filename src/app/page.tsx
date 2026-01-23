@@ -350,6 +350,12 @@ async function handleMintIdentity() {
     const tx = await nft.mint();
     await tx.wait();
 
+    setHasIdentityNFT(true);
+    setTimeout(() => {
+  // force re-check from chain (safety)
+  setHasIdentityNFT(null);
+}, 0);
+
     setStatus("Identity NFT minted 🎉");
     setShowMintIdentity(false);
   } catch (err: any) {
@@ -396,31 +402,7 @@ async function handleMintIdentity() {
   });
 }, [account, fcDisplayName, fcPfp, fcFid, fcScore, highestStreak]);
 
-useEffect(() => {
-  if (!account || !ethReady) return;
 
-  async function checkIdentityMinted() {
-    try {
-      const eth = getEthereum();
-      if (!eth) return;
-
-      const provider = new ethers.BrowserProvider(eth as any);
-      const nft = new ethers.Contract(
-        IDENTITY_NFT_ADDRESS,
-        ["function balanceOf(address owner) view returns (uint256)"],
-        provider
-      );
-
-      const balance = Number(await nft.balanceOf(account));
-      setHasIdentityNFT(balance > 0);
-    } catch (err) {
-      console.error("Failed to check identity NFT", err);
-      setHasIdentityNFT(false);
-    }
-  }
-
-  checkIdentityMinted();
-}, [account, ethReady]);
 
 
 useEffect(() => {
@@ -428,7 +410,10 @@ useEffect(() => {
 
   async function checkIdentityNFT() {
     try {
-      const provider = new ethers.BrowserProvider(getEthereum() as any);
+      const eth = getEthereum();
+      if (!eth) return;
+
+      const provider = new ethers.BrowserProvider(eth as any);
       const nft = new ethers.Contract(
         IDENTITY_NFT_ADDRESS,
         [
@@ -448,15 +433,18 @@ useEffect(() => {
         setIdentityTokenId(tokenId);
       } else {
         setHasIdentityNFT(false);
+        setIdentityTokenId(null);
       }
-    } catch (e) {
-      console.error("Identity NFT check failed", e);
+    } catch (err) {
+      console.error("Identity NFT check failed", err);
       setHasIdentityNFT(false);
+      setIdentityTokenId(null);
     }
   }
 
   checkIdentityNFT();
 }, [account, ethReady]);
+
 
 
   async function ensureBaseNetwork() {
