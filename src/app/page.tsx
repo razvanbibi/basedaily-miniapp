@@ -1275,7 +1275,7 @@ export default function HomePage() {
 
             {account
               ? hasCheckedInToday
-                ? "You have already checked in today. Come back tomorrow!"
+                ? "You've already checked in today. Come back tomorrow!"
                 : "Tap check-in to unlock today’s 0xtxn reward."
               : "Connect your wallet to start your daily check-in streak."}
           </p>
@@ -1413,33 +1413,58 @@ export default function HomePage() {
               </div>
 
               {/* RIGHT: Unclaimed badges */}
-              {hasUnclaimedBadges && (
-                <div className="flex flex-col items-end gap-1">
-                  <span
-                    className={`text-[12px] uppercase ${isDarkMode ? "text-slate-400" : "text-slate-900"
-                      }`}
-                  >
+              <div
+                className={`
+    flex flex-col items-end gap-1
+    transition-all duration-500
+    ${hasUnclaimedBadges
+                    ? ""
+                    : "opacity-40 grayscale"
+                  }
+  `}
+              >
+                <span
+                  className={`
+      text-[12px] uppercase tracking-wide
+      transition-all duration-300
+      ${hasUnclaimedBadges
+                      ? isDarkMode
+                        ? "text-slate-400"
+                        : "text-slate-900"
+                      : isDarkMode
+                        ? "text-slate-500"
+                        : "text-slate-700"
+                    }
+    `}
+                >
+                  Unclaimed badges
+                </span>
 
-                    Unclaimed badges
-                  </span>
+                <div className="flex items-center gap-2 transition-all duration-500">
+                  {pendingSilverCount > 0
+                    ? <BadgeGlow icon="🥈" count={pendingSilverCount} />
+                    : <BadgeGhost icon="🥈" />
+                  }
 
-                  <div className="flex items-center gap-2">
-                    {pendingSilverCount > 0 && (
-                      <BadgeGlow icon="🥈" count={pendingSilverCount} />
-                    )}
-                    {pendingGoldCount > 0 && (
-                      <BadgeGlow icon="🥇" count={pendingGoldCount} />
-                    )}
-                    {pendingDiamondCount > 0 && (
-                      <BadgeGlow icon="💎" count={pendingDiamondCount} />
-                    )}
-                    {pendingLegendaryCount > 0 && (
-                      <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
-                    )}
-                  </div>
-                  <button
-                    onClick={() => setShowMintIdentity(true)}
-                    className="
+                  {pendingGoldCount > 0
+                    ? <BadgeGlow icon="🥇" count={pendingGoldCount} />
+                    : <BadgeGhost icon="🥇" />
+                  }
+
+                  {pendingDiamondCount > 0
+                    ? <BadgeGlow icon="💎" count={pendingDiamondCount} />
+                    : <BadgeGhost icon="💎" />
+                  }
+
+                  {pendingLegendaryCount > 0
+                    ? <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
+                    : <BadgeGhost icon="🌟" />
+                  }
+                </div>
+
+                <button
+                  onClick={() => setShowMintIdentity(true)}
+                  className="
     mt-2
     px-3 py-1.5
     rounded-xl
@@ -1452,13 +1477,12 @@ export default function HomePage() {
     active:scale-[0.97]
     transition
   "
-                  >
-                    {hasIdentityNFT ? "View Identity" : "Mint Identity"}
-                  </button>
+                >
+                  {hasIdentityNFT ? "View Identity" : "Mint Identity"}
+                </button>
 
 
-                </div>
-              )}
+              </div>
 
             </div>
 
@@ -2451,10 +2475,11 @@ function BadgeCard({
 function BadgeGlow({
   icon,
   count,
-}: {
-  icon: string;
-  count: number;
-}) {
+}:
+  {
+    icon: string;
+    count: number;
+  }) {
   return (
     <div className="relative">
       <span
@@ -2479,6 +2504,14 @@ function BadgeGlow({
         </span>
       )}
     </div>
+  );
+}
+
+function BadgeGhost({ icon }: { icon: string }) {
+  return (
+    <span className="text-xl opacity-20 grayscale select-none">
+      {icon}
+    </span>
   );
 }
 
