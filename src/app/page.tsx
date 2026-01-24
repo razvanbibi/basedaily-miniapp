@@ -412,29 +412,16 @@ useEffect(() => {
       const provider = new ethers.BrowserProvider(eth as any);
       const nft = new ethers.Contract(
         IDENTITY_NFT_ADDRESS,
-        [
-          "function balanceOf(address owner) view returns (uint256)",
-          "function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)"
-        ],
+        ["function balanceOf(address owner) view returns (uint256)"],
         provider
       );
 
       const balance = Number(await nft.balanceOf(account));
 
-      if (balance > 0) {
-        const tokenId = Number(
-          await nft.tokenOfOwnerByIndex(account, 0)
-        );
-        setHasIdentityNFT(true);
-        setIdentityTokenId(tokenId);
-      } else {
-        setHasIdentityNFT(false);
-        setIdentityTokenId(null);
-      }
+      setHasIdentityNFT(balance > 0);
     } catch (err) {
       console.error("Identity NFT check failed", err);
-      setHasIdentityNFT(false);
-      setIdentityTokenId(null);
+      // ❌ এখানে false সেট কোরো না
     }
   }
 
