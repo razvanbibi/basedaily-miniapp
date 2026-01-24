@@ -351,10 +351,6 @@ async function handleMintIdentity() {
     await tx.wait();
 
     setHasIdentityNFT(true);
-    setTimeout(() => {
-  // force re-check from chain (safety)
-  setHasIdentityNFT(null);
-}, 0);
 
     setStatus("Identity NFT minted 🎉");
     setShowMintIdentity(false);
