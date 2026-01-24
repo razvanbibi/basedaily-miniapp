@@ -95,17 +95,17 @@ export default function HomePage() {
 
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
-const [leaderboard, setLeaderboard] = useState<
-  { address: string; highestStreak: number; name?: string | null; avatar?: string | null }[]
->([]);
-const [leaderboardLoading, setLeaderboardLoading] = useState(false);
+  const [leaderboard, setLeaderboard] = useState<
+    { address: string; highestStreak: number; name?: string | null; avatar?: string | null }[]
+  >([]);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false);
 
-const [showMintIdentity, setShowMintIdentity] = useState(false);
+  const [showMintIdentity, setShowMintIdentity] = useState(false);
 
-const IDENTITY_NFT_ADDRESS = "0xe56bF68c390f3761fa3707D8Dbb411bACBa0fa96";
+  const IDENTITY_NFT_ADDRESS = "0xe56bF68c390f3761fa3707D8Dbb411bACBa0fa96";
 
-const [hasIdentityNFT, setHasIdentityNFT] = useState<boolean | null>(null);
-const [identityTokenId, setIdentityTokenId] = useState<number | null>(null);
+  const [hasIdentityNFT, setHasIdentityNFT] = useState<boolean | null>(null);
+  const [identityTokenId, setIdentityTokenId] = useState<number | null>(null);
 
 
   // MiniApp SDK → Base-কে জানানো যে app ready
@@ -312,57 +312,57 @@ const [identityTokenId, setIdentityTokenId] = useState<number | null>(null);
     void loadDonationLeaderboard();
   }, []);
 
-useEffect(() => {
-  if (!showLeaderboard) return;
+  useEffect(() => {
+    if (!showLeaderboard) return;
 
-  const close = () => setShowLeaderboard(false);
-  window.addEventListener("click", close);
+    const close = () => setShowLeaderboard(false);
+    window.addEventListener("click", close);
 
-  return () => window.removeEventListener("click", close);
-}, [showLeaderboard]);
+    return () => window.removeEventListener("click", close);
+  }, [showLeaderboard]);
 
-const IDENTITY_NFT_ABI = [
-  "function mint() external",
-];
+  const IDENTITY_NFT_ABI = [
+    "function mint() external",
+  ];
 
-async function handleMintIdentity() {
-  try {
-    if (!account) {
-      setStatus("Connect wallet first");
-      return;
+  async function handleMintIdentity() {
+    try {
+      if (!account) {
+        setStatus("Connect wallet first");
+        return;
+      }
+
+      await ensureBaseNetwork();
+
+      const eth = getEthereum();
+      if (!eth) return;
+
+      const provider = new ethers.BrowserProvider(eth as any);
+      const signer = await provider.getSigner();
+
+      const nft = new ethers.Contract(
+        IDENTITY_NFT_ADDRESS,
+        IDENTITY_NFT_ABI,
+        signer
+      );
+
+      setStatus("Minting identity NFT...");
+      const tx = await nft.mint();
+      await tx.wait();
+
+      setHasIdentityNFT(true);
+
+      setStatus("Identity NFT minted 🎉");
+      setShowMintIdentity(false);
+    } catch (err: any) {
+      console.error(err);
+      setStatus(
+        err?.shortMessage ??
+        err?.message ??
+        "Mint failed"
+      );
     }
-
-    await ensureBaseNetwork();
-
-    const eth = getEthereum();
-    if (!eth) return;
-
-    const provider = new ethers.BrowserProvider(eth as any);
-    const signer = await provider.getSigner();
-
-    const nft = new ethers.Contract(
-      IDENTITY_NFT_ADDRESS,
-      IDENTITY_NFT_ABI,
-      signer
-    );
-
-    setStatus("Minting identity NFT...");
-    const tx = await nft.mint();
-    await tx.wait();
-
-    setHasIdentityNFT(true);
-
-    setStatus("Identity NFT minted 🎉");
-    setShowMintIdentity(false);
-  } catch (err: any) {
-    console.error(err);
-    setStatus(
-      err?.shortMessage ??
-      err?.message ??
-      "Mint failed"
-    );
   }
-}
   async function getUsdcContractWithSigner() {
     const eth = getEthereum();
     if (!eth) throw new Error("Wallet not found");
@@ -381,52 +381,52 @@ async function handleMintIdentity() {
   }
 
   useEffect(() => {
-  if (!account) return;
-  if (!fcDisplayName && !fcPfp) return;
+    if (!account) return;
+    if (!fcDisplayName && !fcPfp) return;
 
-  fetch("/api/profile/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      address: account,
-      name: fcDisplayName,
-      avatar: fcPfp,
-      fid: fcFid,
-      neynarScore: fcScore,
-      highestStreak: highestStreak ? Number(highestStreak) : 0,
-    }),
-  });
-}, [account, fcDisplayName, fcPfp, fcFid, fcScore, highestStreak]);
-
-
+    fetch("/api/profile/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address: account,
+        name: fcDisplayName,
+        avatar: fcPfp,
+        fid: fcFid,
+        neynarScore: fcScore,
+        highestStreak: highestStreak ? Number(highestStreak) : 0,
+      }),
+    });
+  }, [account, fcDisplayName, fcPfp, fcFid, fcScore, highestStreak]);
 
 
-useEffect(() => {
-  if (!account || !ethReady) return;
 
-  async function checkIdentityNFT() {
-    try {
-      const eth = getEthereum();
-      if (!eth) return;
 
-      const provider = new ethers.BrowserProvider(eth as any);
-      const nft = new ethers.Contract(
-        IDENTITY_NFT_ADDRESS,
-        ["function balanceOf(address owner) view returns (uint256)"],
-        provider
-      );
+  useEffect(() => {
+    if (!account || !ethReady) return;
 
-      const balance = Number(await nft.balanceOf(account));
+    async function checkIdentityNFT() {
+      try {
+        const eth = getEthereum();
+        if (!eth) return;
 
-      setHasIdentityNFT(balance > 0);
-    } catch (err) {
-      console.error("Identity NFT check failed", err);
-      // ❌ এখানে false সেট কোরো না
+        const provider = new ethers.BrowserProvider(eth as any);
+        const nft = new ethers.Contract(
+          IDENTITY_NFT_ADDRESS,
+          ["function balanceOf(address owner) view returns (uint256)"],
+          provider
+        );
+
+        const balance = Number(await nft.balanceOf(account));
+
+        setHasIdentityNFT(balance > 0);
+      } catch (err) {
+        console.error("Identity NFT check failed", err);
+        // ❌ এখানে false সেট কোরো না
+      }
     }
-  }
 
-  checkIdentityNFT();
-}, [account, ethReady]);
+    checkIdentityNFT();
+  }, [account, ethReady]);
 
 
 
@@ -605,11 +605,11 @@ useEffect(() => {
       setStatus("Check-in pending... waiting for confirmation.");
       await tx.wait();
 
-await fetch("/api/leaderboard/register", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ address: account }),
-});
+      await fetch("/api/leaderboard/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ address: account }),
+      });
 
       // আজকের দিন localStorage এ সেভ + UI state সেট
       const key = getStorageKey(account);
@@ -664,16 +664,16 @@ await fetch("/api/leaderboard/register", {
   }
 
   async function loadLeaderboard() {
-  try {
-    setLeaderboardLoading(true);
-    const res = await fetch("/api/leaderboard/lifetime");
-    if (!res.ok) return;
-    const data = await res.json();
-    setLeaderboard(data);
-  } finally {
-    setLeaderboardLoading(false);
+    try {
+      setLeaderboardLoading(true);
+      const res = await fetch("/api/leaderboard/lifetime");
+      if (!res.ok) return;
+      const data = await res.json();
+      setLeaderboard(data);
+    } finally {
+      setLeaderboardLoading(false);
+    }
   }
-}
 
 
   function triggerAvatarRun(badgeProgress: number) {
@@ -1190,9 +1190,9 @@ await fetch("/api/leaderboard/register", {
                 >
                   Highest
                 </div>
-{showLeaderboard && (
-  <div
-    className="
+                {showLeaderboard && (
+                  <div
+                    className="
       absolute
       right-3
       top-[58px]
@@ -1205,42 +1205,42 @@ await fetch("/api/leaderboard/register", {
       overflow-y-auto
       z-20
     "
-  >
+                  >
 
-    {leaderboardLoading && <p className="text-slate-400">Loading…</p>}
+                    {leaderboardLoading && <p className="text-slate-400">Loading…</p>}
 
-    {!leaderboardLoading && leaderboard.length === 0 && (
-      <p className="text-slate-400">No data yet</p>
-    )}
+                    {!leaderboardLoading && leaderboard.length === 0 && (
+                      <p className="text-slate-400">No data yet</p>
+                    )}
 
-    <ul className="space-y-2">
-      {leaderboard.map((u, i) => (
-        <li key={u.address} className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {u.avatar ? (
-              <img src={u.avatar} className="h-5 w-5 rounded-full" />
-            ) : (
-              <div className="h-5 w-5 rounded-full bg-slate-700" />
-            )}
-            <span>
-  #{i + 1} {u.name ? u.name : `${u.address.slice(0, 6)}…`}
-</span>
+                    <ul className="space-y-2">
+                      {leaderboard.map((u, i) => (
+                        <li key={u.address} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {u.avatar ? (
+                              <img src={u.avatar} className="h-5 w-5 rounded-full" />
+                            ) : (
+                              <div className="h-5 w-5 rounded-full bg-slate-700" />
+                            )}
+                            <span>
+                              #{i + 1} {u.name ? u.name : `${u.address.slice(0, 6)}…`}
+                            </span>
 
-          </div>
-          <span>{u.highestStreak}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+                          </div>
+                          <span>{u.highestStreak}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* 🏆 Leaderboard button — EXACT RED BOX POSITION */}
                 <button
-  onClick={(e) => {
-    e.stopPropagation();
-    setShowLeaderboard(true);
-    loadLeaderboard();
-  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowLeaderboard(true);
+                    loadLeaderboard();
+                  }}
 
                   className={`
   absolute
@@ -1261,7 +1261,7 @@ await fetch("/api/leaderboard/register", {
                 >
                   🏆
                 </button>
-                
+
               </div>
 
             </div>
@@ -1438,8 +1438,8 @@ await fetch("/api/leaderboard/register", {
                     )}
                   </div>
                   <button
-  onClick={() => setShowMintIdentity(true)}
-  className="
+                    onClick={() => setShowMintIdentity(true)}
+                    className="
     mt-2
     px-3 py-1.5
     rounded-xl
@@ -1452,16 +1452,16 @@ await fetch("/api/leaderboard/register", {
     active:scale-[0.97]
     transition
   "
->
-  {hasIdentityNFT ? "View Identity" : "Mint Identity"}
-</button>
+                  >
+                    {hasIdentityNFT ? "View Identity" : "Mint Identity"}
+                  </button>
 
 
                 </div>
               )}
-              
+
             </div>
-            
+
 
           </div>
 
@@ -2241,16 +2241,16 @@ await fetch("/api/leaderboard/register", {
         />
       )}
 
-{showMintIdentity && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center">
-    {/* overlay */}
-    <div
-      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-      onClick={() => setShowMintIdentity(false)}
-    />
+      {showMintIdentity && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* overlay */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowMintIdentity(false)}
+          />
 
-    {/* modal */}
-    <div className="
+          {/* modal */}
+          <div className="
       relative z-10 w-[90%] max-w-sm
       rounded-3xl
       bg-slate-950/90 backdrop-blur-xl
@@ -2259,13 +2259,53 @@ await fetch("/api/leaderboard/register", {
       p-4 space-y-3
       animate-[toast-pop_0.28s_ease-out]
     ">
-      <h3 className="text-sm font-semibold text-slate-100 text-center">
-        Mint Your BaseDaily Identity
-      </h3>
+            <h3
+              className={`
+    relative
+    text-center
+    text-lg
+    font-semibold
+    tracking-tight
+    transition-all
+    duration-500
 
-      {/* NFT preview card */}
-      <div
-  className="
+    ${hasIdentityNFT
+                  ? `
+          bg-gradient-to-r from-emerald-300 via-sky-300 to-blue-400
+          bg-clip-text text-transparent
+          animate-[identityPulse_3.5s_ease-in-out_infinite]
+        `
+                  : `
+          text-slate-100
+        `
+                }
+  `}
+            >
+              {hasIdentityNFT ? "Your Identity" : "Mint Your BaseDaily Identity"}
+
+              {/* subtle underline glow */}
+              {hasIdentityNFT && (
+                <span
+                  className="
+        pointer-events-none
+        absolute
+        left-1/2
+        -bottom-1
+        h-[2px]
+        w-24
+        -translate-x-1/2
+        rounded-full
+        bg-gradient-to-r from-transparent via-sky-400/60 to-transparent
+        blur-sm
+      "
+                />
+              )}
+            </h3>
+
+
+            {/* NFT preview card */}
+            <div
+              className="
     relative
     rounded-2xl
     p-4 space-y-3
@@ -2274,10 +2314,10 @@ await fetch("/api/leaderboard/register", {
     border border-white/10
     shadow-[0_0_40px_rgba(56,189,248,0.15)]
   "
->
+            >
 
-        {/* glow blob */}
-<div className="
+              {/* glow blob */}
+              <div className="
   absolute -top-10 -right-10
   h-32 w-32
   rounded-full
@@ -2285,8 +2325,8 @@ await fetch("/api/leaderboard/register", {
   blur-3xl
 " />
 
-{/* subtle grid texture */}
-<div className="
+              {/* subtle grid texture */}
+              <div className="
   absolute inset-0
   opacity-[0.06]
   bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)]
@@ -2294,53 +2334,53 @@ await fetch("/api/leaderboard/register", {
   pointer-events-none
 " />
 
-        
-        <div className="flex items-center gap-3">
-          <img
-            src={fcPfp || "/avatar.png"}
-            className="h-12 w-12 rounded-full ring-2 ring-sky-400 animate-[breath_3.6s_ease-in-out_infinite]"
+
+              <div className="flex items-center gap-3">
+                <img
+                  src={fcPfp || "/avatar.png"}
+                  className="h-12 w-12 rounded-full ring-2 ring-sky-400 animate-[breath_3.6s_ease-in-out_infinite]"
 
 
-          />
-          <div>
-            <p className="text-sm font-semibold text-slate-100">
-              {fcDisplayName || "Base user"}
-            </p>
-            <p className="text-[11px] text-slate-400">
-              FID: {fcFid ?? "—"}
-            </p>
-          </div>
-        </div>
+                />
+                <div>
+                  <p className="text-sm font-semibold text-slate-100">
+                    {fcDisplayName || "Base user"}
+                  </p>
+                  <p className="text-[11px] text-slate-400">
+                    FID: {fcFid ?? "—"}
+                  </p>
+                </div>
+              </div>
 
-        <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
-          <span className="text-[11px] uppercase tracking-wider text-slate-400">🔥 Highest streak</span>
-          <span className=" text-right
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+                <span className="text-[11px] uppercase tracking-wider text-slate-400">🔥 Highest streak</span>
+                <span className=" text-right
     text-xl font-extrabold
     bg-gradient-to-r from-amber-300 to-yellow-400
     bg-clip-text text-transparent
     drop-shadow-[0_0_12px_rgba(251,191,36,0.35)]
   ">
-    {highestNumber}
-  </span>
+                  {highestNumber}
+                </span>
 
-          <span className="text-[11px] uppercase tracking-wider text-slate-400">⭐ Neynar score</span>
-          <span className="text-right text-sm font-semibold text-sky-300">
-    {fcScore ?? "—"}
-  </span>
-        </div>
+                <span className="text-[11px] uppercase tracking-wider text-slate-400">⭐ Neynar score</span>
+                <span className="text-right text-sm font-semibold text-sky-300">
+                  {fcScore ?? "—"}
+                </span>
+              </div>
 
-        <div className="flex items-center justify-center gap-2 pt-2 text-[10px] text-slate-400 text-center">
-          <img src="/logo-0x.png" className="h-4 w-4" />
-          BaseDaily Identity NFT
-        </div>
-      </div>
+              <div className="flex items-center justify-center gap-2 pt-2 text-[10px] text-slate-400 text-center">
+                <img src="/logo-0x.png" className="h-4 w-4" />
+                BaseDaily Identity NFT
+              </div>
+            </div>
 
-      {/* mint button */}
-      <div className="flex justify-center mt-3">
-      <button
-  onClick={handleMintIdentity}
-  disabled={hasIdentityNFT === true}
-  className={`
+            {/* mint button */}
+            <div className="flex justify-center mt-3">
+              <button
+                onClick={handleMintIdentity}
+                disabled={hasIdentityNFT === true}
+                className={`
     mx-auto
     px-6 py-2
     rounded-full
@@ -2350,32 +2390,31 @@ await fetch("/api/leaderboard/register", {
     shadow-[0_0_20px_rgba(56,189,248,0.25)]
     transition-all
 
-    ${
-      hasIdentityNFT
-        ? `
+    ${hasIdentityNFT
+                    ? `
           bg-emerald-500/10
           text-emerald-300
           cursor-not-allowed
           shadow-[0_0_20px_rgba(16,185,129,0.25)]
         `
-        : `
+                    : `
           bg-sky-500/10
           text-sky-300
           hover:bg-sky-500/20
           hover:shadow-[0_0_30px_rgba(56,189,248,0.45)]
           active:scale-[0.97]
         `
-    }
+                  }
   `}
->
-  {hasIdentityNFT ? "Minted ✓" : "Mint"}
-</button>
+              >
+                {hasIdentityNFT ? "Minted ✓" : "Mint"}
+              </button>
 
-</div>
+            </div>
 
-    </div>
-  </div>
-)}
+          </div>
+        </div>
+      )}
 
 
     </main>
