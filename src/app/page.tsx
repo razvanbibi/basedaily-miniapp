@@ -846,9 +846,9 @@ export default function HomePage() {
     const APP_URL = "https://basedaily-miniapp.vercel.app";
 
     const text =
-      "🟦 BaseDaily — Be loyal to Base\n\n" +
-      "I’m checking in daily on Base, growing my streak and earning 0xtxn rewards.\n\n" +
-      "Join here 👇\n" +
+      "🟦 BaseDaily \n\n" +
+      "Building a daily habit on Base. Checking in, growing my streak, earning 0xtxn.\n\n" +
+      "Join the journey 👇\n" +
       APP_URL;
 
     try {
@@ -2346,9 +2346,11 @@ export default function HomePage() {
                                         duration-300 active:scale-[0.98] transition-transform
                                         "
             >
-              <span>About us</span>
-              <span>📒</span>
-            </button>
+  <span className={isDarkMode ? "text-sky-300" : "text-slate-900"}>
+    About us
+  </span>
+  <span> 📒</span>
+</button>
             <button
               onClick={handleShare}
               className="
@@ -2369,8 +2371,10 @@ export default function HomePage() {
 
                                           "
             >
-              Share
-            </button>
+  <span className={isDarkMode ? "text-sky-300" : "text-slate-900"}>
+    Share
+  </span>
+</button>
 
           </div>
 
