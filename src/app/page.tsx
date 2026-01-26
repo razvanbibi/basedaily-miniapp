@@ -1001,6 +1001,7 @@ export default function HomePage() {
 
   return (
     <main
+    
       className={`min-h-screen relative overflow-hidden ${isDarkMode ? "text-slate-50" : "text-slate-900"
         }`}
       style={{
@@ -1012,6 +1013,7 @@ export default function HomePage() {
         backgroundRepeat: "no-repeat",
       }}
     >
+      
       {/* dark overlay for contrast */}
       <div
         className={`absolute inset-0 pointer-events-none ${isDarkMode ? "bg-slate-950/65" : "bg-white/65"
@@ -1413,76 +1415,78 @@ export default function HomePage() {
               </div>
 
               {/* RIGHT: Unclaimed badges */}
-              <div
-                className={`
-    flex flex-col items-end gap-1
-    transition-all duration-500
-    ${hasUnclaimedBadges
-                    ? ""
-                    : "opacity-40 grayscale"
-                  }
-  `}
-              >
-                <span
+              <div className="flex flex-col items-end gap-1">
+
+                {/* Badge label + icons ONLY */}
+                <div
                   className={`
-      text-[12px] uppercase tracking-wide
-      transition-all duration-300
-      ${hasUnclaimedBadges
-                      ? isDarkMode
-                        ? "text-slate-400"
-                        : "text-slate-900"
-                      : isDarkMode
-                        ? "text-slate-500"
-                        : "text-slate-700"
-                    }
+      flex flex-col items-end gap-1
+      transition-all duration-500
+      ${hasUnclaimedBadges ? "" : "opacity-40 grayscale"}
     `}
                 >
-                  Unclaimed badges
-                </span>
+                  <span
+                    className={`
+        text-[12px] uppercase tracking-wide
+        transition-all duration-300
+        ${hasUnclaimedBadges
+                        ? isDarkMode
+                          ? "text-slate-400"
+                          : "text-slate-900"
+                        : isDarkMode
+                          ? "text-slate-500"
+                          : "text-slate-700"
+                      }
+      `}
+                  >
+                    Unclaimed badges
+                  </span>
 
-                <div className="flex items-center gap-2 transition-all duration-500">
-                  {pendingSilverCount > 0
-                    ? <BadgeGlow icon="🥈" count={pendingSilverCount} />
-                    : <BadgeGhost icon="🥈" />
-                  }
+                  <div className="flex items-center gap-2 transition-all duration-500">
+                    {pendingSilverCount > 0
+                      ? <BadgeGlow icon="🥈" count={pendingSilverCount} />
+                      : <BadgeGhost icon="🥈" />
+                    }
 
-                  {pendingGoldCount > 0
-                    ? <BadgeGlow icon="🥇" count={pendingGoldCount} />
-                    : <BadgeGhost icon="🥇" />
-                  }
+                    {pendingGoldCount > 0
+                      ? <BadgeGlow icon="🥇" count={pendingGoldCount} />
+                      : <BadgeGhost icon="🥇" />
+                    }
 
-                  {pendingDiamondCount > 0
-                    ? <BadgeGlow icon="💎" count={pendingDiamondCount} />
-                    : <BadgeGhost icon="💎" />
-                  }
+                    {pendingDiamondCount > 0
+                      ? <BadgeGlow icon="💎" count={pendingDiamondCount} />
+                      : <BadgeGhost icon="💎" />
+                    }
 
-                  {pendingLegendaryCount > 0
-                    ? <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
-                    : <BadgeGhost icon="🌟" />
-                  }
+                    {pendingLegendaryCount > 0
+                      ? <BadgeGlow icon="🌟" count={pendingLegendaryCount} />
+                      : <BadgeGhost icon="🌟" />
+                    }
+                  </div>
                 </div>
 
+                {/* ✅ Identity button — ALWAYS LIVE */}
                 <button
                   onClick={() => setShowMintIdentity(true)}
                   className="
-    mt-2
-    px-3 py-1.5
-    rounded-xl
-    bg-gradient-to-r from-indigo-500 via-sky-500 to-blue-500
-    text-slate-950
-    font-semibold
-    text-[11px]
-    shadow-md shadow-sky-900/30
-    hover:brightness-110
-    active:scale-[0.97]
-    transition
-  "
+      mt-2
+      px-3 py-1.5
+      rounded-xl
+      bg-gradient-to-r from-indigo-500 via-sky-500 to-blue-500
+      text-slate-950
+      font-semibold
+      text-[11px]
+      shadow-md shadow-sky-900/30
+      hover:brightness-110
+      active:scale-[0.97]
+      transition
+    "
                 >
                   {hasIdentityNFT ? "View Identity" : "Mint Identity"}
                 </button>
 
-
               </div>
+
 
             </div>
 
