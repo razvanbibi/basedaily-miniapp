@@ -320,3 +320,21 @@ body {
   opacity: 0.75;
 }
 
+/* BaseDaily — Drawer Day Mode Background */
+.basedaily-drawer-day {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.03) 0%,
+      rgba(15, 23, 42, 0.015) 40%,
+      rgba(255, 255, 255, 0) 70%
+    ),
+    repeating-linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.04) 0px,
+      rgba(15, 23, 42, 0.04) 1px,
+      transparent 1px,
+      transparent 36px
+    );
+}
