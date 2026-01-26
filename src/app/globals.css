@@ -258,58 +258,65 @@ body {
   }
 }
 
-/* =========================
-   BaseDaily – Day Mode Background
-   ========================= */
-
+/* BaseDaily — DAY MODE BACKGROUND (Spark / Base style) */
 .basedaily-day-bg {
-  background-color: #f7f8f9; /* Base app style off-white */
-  position: relative;
+  position: absolute;
+  inset: 0;
+  background-color: #f6f7f9; /* Base app white */
   overflow: hidden;
 }
 
-/* soft color wash */
+/* SOFT COLOR FLOW (MAIN FEEL) */
 .basedaily-day-bg::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
+  pointer-events: none;
+
+  background-image:
     radial-gradient(
-      60% 40% at 85% 10%,
-      rgba(56, 189, 248, 0.08),
+      1100px 520px at 120% -10%,
+      rgba(56, 189, 248, 0.35),
       transparent 60%
     ),
     radial-gradient(
-      50% 35% at 10% 20%,
-      rgba(34, 197, 94, 0.06),
-      transparent 65%
+      900px 460px at -20% 45%,
+      rgba(34, 197, 94, 0.28),
+      transparent 55%
+    ),
+    radial-gradient(
+      800px 400px at 50% 120%,
+      rgba(99, 102, 241, 0.22),
+      transparent 60%
     );
-  pointer-events: none;
-  z-index: 0;
 }
 
-/* ultra subtle flow lines */
+/* DIAGONAL FLOW LINES (VISIBLE + NON-UNIFORM) */
 .basedaily-day-bg::after {
   content: "";
   position: absolute;
   inset: 0;
+  pointer-events: none;
 
   background-image:
+    /* MAIN FLOW LINES */
     repeating-linear-gradient(
-      -22deg,
-      rgba(0, 0, 0, 0.06),
-      rgba(0, 0, 0, 0.06) 1px,
+      135deg,
+      rgba(15, 23, 42, 0.18) 0px,
+      rgba(15, 23, 42, 0.18) 1px,
       transparent 1px,
       transparent 140px
+    ),
+
+    /* SECONDARY SOFT LINES */
+    repeating-linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.08) 0px,
+      rgba(15, 23, 42, 0.08) 1px,
+      transparent 1px,
+      transparent 70px
     );
 
-  opacity: 0.25; /* important: single opacity */
-  pointer-events: none;
+  opacity: 0.75;
 }
 
-
-/* content always on top */
-.basedaily-day-bg > * {
-  position: relative;
-  z-index: 1;
-}

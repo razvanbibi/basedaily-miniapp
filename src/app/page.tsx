@@ -1001,19 +1001,20 @@ export default function HomePage() {
 
   return (
     <main
-    
       className={`min-h-screen relative overflow-hidden ${isDarkMode ? "text-slate-50" : "text-slate-900"
         }`}
       style={{
-        backgroundImage: isDarkMode
-          ? "url('/bg-lamp.jpg')"
-          : "url('/bg-lamp.jpg')",
+        backgroundImage: isDarkMode ? "url('/bg-lamp.jpg')" : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
       }}
     >
-      
+      {!isDarkMode && (
+        <div className="basedaily-day-bg absolute inset-0 -z-10" />
+      )}
+
+
       {/* dark overlay for contrast */}
       <div
         className={`absolute inset-0 pointer-events-none ${isDarkMode ? "bg-slate-950/65" : "bg-white/65"
@@ -1074,7 +1075,13 @@ export default function HomePage() {
         </header>
 
         {/* Welcome / wallet card */}
-        <section className={`${glassCard} p-4 space-y-3`}>
+        <section
+          className={`
+    p-4 space-y-3
+    ${isDarkMode ? glassCard : ""}
+  `}
+        >
+
 
           {/* top row */}
           <div className="flex items-start justify-between gap-3">
@@ -1149,7 +1156,13 @@ export default function HomePage() {
 
 
         {/* Today card */}
-        <section className={`${glassCard} p-4 space-y-3`}>
+        <section
+          className={`
+    p-4 space-y-3
+    ${isDarkMode ? glassCard : ""}
+  `}
+        >
+
 
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
@@ -1339,7 +1352,13 @@ export default function HomePage() {
 
         {/* Rewards card */}
 
-        <section className={`${glassCard} p-4 space-y-3`}>
+        <section
+          className={`
+    p-4 space-y-3
+    ${isDarkMode ? glassCard : ""}
+  `}
+        >
+
 
           <div className="relative group inline-flex">
             <div className="relative inline-flex">
@@ -1526,7 +1545,13 @@ export default function HomePage() {
         </section>
 
         {/* Badge progress + badge list */}
-        <section className={`${glassCard} p-4 space-y-3`}>
+        <section
+          className={`
+    p-4 space-y-3
+    ${isDarkMode ? glassCard : ""}
+  `}
+        >
+
 
           <div className="relative group inline-flex">
             <div className="relative inline-flex">
@@ -1707,7 +1732,13 @@ export default function HomePage() {
         </section>
 
         {/* Donation */}
-        <section className={`${glassCard} p-4 space-y-3`}>
+        <section
+          className={`
+    p-4 space-y-3
+    ${isDarkMode ? glassCard : ""}
+  `}
+        >
+
 
           <button
             type="button"
@@ -2027,7 +2058,18 @@ export default function HomePage() {
           </div>
 
           {/* FID + Neynar score */}
-          <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3 space-y-1 text-[11px] text-slate-300">
+          <div
+            className={`
+    rounded-2xl
+    px-3 py-3 space-y-1
+    text-[11px]
+    ${isDarkMode
+                ? "bg-slate-950/60 border border-white/5 text-slate-300"
+                : "bg-white border border-slate-200 text-slate-700"
+              }
+  `}
+          >
+
             <div className="flex justify-between">
               <span>FID</span>
               <span className="font-mono text-slate-100">
@@ -2043,7 +2085,17 @@ export default function HomePage() {
           </div>
 
           {/* Your stats (on-chain) */}
-          <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3">
+          <div
+            className={`
+    rounded-2xl
+    px-3 py-3
+    ${isDarkMode
+                ? "bg-slate-950/60 border border-white/5"
+                : "bg-white border border-slate-200"
+              }
+  `}
+          >
+
             <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
               <div>
                 <p className="text-lg">🔥</p>
@@ -2099,7 +2151,17 @@ export default function HomePage() {
 
 
           {/* Contact dev */}
-          <div className="rounded-2xl bg-slate-950/60 border border-white/5 px-3 py-3 space-y-2">
+          <div
+            className={`
+              rounded-2xl
+               px-3 py-3 space-y-2
+              ${isDarkMode
+                ? "bg-slate-950/60 border border-white/5"
+                : "bg-white border border-slate-200"
+              }
+              `}
+          >
+
             <p className="text-xs font-semibold text-slate-100">
               Contact dev
             </p>
