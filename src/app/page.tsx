@@ -1207,20 +1207,25 @@ export default function HomePage() {
                 </div>
                 {showLeaderboard && (
                   <div
-                    className="
+                    className={`
       absolute
       right-3
       top-[58px]
       w-[180px]
       max-h-[120px]
       rounded-xl
-      bg-slate-950/90
       p-2
       text-xs
       overflow-y-auto
       z-20
-    "
+
+      ${isDarkMode
+                        ? "bg-slate-950/90 text-slate-200"
+                        : "bg-white text-slate-900 border border-slate-200 shadow-lg"
+                      }
+    `}
                   >
+
 
                     {leaderboardLoading && <p className="text-slate-400">Loading…</p>}
 
@@ -1230,7 +1235,7 @@ export default function HomePage() {
 
                     <ul className="space-y-2">
                       {leaderboard.map((u, i) => (
-                        <li key={u.address} className="flex items-center justify-between">
+                        <li key={u.address} className="flex items-center justify-between" >
                           <div className="flex items-center gap-2">
                             {u.avatar ? (
                               <img src={u.avatar} className="h-5 w-5 rounded-full" />
@@ -1242,7 +1247,15 @@ export default function HomePage() {
                             </span>
 
                           </div>
-                          <span>{u.highestStreak}</span>
+                          <span
+                            className={`
+    font-semibold
+    ${isDarkMode ? "text-slate-200" : "text-sky-500"}
+  `}
+                          >
+                            {u.highestStreak}
+                          </span>
+
                         </li>
                       ))}
                     </ul>
@@ -1417,12 +1430,28 @@ export default function HomePage() {
     `}
               >
                 <span
-                  className={`text-[12px] uppercase tracking-wide ${isDarkMode ? "text-slate-400" : "text-slate-900"
-                    }`}
+                  className={`
+    text-[12px]
+    uppercase
+    tracking-wide
+    flex items-center gap-1
+    ${isDarkMode ? "text-slate-400" : "text-slate-900"}
+  `}
                 >
-
-                  Unclaimed 0xtxn
+                  Unclaimed
+                  <span
+                    className={`
+      font-extrabold
+      tracking-tight
+      bg-gradient-to-r from-sky-400 to-blue-500
+      bg-clip-text text-transparent
+      drop-shadow-[0_0_6px_rgba(56,189,248,0.45)]
+    `}
+                  >
+                    0xtxn
+                  </span>
                 </span>
+
 
                 <span
                   className={`text-3xl font-bold tracking-tight ${isDarkMode ? "text-sky-200" : "text-sky-500"
@@ -1712,22 +1741,30 @@ export default function HomePage() {
               icon="🥈"
               name="Silver"
               owned={Math.max(totalSilverCount - pendingSilverCount, 0)}
+              isDarkMode={isDarkMode}
             />
+
             <BadgeCard
               icon="🥇"
               name="Gold"
               owned={Math.max(totalGoldCount - pendingGoldCount, 0)}
+              isDarkMode={isDarkMode}
             />
+
             <BadgeCard
               icon="💎"
               name="Diamond"
               owned={Math.max(totalDiamondCount - pendingDiamondCount, 0)}
+              isDarkMode={isDarkMode}
             />
+
             <BadgeCard
               icon="🌟"
               name="Legendary / Loyalty"
               owned={Math.max(totalLegendaryCount - pendingLegendaryCount, 0)}
+              isDarkMode={isDarkMode}
             />
+
           </div>
         </section>
 
@@ -1984,19 +2021,23 @@ export default function HomePage() {
         {/* panel */}
         <div
           className={`
-            w-4/5 max-w-xs
-            bg-sky-950/70 backdrop-blur-2xl
-            border border-sky-500/10
-            shadow-2xl shadow-black/70
-            p-4 flex flex-col gap-4
-            transform transition-transform duration-300 ease-out
-            ${drawerOpen ? "translate-x-0" : "translate-x-full"}
-          `}
+    w-4/5 max-w-xs
+    p-4 flex flex-col gap-4
+    transform transition-transform duration-300 ease-out
+
+    ${isDarkMode
+              ? "bg-sky-950/70 backdrop-blur-2xl border border-sky-500/10 shadow-2xl shadow-black/70"
+              : "basedaily-drawer-day border border-slate-200 shadow-xl"
+            }
+
+    ${drawerOpen ? "translate-x-0" : "translate-x-full"}
+  `}
         >
+
           {/* header */}
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-100">
-              Profile
+
             </h2>
             <button
               onClick={() => setDrawerOpen(false)}
@@ -2017,7 +2058,7 @@ export default function HomePage() {
               <img
                 src={fcPfp || "/raihan-avatar.png"}
                 alt="User avatar"
-                className="h-10 w-10 rounded-full object-cover"
+                className="h-15 w-15 rounded-full object-cover"
               />
               <div className="flex flex-col">
                 <span className="text-sm font-semibold">
@@ -2071,17 +2112,40 @@ export default function HomePage() {
           >
 
             <div className="flex justify-between">
-              <span>FID</span>
-              <span className="font-mono text-slate-100">
+              <span
+                className={`
+      ${isDarkMode ? "" : "font-semibold"}
+    `}
+              >
+                FID
+              </span>
+              <span
+                className={`
+      font-mono
+      ${isDarkMode ? "text-slate-100" : "text-slate-900 font-semibold"}
+    `}
+              >
                 {fcFid || "—"}
               </span>
             </div>
+
             <div className="flex justify-between">
-              <span>Neynar score</span>
-              <span className="font-semibold text-sky-300">
+              <span
+                className={`
+      ${isDarkMode ? "" : "font-semibold"}
+    `}
+              >
+                Neynar score
+              </span>
+              <span
+                className={`
+      ${isDarkMode ? "text-sky-300 font-semibold" : "text-sky-500 font-semibold"}
+    `}
+              >
                 {fcScore !== null ? fcScore : "—"}
               </span>
             </div>
+
           </div>
 
           {/* Your stats (on-chain) */}
@@ -2095,39 +2159,64 @@ export default function HomePage() {
               }
   `}
           >
-
             <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
+
+              {/* 🔥 Streak */}
               <div>
                 <p className="text-lg">🔥</p>
-                <p className="text-slate-100 font-semibold">{streakNumber}</p>
-                <p className="text-slate-400">Streak</p>
+                <p
+                  className={`
+          font-semibold
+          ${isDarkMode ? "text-slate-100" : "text-slate-900"}
+        `}
+                >
+                  {streakNumber}
+                </p>
+                <p
+                  className={`
+          ${isDarkMode ? "text-slate-400" : "text-slate-900"}
+        `}
+                >
+                  Streak
+                </p>
               </div>
 
+              {/* 🏅 Badges */}
               <div className="flex flex-col items-center relative">
                 <button
                   type="button"
                   onClick={() => setShowBadgeInfo((v) => !v)}
-                  className="flex flex-col items-center active:scale-95 transition active:scale-[0.98] transition-transform
-                  "
+                  className="flex flex-col items-center active:scale-95 transition active:scale-[0.98]"
                 >
                   <p className="text-lg">🏅</p>
-                  <p className="text-slate-100 font-semibold">
+                  <p
+                    className={`
+            font-semibold
+            ${isDarkMode ? "text-slate-100" : "text-slate-900"}
+          `}
+                  >
                     {totalSilverCount + totalGoldCount + totalDiamondCount + totalLegendaryCount}
                   </p>
-                  <p className="text-slate-400">Badges</p>
+                  <p
+                    className={`
+            ${isDarkMode ? "text-slate-400" : "text-slate-900"}
+          `}
+                  >
+                    Badges
+                  </p>
                 </button>
 
                 {showBadgeInfo && (
                   <div
                     className="
-        absolute top-full mt-2 left-1/2 -translate-x-1/2
-        bg-slate-950/95 backdrop-blur-xl
-        border border-white/10
-        rounded-xl px-3 py-2
-        text-[11px] text-slate-200
-        shadow-2xl z-50
-        animate-[toast-pop_0.18s_ease-out]
-                  "
+            absolute top-full mt-2 left-1/2 -translate-x-1/2
+            bg-slate-950/95 backdrop-blur-xl
+            border border-white/10
+            rounded-xl px-3 py-2
+            text-[11px] text-slate-200
+            shadow-2xl z-50
+            animate-[toast-pop_0.18s_ease-out]
+          "
                   >
                     <div className="flex flex-col gap-1 whitespace-nowrap">
                       <span>🥈 Silver: {totalSilverCount}</span>
@@ -2139,15 +2228,29 @@ export default function HomePage() {
                 )}
               </div>
 
+              {/* 💰 0xtxn */}
               <div>
                 <p className="text-lg">💰</p>
-                <p className="text-slate-100 font-semibold">
+                <p
+                  className={`
+          font-semibold
+          ${isDarkMode ? "text-slate-100" : "text-slate-900"}
+        `}
+                >
                   {totalEarnedReadable ?? "—"}
                 </p>
-                <p className="text-slate-400">0xtxn</p>
+                <p
+                  className={`
+          ${isDarkMode ? "text-slate-400" : "text-slate-900"}
+        `}
+                >
+                  0xtxn
+                </p>
               </div>
+
             </div>
           </div>
+
 
 
           {/* Contact dev */}
@@ -2162,9 +2265,15 @@ export default function HomePage() {
               `}
           >
 
-            <p className="text-xs font-semibold text-slate-100">
+            <p
+              className={`
+    text-xs font-semibold
+    ${isDarkMode ? "text-slate-100" : "text-slate-900"}
+  `}
+            >
               Contact dev
             </p>
+
             <div className="flex items-center gap-3 text-[20px] text-slate-300">
               <a
                 href="https://farcaster.xyz/0xtxn"
@@ -2183,6 +2292,20 @@ export default function HomePage() {
                 title="Base profile"
               >
                 🟦
+              </a>
+              {/* Zora */}
+              <a
+                href="https://zora.co/@0xtxn"
+                target="_blank"
+                rel="noreferrer"
+                title="Zora"
+                className="hover:scale-105 transition-transform"
+              >
+                <img
+                  src="/zora.jpg"
+                  alt="Zora"
+                  className="h-5 w-5"
+                />
               </a>
               <a
                 href="https://x.com/Oxxtxn"
@@ -2515,28 +2638,54 @@ function BadgeCard({
   icon,
   name,
   owned,
+  isDarkMode,
 }: {
   icon: string;
   name: string;
   owned: number;
+  isDarkMode: boolean;
 }) {
   return (
-    <div className="rounded-2xl bg-slate-950/80 px-3 py-2 flex items-center justify-between shadow-inner shadow-slate-950/70">
+    <div
+      className={`
+        rounded-2xl
+        px-3 py-2
+        flex items-center justify-between
+
+        ${isDarkMode
+          ? "bg-slate-950/80 shadow-inner shadow-slate-950/70"
+          : "bg-white border border-slate-200"
+        }
+      `}
+    >
       <div className="flex items-center gap-2">
         <span
-          className={`text-lg ${owned === 0 ? "opacity-40" : ""
-            } ${owned === 0 ? "animate-[badge-pulse_1.8s_ease-in-out_infinite]" : ""
+          className={`text-lg ${owned === 0
+            ? "opacity-40 animate-[badge-pulse_1.8s_ease-in-out_infinite]"
+            : ""
             }`}
         >
           {icon}
         </span>
 
-        <span className="text-[11px] text-slate-100">{name}</span>
+        <span
+          className={`text-[11px] ${isDarkMode ? "text-slate-100" : "text-slate-900"
+            }`}
+        >
+          {name}
+        </span>
       </div>
-      <span className="text-[11px] text-slate-400">x{owned}</span>
+
+      <span
+        className={`text-[11px] font-semibold ${isDarkMode ? "text-slate-400" : "text-slate-900"
+          }`}
+      >
+        x{owned}
+      </span>
     </div>
   );
 }
+
 
 function BadgeGlow({
   icon,
