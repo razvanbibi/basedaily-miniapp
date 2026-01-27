@@ -34,6 +34,49 @@ const BASE_USDC_ADDRESS = "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
 const DONATION_CONTRACT =
   "0x8848c754269c7376959710002a9211ef353fba69" as const; // BaseDailyDonations
 
+function AvatarBubbleStream({ avatar }: { avatar: string }) {
+  const [bubbles, setBubbles] = useState<
+    { id: number; left: number; size: number }[]
+  >([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBubbles((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          left: Math.random() * 30 - 15,
+          size: 14 + Math.random() * 10,
+        },
+      ]);
+    }, 1200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-visible">
+      {bubbles.map((b) => (
+        <img
+          key={b.id}
+          src={avatar}
+          className="absolute rounded-full animate-avatar-float"
+          style={{
+            left: `calc(50% + ${b.left}px)`,
+            bottom: "0px",
+            width: b.size,
+            height: b.size,
+            animationDuration: "3.8s",
+          }}
+          onAnimationEnd={() =>
+            setBubbles((prev) => prev.filter((x) => x.id !== b.id))
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 
 export default function HomePage() {
   const [account, setAccount] = useState<string | null>(null);
@@ -1198,6 +1241,7 @@ export default function HomePage() {
                 >
                   {highestNumber}
                 </div>
+                <AvatarBubbleStream avatar={fcPfp || "/avatar.png"} />
 
                 <div
                   className={`text-[11px] ${isDarkMode ? "text-slate-400" : "text-slate-900"
