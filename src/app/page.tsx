@@ -12,6 +12,7 @@ import {
 import { ethers } from "ethers";
 
 import { sdk } from "@farcaster/miniapp-sdk";
+import TodayMessageLoop from "./TodayMessageLoop";
 
 type Status = string | null;
 
@@ -184,15 +185,16 @@ export default function HomePage() {
 
 
   // প্রথমবার লোড হলে থিম পড়ে আনা
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem("basedaily_theme");
-    if (stored === "light") {
-      setIsDarkMode(false);
-    } else {
-      setIsDarkMode(true);
-    }
-  }, []);
+useEffect(() => {
+  if (typeof window === "undefined") return;
+  const stored = window.localStorage.getItem("basedaily_theme");
+  if (stored === "dark") {
+    setIsDarkMode(true);
+  } else {
+    setIsDarkMode(false);
+  }
+}, []);
+
 
   // থিম পরিবর্তন হলে localStorage এ সেভ
   useEffect(() => {
@@ -1091,7 +1093,7 @@ export default function HomePage() {
                   } ${taglineAnim ? "animate-[fade-up_0.6s_ease-out]" : ""}`}
               >
 
-                Be loyal to BASE 🟦 Earn rewards
+                Building a daily habit on Base
               </span>
             </div>
 
@@ -1130,31 +1132,12 @@ export default function HomePage() {
           <div className="flex items-start justify-between gap-3">
             {/* left text */}
             <div className="flex-1">
-              <p
-                className={`text-sm leading-tight ${isDarkMode ? "text-slate-200" : "text-slate-900"
-                  }`}
-              >
+  <TodayMessageLoop
+    isDarkMode={isDarkMode}
+    account={account}
+  />
+</div>
 
-                Hello{account ? "," : ""}{" "}
-                <span
-                  className={`font-medium ${isDarkMode ? "text-sky-200" : "text-slate-900"
-                    }`}
-                >
-                  {account ? "streaker" : "friend"}
-                </span>
-                {" "}
-                👋
-              </p>
-
-              {/* description moved UP so it fits in one line */}
-              <p
-                className={`text-[11px] truncate ${isDarkMode ? "text-slate-400" : "text-slate-900"
-                  }`}
-              >
-
-                Check in every day to grow your streak and earn 0xtxn.
-              </p>
-            </div>
 
             {/* right wallet / connect */}
             <div className="shrink-0">
@@ -1260,7 +1243,7 @@ export default function HomePage() {
       rounded-xl
       p-2
       text-xs
-      overflow-y-auto
+      overflow-y-auto overflow-visible
       z-20
 
       ${isDarkMode
@@ -1279,7 +1262,16 @@ export default function HomePage() {
 
                     <ul className="space-y-2">
                       {leaderboard.map((u, i) => (
-                        <li key={u.address} className="flex items-center justify-between" >
+                        <li
+  key={u.address}
+  className={`relative flex items-center justify-between ${
+    u.address.toLowerCase() === account?.toLowerCase()
+      ? "you-row-highlight"
+      : ""
+  }`}
+>
+
+
                           <div className="flex items-center gap-2">
                             {u.avatar ? (
                               <img src={u.avatar} className="h-5 w-5 rounded-full" />
@@ -2182,12 +2174,15 @@ export default function HomePage() {
                 Neynar score
               </span>
               <span
-                className={`
-      ${isDarkMode ? "text-sky-300 font-semibold" : "text-sky-500 font-semibold"}
-    `}
-              >
-                {fcScore !== null ? fcScore : "—"}
-              </span>
+  className={`
+    ${isDarkMode ? "text-sky-300" : "text-sky-500"}
+    font-semibold
+    text-[14px]
+  `}
+>
+  {fcScore !== null ? fcScore : "—"}
+</span>
+
             </div>
 
           </div>

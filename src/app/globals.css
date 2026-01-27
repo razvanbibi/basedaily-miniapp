@@ -357,3 +357,33 @@ body {
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 }
+.you-row-highlight {
+  position: relative;
+}
+
+.you-row-highlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: linear-gradient(
+    120deg,
+    rgba(56, 189, 248, 0.28),
+    rgba(99, 102, 241, 0.28),
+    rgba(56, 189, 248, 0.28)
+  );
+  background-size: 200% 200%;
+  animation: youGlow 3s ease-in-out infinite;
+  z-index: 0;
+}
+
+.you-row-highlight > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes youGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
