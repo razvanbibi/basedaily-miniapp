@@ -2334,18 +2334,26 @@ useEffect(() => {
               </a>
               {/* Zora */}
               <a
-                href="https://zora.co/@0xtxn"
-                target="_blank"
-                rel="noreferrer"
-                title="Zora"
-                className="hover:scale-105 transition-transform"
-              >
-                <img
-                  src="/zora.jpg"
-                  alt="Zora"
-                  className="h-5 w-5"
-                />
-              </a>
+  href="https://zora.co/@0xtxn"
+  target="_blank"
+  rel="noreferrer"
+  title="Zora"
+  className="
+    h-s w-6
+    rounded-full
+    overflow-hidden
+    flex items-center justify-center
+    hover:scale-105
+    transition-transform
+  "
+>
+  <img
+    src="/zora.jpg"
+    alt="Zora"
+    className="h-full w-full object-cover"
+  />
+</a>
+
               <a
                 href="https://x.com/Oxxtxn"
                 target="_blank"

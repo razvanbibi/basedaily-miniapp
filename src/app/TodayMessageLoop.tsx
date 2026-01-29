@@ -7,59 +7,58 @@ type Props = {
 
 export default function TodayMessageLoop({ isDarkMode, account }: Props) {
   const slides = [
-  {
-    duration: 4000,
-    title: (
-      <>
-        Hello{account ? "," : ""}{" "}
-        <span
-          className={`font-medium ${
-            isDarkMode ? "text-sky-200" : "text-slate-900"
-          }`}
-        >
-          {account ? "streaker" : "friend"}
-        </span>{" "}
-        👋
-      </>
-    ),
-    desc: "Check in every day to grow your streak and earn 0xtxn.",
-    small: false,
-  },
-  {
-    duration: 6000,
-    title: "Did you know, Your rewards grow faster every day?",
-    desc: "Missing one day resets streak — don’t blink 👀",
-    small: true,
-  },
-  {
-    duration: 6000,
-    title: "Today is a good day to stay loyal",
-    desc: "You’re doing better than yesterday 👊",
-    small: true,
-  },
-];
-
+    {
+      duration: 4000,
+      first: (
+        <>
+          Hello{account ? "," : ""}{" "}
+          <span
+            className={`font-medium ${
+              isDarkMode ? "text-sky-200" : "text-slate-900"
+            }`}
+          >
+            {account ? "streaker" : "friend"}
+          </span>{" "}
+          👋
+        </>
+      ),
+      second: "Check in every day to grow your streak and earn 0xtxn.",
+      hero: true,
+    },
+    {
+      duration: 3000,
+      first: "Did you know, Your rewards grow faster every day?",
+      second: "Missing one day resets streak — don’t blink 👀",
+      hero: false,
+    },
+    {
+      duration: 3000,
+      first: "Today is a good day to stay loyal",
+      second: "You’re doing better than yesterday 👊",
+      hero: false,
+    },
+  ];
 
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const current = slides[index];
+  const current = slides[index];
 
-    const fadeTimer = setTimeout(() => {
-      setVisible(false);
-    }, current.duration - 300);
+  const timer = setTimeout(() => {
+    setVisible(false);
 
-    const nextTimer = setTimeout(() => {
+    setTimeout(() => {
       setIndex((i) => (i + 1) % slides.length);
       setVisible(true);
-    }, current.duration);
+    }, 300); // fade duration এর সমান
+  }, current.duration);
 
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(nextTimer);
-    };
-  }, [index]);
+  return () => clearTimeout(timer);
+}, [index, slides]);
+
+
+  const slide = slides[index];
 
   return (
     <div className="relative h-[38px] overflow-hidden">
@@ -68,26 +67,43 @@ export default function TodayMessageLoop({ isDarkMode, account }: Props) {
           visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
         }`}
       >
-        {/* TITLE — exact same style as before */}
-        <p
-  className={`leading-tight ${
-    slides[index].small
-      ? "text-[11px]"
-      : "text-sm"
-  } ${isDarkMode ? "text-slate-200" : "text-slate-900"}`}
->
-  {slides[index].title}
-</p>
-
-
-        {/* DESCRIPTION — exact same style as before */}
-        <p
-          className={`text-[11px] truncate ${
-            isDarkMode ? "text-slate-400" : "text-slate-900"
-          }`}
-        >
-          {slides[index].desc}
-        </p>
+        {slide.hero ? (
+          <>
+            {/* FIRST SLIDE — ORIGINAL DESIGN */}
+            <p
+              className={`text-sm leading-tight ${
+                isDarkMode ? "text-slate-200" : "text-slate-900"
+              }`}
+            >
+              {slide.first}
+            </p>
+            <p
+              className={`text-[11px] truncate ${
+                isDarkMode ? "text-slate-400" : "text-slate-900"
+              }`}
+            >
+              {slide.second}
+            </p>
+          </>
+        ) : (
+          <>
+            {/* OTHER SLIDES — NO TITLE, BOTH SMALL */}
+            <p
+              className={`text-[11px] leading-tight ${
+                isDarkMode ? "text-slate-400" : "text-slate-900"
+              }`}
+            >
+              {slide.first}
+            </p>
+            <p
+              className={`text-[11px] truncate ${
+                isDarkMode ? "text-slate-400" : "text-slate-900"
+              }`}
+            >
+              {slide.second}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
