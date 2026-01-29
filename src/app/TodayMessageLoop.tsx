@@ -26,13 +26,13 @@ export default function TodayMessageLoop({ isDarkMode, account }: Props) {
       hero: true,
     },
     {
-      duration: 3000,
-      first: "Did you know, Your rewards grow faster every day?",
+      duration: 5000,
+      first: "Do you know, Your rewards grow faster every day?",
       second: "Missing one day resets streak — don’t blink 👀",
       hero: false,
     },
     {
-      duration: 3000,
+      duration: 5000,
       first: "Today is a good day to stay loyal",
       second: "You’re doing better than yesterday 👊",
       hero: false,
