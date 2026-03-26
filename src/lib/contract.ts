@@ -4,7 +4,7 @@ import { BrowserProvider, Contract, formatUnits } from "ethers";
 
 export const OXTXN_STREAK_CONTRACT =
   "0x9D028f81d30C366079882aBb7255Edba0d34Ea80" as const;
-  const PAYMASTER_RPC =
+  export const PAYMASTER_RPC =
   "https://api.developer.coinbase.com/rpc/v1/base/KbNJV5E8r843PcyhzAPpKAcVzieP7RYH";
 
 export const BASE_CHAIN_ID_HEX = "0x2105"; // 8453 dec
@@ -155,9 +155,7 @@ export async function getContractWithSigner() {
   const eth = getEthereum();
   if (!eth) throw new Error("Wallet not found");
 
-  const provider = new BrowserProvider(
-    new (window as any).ethereum.constructor(PAYMASTER_RPC)
-  );
+  const provider = new BrowserProvider(eth);
 
   const signer = await provider.getSigner();
 

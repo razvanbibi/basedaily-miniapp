@@ -6,6 +6,7 @@ import {
   getContractWithSigner,
   getReadOnlyContract,
   formatToken,
+  PAYMASTER_RPC
 } from "@/lib/contract";
 
 
@@ -642,7 +643,13 @@ useEffect(() => {
 
       await ensureBaseNetwork();
       const { contract } = await getContractWithSigner();
-      const tx = await contract.checkIn();
+      const tx = await contract.checkIn({
+  customData: {
+    paymasterService: {
+      url: PAYMASTER_RPC
+    }
+  }
+});
       const pending = (await refreshData())?.pending ?? BigInt(0);
       setPendingTokens(pending);
 
@@ -754,7 +761,13 @@ useEffect(() => {
 
       await ensureBaseNetwork();
       const { contract } = await getContractWithSigner();
-      const tx = await contract.claimAll();
+      const tx = await contract.claimAll({
+  customData: {
+    paymasterService: {
+      url: PAYMASTER_RPC
+    }
+  }
+});
       setStatus("Claim pending... waiting for confirmation.");
       await tx.wait();
 
