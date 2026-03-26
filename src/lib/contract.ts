@@ -162,13 +162,7 @@ export async function getContractWithSigner() {
 
   const signer = await provider.getSigner();
 
-  const walletClient = createWalletClient({
-  chain: base,
-  transport: custom(eth),
-});
-
-const smartAccountClient = createSmartAccountClient({
-  account: walletClient.account,
+  const smartAccountClient = createSmartAccountClient({
   chain: base,
   bundlerTransport: http(PAYMASTER_RPC),
 });

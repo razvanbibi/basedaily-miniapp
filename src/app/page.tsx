@@ -646,7 +646,10 @@ useEffect(() => {
       const { smartAccountClient } = await getContractWithSigner();
 
 const hash = await smartAccountClient.writeContract({
-  account: account as `0x${string}`,
+  account: {
+  address: account as `0x${string}`,
+  type: "json-rpc",
+},
   address: OXTXN_STREAK_CONTRACT,
   abi: OXTXN_STREAK_ABI,
   functionName: "checkIn",
@@ -769,7 +772,10 @@ await smartAccountClient.waitForUserOperationReceipt({
       const { smartAccountClient } = await getContractWithSigner();
 
 const hash = await smartAccountClient.writeContract({
-  account: account as `0x${string}`,
+  account: {
+  address: account as `0x${string}`,
+  type: "json-rpc",
+},
   address: OXTXN_STREAK_CONTRACT,
   abi: OXTXN_STREAK_ABI,
   functionName: "claimAll",
