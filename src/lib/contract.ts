@@ -6,8 +6,6 @@ import { BrowserProvider, Contract, formatUnits } from "ethers";
 
 export const OXTXN_STREAK_CONTRACT =
   "0x9D028f81d30C366079882aBb7255Edba0d34Ea80" as const;
-  export const PAYMASTER_RPC =
-  "https://api.developer.coinbase.com/rpc/v1/base/KbNJVsE8r843PcyhzAPpKAcVzieP7RYH";
 
 export const BASE_CHAIN_ID_HEX = "0x2105"; // 8453 dec
 

@@ -6,7 +6,8 @@ import {
   getContractWithSigner,
   getReadOnlyContract,
   formatToken,
-  PAYMASTER_RPC 
+  OXTXN_STREAK_CONTRACT,
+  OXTXN_STREAK_ABI 
 } from "@/lib/contract";
 
 
@@ -14,6 +15,8 @@ import { ethers } from "ethers";
 
 import { sdk } from "@farcaster/miniapp-sdk";
 import TodayMessageLoop from "./TodayMessageLoop";
+import { encodeFunctionData } from "viem";
+import { getBaseProvider, PAYMASTER_RPC } from "@/lib/baseAccount";
 
 type Status = string | null;
 
@@ -629,8 +632,6 @@ useEffect(() => {
     }
   }
 
-
-
   async function handleCheckIn() {
     try {
       if (!account) {
@@ -642,20 +643,32 @@ useEffect(() => {
       const prevPending = pendingTokens ?? BigInt(0);
 
       await ensureBaseNetwork();
-      const { contract } = await getContractWithSigner();
-      const tx = await contract.checkIn({
-  customData: {
-    paymasterService: {
-      url: PAYMASTER_RPC
-    }
-  }
+      
+const provider = getBaseProvider();
+
+await provider.request({
+  method: "wallet_sendCalls",
+
+  params: [{
+    calls: [{
+      to: OXTXN_STREAK_CONTRACT,
+
+      data: encodeFunctionData({
+        abi: OXTXN_STREAK_ABI,
+        functionName: "checkIn",
+      }),
+    }],
+    capabilities: {
+      paymasterService: {
+        url: PAYMASTER_RPC,
+      },
+    },
+  }],
 });
       const pending = (await refreshData())?.pending ?? BigInt(0);
       setPendingTokens(pending);
-
-
       setStatus("Check-in pending... waiting for confirmation.");
-      await tx.wait();
+      
 
       await fetch("/api/leaderboard/register", {
         method: "POST",
@@ -760,16 +773,30 @@ useEffect(() => {
       const claimAmount = pendingTokens;
 
       await ensureBaseNetwork();
-      const { contract } = await getContractWithSigner();
-      const tx = await contract.claimAll({
-  customData: {
-    paymasterService: {
-      url: PAYMASTER_RPC
-    }
-  }
+      const provider = getBaseProvider();
+
+await provider.request({
+  method: "wallet_sendCalls",
+
+  params: [{
+    calls: [{
+      to: OXTXN_STREAK_CONTRACT,
+
+      data: encodeFunctionData({
+        abi: OXTXN_STREAK_ABI,
+        functionName: "claimAll",
+      }),
+    }],
+
+    capabilities: {
+      paymasterService: {
+        url: PAYMASTER_RPC,
+      },
+    },
+  }],
 });
       setStatus("Claim pending... waiting for confirmation.");
-      await tx.wait();
+      
 
       setRecentlyClaimed(true);
       await refreshData();
