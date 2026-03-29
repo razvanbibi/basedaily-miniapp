@@ -1,17 +1,32 @@
 "use client";
 
+import { createBaseAccountSDK, getCryptoKeyAccount, base } from "@base-org/account";
+import { numberToHex } from "viem";
+
 export const PAYMASTER_RPC =
   "https://api.developer.coinbase.com/rpc/v1/base/KbNJVsE8r843PcyhzAPpKAcVzieP7RYH";
 
-export function getBaseProvider() {
+export function getBaseAccountSDK() {
 
-  if (typeof window === "undefined")
-    throw new Error("Client only");
+  return createBaseAccountSDK({
 
-  const provider = (window as any).ethereum;
+    appName: "BaseDaily",
 
-  if (!provider)
-    throw new Error("Base wallet not detected");
+    appLogoUrl: "https://basedaily-miniapp.vercel.app/icon.png",
 
-  return provider;
+    appChainIds: [base.constants.CHAIN_IDS.base],
+
+  });
+
 }
+
+export async function getBaseAccountAddress() {
+
+  const cryptoAccount = await getCryptoKeyAccount();
+
+  return cryptoAccount?.account?.address;
+
+}
+
+export const BASE_CHAIN_HEX =
+  numberToHex(base.constants.CHAIN_IDS.base);

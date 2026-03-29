@@ -15,8 +15,14 @@ import { ethers } from "ethers";
 
 import { sdk } from "@farcaster/miniapp-sdk";
 import TodayMessageLoop from "./TodayMessageLoop";
+import {
+  getBaseAccountSDK,
+  getBaseAccountAddress,
+  PAYMASTER_RPC,
+  BASE_CHAIN_HEX
+} from "@/lib/baseAccount";
+
 import { encodeFunctionData } from "viem";
-import { getBaseProvider, PAYMASTER_RPC } from "@/lib/baseAccount";
 
 type Status = string | null;
 
@@ -644,7 +650,15 @@ useEffect(() => {
 
       await ensureBaseNetwork();
       
-const provider = getBaseProvider();
+const sdk = getBaseAccountSDK();
+
+const provider = sdk.getProvider();
+
+const fromAddress = await getBaseAccountAddress();
+
+if (!fromAddress)
+  throw new Error("No smart wallet found");
+
 
 await provider.request({
 
@@ -652,15 +666,24 @@ await provider.request({
 
   params: [{
 
-    version: "1",
+    version: "1.0",
+
+    chainId: BASE_CHAIN_HEX,
+
+    from: fromAddress,
 
     calls: [{
 
       to: OXTXN_STREAK_CONTRACT,
 
+      value: "0x0",
+
       data: encodeFunctionData({
+
         abi: OXTXN_STREAK_ABI,
+
         functionName: "checkIn",
+
       }),
 
     }],
@@ -668,7 +691,9 @@ await provider.request({
     capabilities: {
 
       paymasterService: {
+
         url: PAYMASTER_RPC,
+
       },
 
     },
@@ -784,7 +809,11 @@ await provider.request({
       const claimAmount = pendingTokens;
 
       await ensureBaseNetwork();
-      const provider = getBaseProvider();
+      const sdk = getBaseAccountSDK();
+
+const provider = sdk.getProvider();
+
+const fromAddress = await getBaseAccountAddress();
 
 await provider.request({
 
@@ -792,15 +821,24 @@ await provider.request({
 
   params: [{
 
-    version: "1",
+    version: "1.0",
+
+    chainId: BASE_CHAIN_HEX,
+
+    from: fromAddress,
 
     calls: [{
 
       to: OXTXN_STREAK_CONTRACT,
 
+      value: "0x0",
+
       data: encodeFunctionData({
+
         abi: OXTXN_STREAK_ABI,
+
         functionName: "claimAll",
+
       }),
 
     }],
@@ -808,7 +846,9 @@ await provider.request({
     capabilities: {
 
       paymasterService: {
+
         url: PAYMASTER_RPC,
+
       },
 
     },
