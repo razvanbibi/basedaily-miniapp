@@ -647,23 +647,34 @@ useEffect(() => {
 const provider = getBaseProvider();
 
 await provider.request({
+
   method: "wallet_sendCalls",
 
   params: [{
+
+    version: "1",
+
     calls: [{
+
       to: OXTXN_STREAK_CONTRACT,
 
       data: encodeFunctionData({
         abi: OXTXN_STREAK_ABI,
         functionName: "checkIn",
       }),
+
     }],
+
     capabilities: {
+
       paymasterService: {
         url: PAYMASTER_RPC,
       },
+
     },
+
   }],
+
 });
       const pending = (await refreshData())?.pending ?? BigInt(0);
       setPendingTokens(pending);
@@ -776,24 +787,34 @@ await provider.request({
       const provider = getBaseProvider();
 
 await provider.request({
+
   method: "wallet_sendCalls",
 
   params: [{
+
+    version: "1",
+
     calls: [{
+
       to: OXTXN_STREAK_CONTRACT,
 
       data: encodeFunctionData({
         abi: OXTXN_STREAK_ABI,
         functionName: "claimAll",
       }),
+
     }],
 
     capabilities: {
+
       paymasterService: {
         url: PAYMASTER_RPC,
       },
+
     },
+
   }],
+
 });
       setStatus("Claim pending... waiting for confirmation.");
       
