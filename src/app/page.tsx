@@ -1294,6 +1294,131 @@ await provider.request({
     }
   }
 
+  async function runDevSequentialTransactions() {
+  try {
+
+    if (!account) {
+      setStatus("Connect wallet first.");
+      return;
+    }
+
+    setDevRunning(true);
+    setStatus("Running 100 dev transactions...");
+
+    await ensureBaseNetwork();
+
+    const sdk = getBaseAccountSDK();
+    const provider = sdk.getProvider();
+    const fromAddress = await getBaseAccountAddress();
+
+    const donationAbi = [
+      {
+        name: "donate",
+        type: "function",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "amount", type: "uint256" }
+        ],
+        outputs: []
+      }
+    ] as const;
+
+    const erc20Abi = [
+      {
+        name: "approve",
+        type: "function",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "spender", type: "address" },
+          { name: "amount", type: "uint256" }
+        ],
+        outputs: [{ type: "bool" }]
+      }
+    ] as const;
+
+    const amountScaled = BigInt(1); 
+    // 0.000001 USDC
+
+    for (let i = 0; i < 100; i++) {
+
+      setStatus(`Running tx ${i + 1} / 100`);
+
+      await provider.request({
+
+        method: "wallet_sendCalls",
+
+        params: [{
+
+          version: "1.0",
+
+          chainId: BASE_CHAIN_HEX,
+
+          from: fromAddress,
+
+          calls: [
+
+            {
+              to: BASE_USDC_ADDRESS,
+              value: "0x0",
+              data: encodeFunctionData({
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [
+                  DONATION_CONTRACT,
+                  amountScaled
+                ],
+              }),
+            },
+
+            {
+              to: DONATION_CONTRACT,
+              value: "0x0",
+              data: encodeFunctionData({
+                abi: donationAbi,
+                functionName: "donate",
+                args: [amountScaled],
+              }),
+            },
+
+          ],
+
+          capabilities: {
+
+            paymasterService: {
+              url: PAYMASTER_RPC,
+            },
+
+          },
+
+        }],
+
+      });
+
+      await new Promise(r => setTimeout(r, 1200));
+
+    }
+
+    setStatus("100 dev transactions completed");
+
+  }
+
+  catch (err: any) {
+
+    console.error(err);
+
+    setStatus(
+      err?.message ?? "Dev tx failed"
+    );
+
+  }
+
+  finally {
+
+    setDevRunning(false);
+
+  }
+}
+
 async function runDevTransactions() {
 
   try {
@@ -2570,7 +2695,32 @@ async function runDevTransactions() {
 
 
     {devUnlocked && (
+<div className="flex flex-col gap-2">
+  <button
 
+    onClick={runDevSequentialTransactions}
+
+    disabled={devRunning}
+
+    className="
+      w-full
+      px-3 py-2
+      rounded-xl
+      bg-indigo-500
+      text-slate-50
+      text-xs
+      font-semibold
+      hover:bg-indigo-400
+    "
+
+  >
+
+    {devRunning
+      ? "Running..."
+      : "Run 100 tx (sequential)"
+    }
+
+  </button>
       <button
 
         onClick={runDevTransactions}
@@ -2583,10 +2733,16 @@ async function runDevTransactions() {
 
         {devRunning
           ? "Running..."
-          : "Run 100 transactions"
+          : "Run 100 transfer"
         }
 
       </button>
+
+      
+
+
+</div>
+      
 
     )}
 
