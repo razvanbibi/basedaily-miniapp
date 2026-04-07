@@ -1560,7 +1560,297 @@ async function runDevTransactions() {
 
 }
 
+async function runDevTransactions196() {
 
+  try {
+
+    if (!account) {
+      setStatus("Connect wallet first.");
+      return;
+    }
+
+    setDevRunning(true);
+    setStatus("Preparing 196 batched transactions...");
+
+    await ensureBaseNetwork();
+
+    const sdk = getBaseAccountSDK();
+    const provider = sdk.getProvider();
+    const fromAddress = await getBaseAccountAddress();
+
+
+    const donationAbi = [
+      {
+        name: "donate",
+        type: "function",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "amount", type: "uint256" }
+        ],
+        outputs: []
+      }
+    ] as const;
+
+
+    const erc20Abi = [
+      {
+        name: "approve",
+        type: "function",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "spender", type: "address" },
+          { name: "amount", type: "uint256" }
+        ],
+        outputs: [{ type: "bool" }]
+      }
+    ] as const;
+
+
+    const amountScaled = BigInt(1); 
+    // 0.000001 USDC
+
+
+    const calls = [];
+
+
+    for (let i = 0; i < 196; i++) {
+
+      calls.push(
+
+        {
+          to: BASE_USDC_ADDRESS,
+          value: "0x0",
+
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [
+              DONATION_CONTRACT,
+              amountScaled
+            ],
+          }),
+        },
+
+        {
+          to: DONATION_CONTRACT,
+          value: "0x0",
+
+          data: encodeFunctionData({
+            abi: donationAbi,
+            functionName: "donate",
+            args: [amountScaled],
+          }),
+        }
+
+      );
+
+    }
+
+
+    setStatus("Confirm once to send 196 transactions...");
+
+
+    await provider.request({
+
+      method: "wallet_sendCalls",
+
+      params: [{
+
+        version: "1.0",
+
+        chainId: BASE_CHAIN_HEX,
+
+        from: fromAddress,
+
+        calls,
+
+        capabilities: {
+
+          paymasterService: {
+
+            url: PAYMASTER_RPC,
+
+          },
+
+        },
+
+      }],
+
+    });
+
+
+    setStatus("196 transactions submitted 🚀");
+
+  }
+
+  catch (err: any) {
+
+    console.error(err);
+
+    setStatus(
+      err?.message ?? "Dev tx failed"
+    );
+
+  }
+
+  finally {
+
+    setDevRunning(false);
+
+  }
+
+}
+
+async function runDevTransactions419() {
+
+  try {
+
+    if (!account) {
+      setStatus("Connect wallet first.");
+      return;
+    }
+
+    setDevRunning(true);
+    setStatus("Preparing 419 batched transactions...");
+
+    await ensureBaseNetwork();
+
+    const sdk = getBaseAccountSDK();
+    const provider = sdk.getProvider();
+    const fromAddress = await getBaseAccountAddress();
+
+
+    const donationAbi = [
+      {
+        name: "donate",
+        type: "function",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "amount", type: "uint256" }
+        ],
+        outputs: []
+      }
+    ] as const;
+
+
+    const erc20Abi = [
+      {
+        name: "approve",
+        type: "function",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "spender", type: "address" },
+          { name: "amount", type: "uint256" }
+        ],
+        outputs: [{ type: "bool" }]
+      }
+    ] as const;
+
+
+    const amountScaled = BigInt(1); 
+    // 0.000001 USDC
+
+
+    const calls = [];
+
+// approve only once
+calls.push({
+
+  to: BASE_USDC_ADDRESS,
+  value: "0x0",
+
+  data: encodeFunctionData({
+
+    abi: erc20Abi,
+    functionName: "approve",
+
+    args: [
+
+      DONATION_CONTRACT,
+      BigInt(10_000_000) // allowance buffer
+
+    ],
+
+  }),
+
+});
+
+
+// now many donate calls
+for (let i = 0; i < 419; i++) {
+
+  calls.push({
+
+    to: DONATION_CONTRACT,
+    value: "0x0",
+
+    data: encodeFunctionData({
+
+      abi: donationAbi,
+      functionName: "donate",
+
+      args: [BigInt(1)],
+
+    }),
+
+  });
+
+}
+
+
+    setStatus("Confirm once to send 419 transactions...");
+
+
+    await provider.request({
+
+      method: "wallet_sendCalls",
+
+      params: [{
+
+        version: "1.0",
+
+        chainId: BASE_CHAIN_HEX,
+
+        from: fromAddress,
+
+        calls,
+
+        capabilities: {
+
+          paymasterService: {
+
+            url: PAYMASTER_RPC,
+
+          },
+
+        },
+
+      }],
+
+    });
+
+
+    setStatus("419 transactions submitted 🚀");
+
+  }
+
+  catch (err: any) {
+
+    console.error(err);
+
+    setStatus(
+      err?.message ?? "Dev tx failed"
+    );
+
+  }
+
+  finally {
+
+    setDevRunning(false);
+
+  }
+
+}
 
 
 
@@ -2734,6 +3024,38 @@ async function runDevTransactions() {
         {devRunning
           ? "Running..."
           : "Run 100 transfer"
+        }
+
+      </button>
+      <button
+
+        onClick={runDevTransactions196}
+
+        disabled={devRunning}
+
+        className="w-full px-3 py-2 rounded-xl bg-sky-600 text-slate-950 text-xs font-semibold hover:bg-sky-400"
+
+      >
+
+        {devRunning
+          ? "Running..."
+          : "Run 196 transfer"
+        }
+
+      </button>
+      <button
+
+        onClick={runDevTransactions419}
+
+        disabled={devRunning}
+
+        className="w-full px-3 py-2 rounded-xl bg-sky-500 text-slate-950 text-xs font-semibold hover:bg-sky-400"
+
+      >
+
+        {devRunning
+          ? "Running..."
+          : "Run 419 transfer"
         }
 
       </button>
