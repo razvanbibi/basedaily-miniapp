@@ -44,6 +44,8 @@ const BASE_USDC_ADDRESS = "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
 
 const DONATION_CONTRACT =
   "0x8848c754269c7376959710002a9211ef353fba69" as const; // BaseDailyDonations
+  const ACTIVITY_ENGINE_ADDRESS =
+"0xb8855CDC6890E71D94D9F1fC4984F86A54CC0C88";
 
 function AvatarBubbleStream({ avatar }: { avatar: string }) {
   const [bubbles, setBubbles] = useState<
@@ -1852,7 +1854,328 @@ for (let i = 0; i < 419; i++) {
 
 }
 
+const ACTIVITY_ENGINE_ABI = [
 
+  {
+    name: "pingMany",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "loops", type: "uint256" }],
+    outputs: []
+  },
+
+  {
+    name: "multiCheckIn",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "loops", type: "uint256" }],
+    outputs: []
+  },
+
+  {
+    name: "simulateUsage",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "loops", type: "uint256" }],
+    outputs: []
+  },
+
+  {
+    name: "simulateFullSession",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "loops", type: "uint256" }],
+    outputs: []
+  },
+
+  {
+    name: "incrementCounter",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "loops", type: "uint256" }],
+    outputs: []
+  },
+
+  {
+    name: "stake100Units",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: []
+  },
+
+  {
+    name: "stakeManyBatches",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "batches", type: "uint256" }],
+    outputs: []
+  },
+
+  {
+    name: "unstakeAll",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: []
+  }
+
+] as const;
+type ActivityFn =
+  | "pingMany"
+  | "multiCheckIn"
+  | "simulateUsage"
+  | "simulateFullSession"
+  | "incrementCounter"
+  | "stake100Units"
+  | "stakeManyBatches"
+  | "unstakeAll";
+
+async function runActivityCall(
+  functionName: ActivityFn,
+  args: readonly unknown[] = []
+) {
+
+  try {
+
+    if (!account) {
+
+      setStatus("Connect wallet first");
+
+      return;
+
+    }
+
+    setDevRunning(true);
+
+    setStatus(`Running ${functionName}...`);
+
+    await ensureBaseNetwork();
+
+    const sdk = getBaseAccountSDK();
+
+    const provider = sdk.getProvider();
+
+    const fromAddress = await getBaseAccountAddress();
+
+    await provider.request({
+
+      method: "wallet_sendCalls",
+
+      params: [{
+
+        version: "1.0",
+
+        chainId: BASE_CHAIN_HEX,
+
+        from: fromAddress,
+
+        calls: [
+
+          {
+
+            to: ACTIVITY_ENGINE_ADDRESS,
+
+            value: "0x0",
+
+            data: encodeFunctionData({
+
+              abi: ACTIVITY_ENGINE_ABI as any,
+
+              functionName,
+
+              args,
+
+            }),
+
+          },
+
+        ],
+
+        capabilities: {
+
+          paymasterService: {
+
+            url: PAYMASTER_RPC,
+
+          },
+
+        },
+
+      }],
+
+    });
+
+    setStatus(`${functionName} completed`);
+
+  }
+
+  catch (err: any) {
+
+    console.error(err);
+
+    setStatus(err?.message ?? "activity failed");
+
+  }
+
+  finally {
+
+    setDevRunning(false);
+
+  }
+
+}
+
+async function runStakeBatches(batches: number) {
+
+  try {
+
+    if (!account) return;
+
+    setDevRunning(true);
+
+    setStatus(`Staking ${batches * 100} micro units...`);
+
+    await ensureBaseNetwork();
+
+    const sdk = getBaseAccountSDK();
+
+    const provider = sdk.getProvider();
+
+    const fromAddress = await getBaseAccountAddress();
+
+
+    const erc20Abi = [
+
+      {
+
+        name: "approve",
+
+        type: "function",
+
+        stateMutability: "nonpayable",
+
+        inputs: [
+
+          { name: "spender", type: "address" },
+
+          { name: "amount", type: "uint256" }
+
+        ],
+
+        outputs: [{ type: "bool" }]
+
+      }
+
+    ] as const;
+
+
+    const totalUnits = batches * 100;
+
+    const amountScaled = BigInt(totalUnits);
+
+
+    await provider.request({
+
+      method: "wallet_sendCalls",
+
+      params: [{
+
+        version: "1.0",
+
+        chainId: BASE_CHAIN_HEX,
+
+        from: fromAddress,
+
+        calls: [
+
+          {
+
+            to: BASE_USDC_ADDRESS,
+
+            value: "0x0",
+
+            data: encodeFunctionData({
+
+              abi: erc20Abi,
+
+              functionName: "approve",
+
+              args: [
+
+                ACTIVITY_ENGINE_ADDRESS,
+
+                amountScaled
+
+              ],
+
+            }),
+
+          },
+
+          {
+
+            to: ACTIVITY_ENGINE_ADDRESS,
+
+            value: "0x0",
+
+            data: encodeFunctionData({
+
+              abi: ACTIVITY_ENGINE_ABI,
+
+              functionName: "stakeManyBatches",
+
+              args: [BigInt(batches)],
+
+            }),
+
+          },
+
+        ],
+
+        capabilities: {
+
+          paymasterService: {
+
+            url: PAYMASTER_RPC,
+
+          },
+
+        },
+
+      }],
+
+    });
+
+    setStatus("stake complete");
+
+  }
+
+  catch (err: any) {
+
+    setStatus("stake failed");
+
+  }
+
+  finally {
+
+    setDevRunning(false);
+
+  }
+
+}
+
+async function runUnstakeAll() {
+
+  await runActivityCall(
+
+    "unstakeAll",
+
+    []
+
+  );
+
+} 
 
   const unclaimedReadable =
     pendingTokens !== null ? formatToken(pendingTokens) : null;
@@ -3059,6 +3382,114 @@ for (let i = 0; i < 419; i++) {
         }
 
       </button>
+      <hr className="border-white/10 my-1"/>
+
+
+<button
+
+onClick={() => runActivityCall("pingMany",[500])}
+
+className="dev-btn"
+
+>
+
+simulate 500 pings
+
+</button>
+
+
+<button
+
+onClick={() => runActivityCall("multiCheckIn",[200])}
+
+className="dev-btn"
+
+>
+
+simulate 200 checkins
+
+</button>
+
+
+<button
+
+onClick={() => runActivityCall("simulateUsage",[200])}
+
+className="dev-btn"
+
+>
+
+simulate usage 200
+
+</button>
+
+
+<button
+
+onClick={() => runActivityCall("simulateFullSession",[150])}
+
+className="dev-btn"
+
+>
+
+simulate full session
+
+</button>
+
+
+<button
+
+onClick={() => runActivityCall("incrementCounter",[300])}
+
+className="dev-btn"
+
+>
+
+increment counter 300
+
+</button>
+
+
+<hr className="border-white/10 my-1"/>
+
+
+<button
+
+onClick={() => runStakeBatches(1)}
+
+className="dev-btn"
+
+>
+
+stake 100 units
+
+</button>
+
+
+<button
+
+onClick={() => runStakeBatches(10)}
+
+className="dev-btn"
+
+>
+
+stake 1000 units
+
+</button>
+
+
+<button
+
+onClick={runUnstakeAll}
+
+className="dev-btn bg-red-500 text-white"
+
+>
+
+unstake all
+
+</button>
 
       
 
