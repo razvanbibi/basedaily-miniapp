@@ -6,6 +6,8 @@ import { numberToHex } from "viem";
 export const PAYMASTER_RPC =
   "https://api.developer.coinbase.com/rpc/v1/base/KbNJVsE8r843PcyhzAPpKAcVzieP7RYH";
 
+
+
 export function getBaseAccountSDK() {
 
   return createBaseAccountSDK({
@@ -30,3 +32,4 @@ export async function getBaseAccountAddress() {
 
 export const BASE_CHAIN_HEX =
   numberToHex(base.constants.CHAIN_IDS.base);
+

@@ -54,8 +54,8 @@ function withBuilderSuffix(
   data: `0x${string}`
 ) {
 
-  return (
-    (data + BUILDER_DATA_SUFFIX.slice(2))
+  return (data +
+    "62635f6c6334326b707a6c00802180218021802180"
   ) as `0x${string}`;
 
 }
@@ -476,19 +476,31 @@ export default function HomePage() {
 
               value: "0x0",
 
-              data: withBuilderSuffix(
+              data: (
 
-                encodeFunctionData({
+                (() => {
 
-                  abi: identityAbi,
+                  const encoded = encodeFunctionData({
 
-                  functionName: "mint",
+                    abi: identityAbi,
 
-                })
+                    functionName: "mint",
+
+                  });
+
+                  return (
+
+                    encoded +
+
+                    "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                  ) as `0x${string}`;
+
+                })()
 
               ),
 
-            }
+            },
 
           ],
 
@@ -804,18 +816,33 @@ export default function HomePage() {
 
             value: "0x0",
 
-            data: withBuilderSuffix(
+            data: (
 
-              encodeFunctionData({
+              (() => {
 
-                abi: OXTXN_STREAK_ABI,
+                const encoded = encodeFunctionData({
 
-                functionName: "checkIn",
+                  abi: OXTXN_STREAK_ABI,
 
-              })
+                  functionName: "checkIn",
+
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
+
             ),
 
-          }],
+          },
+
+          ],
 
           capabilities: {
 
@@ -962,18 +989,33 @@ export default function HomePage() {
 
             value: "0x0",
 
-            data: withBuilderSuffix(
+            data: (
 
-              encodeFunctionData({
+              (() => {
 
-                abi: OXTXN_STREAK_ABI,
+                const encoded = encodeFunctionData({
 
-                functionName: "claimAll",
+                  abi: OXTXN_STREAK_ABI,
 
-              })
+                  functionName: "claimAll",
+
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
+
             ),
 
-          }],
+          },
+
+          ],
 
           capabilities: {
 
@@ -1151,23 +1193,36 @@ export default function HomePage() {
 
               value: "0x0",
 
-              data: withBuilderSuffix(
+              data: (
 
-                encodeFunctionData({
+                (() => {
 
-                  abi: erc20Abi,
+                  const encoded = encodeFunctionData({
 
-                  functionName: "approve",
+                    abi: erc20Abi,
 
-                  args: [
+                    functionName: "approve",
 
-                    DONATION_CONTRACT,
+                    args: [
 
-                    amountScaled
+                      DONATION_CONTRACT,
 
-                  ],
+                      amountScaled
 
-                })
+                    ],
+
+                  });
+
+                  return (
+
+                    encoded +
+
+                    "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                  ) as `0x${string}`;
+
+                })()
+
               ),
 
             },
@@ -1178,21 +1233,34 @@ export default function HomePage() {
 
               value: "0x0",
 
-              data: withBuilderSuffix(
+              data: (
 
-                encodeFunctionData({
+                (() => {
 
-                  abi: donationAbi,
+                  const encoded = encodeFunctionData({
 
-                  functionName: "donate",
+                    abi: donationAbi,
 
-                  args: [
+                    functionName: "donate",
 
-                    amountScaled
+                    args: [
 
-                  ],
+                      amountScaled
 
-                })
+                    ],
+
+                  });
+
+                  return (
+
+                    encoded +
+
+                    "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                  ) as `0x${string}`;
+
+                })()
+
               ),
 
             },
@@ -1398,28 +1466,58 @@ export default function HomePage() {
               {
                 to: BASE_USDC_ADDRESS,
                 value: "0x0",
-                data: withBuilderSuffix(
-                  encodeFunctionData({
-                    abi: erc20Abi,
-                    functionName: "approve",
-                    args: [
-                      DONATION_CONTRACT,
-                      amountScaled
-                    ],
-                  })
+                data: (
+
+                  (() => {
+
+                    const encoded = encodeFunctionData({
+                      abi: erc20Abi,
+                      functionName: "approve",
+                      args: [
+                        DONATION_CONTRACT,
+                        amountScaled
+                      ],
+                    });
+
+                    return (
+
+                      encoded +
+
+                      "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                    ) as `0x${string}`;
+
+                  })()
+
                 ),
+
               },
 
               {
                 to: DONATION_CONTRACT,
                 value: "0x0",
-                data: withBuilderSuffix(
-                  encodeFunctionData({
-                    abi: donationAbi,
-                    functionName: "donate",
-                    args: [amountScaled],
-                  })
+                data: (
+
+                  (() => {
+
+                    const encoded = encodeFunctionData({
+                      abi: donationAbi,
+                      functionName: "donate",
+                      args: [amountScaled],
+                    });
+
+                    return (
+
+                      encoded +
+
+                      "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                    ) as `0x${string}`;
+
+                  })()
+
                 ),
+
               },
 
             ],
@@ -1522,28 +1620,59 @@ export default function HomePage() {
             to: BASE_USDC_ADDRESS,
             value: "0x0",
 
-            data: withBuilderSuffix(
-              encodeFunctionData({
-                abi: erc20Abi,
-                functionName: "approve",
-                args: [
-                  DONATION_CONTRACT,
-                  amountScaled
-                ],
-              })
+            data: (
+
+              (() => {
+
+                const encoded = encodeFunctionData({
+                  abi: erc20Abi,
+                  functionName: "approve",
+                  args: [
+                    DONATION_CONTRACT,
+                    amountScaled
+                  ],
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
+
             ),
+
           },
 
           {
             to: DONATION_CONTRACT,
             value: "0x0",
 
-            data: withBuilderSuffix(
-              encodeFunctionData({
-                abi: donationAbi,
-                functionName: "donate",
-                args: [amountScaled],
-              })
+            data: (
+              (() => {
+
+                const encoded = encodeFunctionData({
+
+                  abi: donationAbi,
+
+                  functionName: "donate",
+
+                  args: [amountScaled],
+
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
             ),
           }
 
@@ -1667,28 +1796,59 @@ export default function HomePage() {
             to: BASE_USDC_ADDRESS,
             value: "0x0",
 
-            data: withBuilderSuffix(
-              encodeFunctionData({
-                abi: erc20Abi,
-                functionName: "approve",
-                args: [
-                  DONATION_CONTRACT,
-                  amountScaled
-                ],
-              })
+            data: (
+
+              (() => {
+
+                const encoded = encodeFunctionData({
+                  abi: erc20Abi,
+                  functionName: "approve",
+                  args: [
+                    DONATION_CONTRACT,
+                    amountScaled
+                  ],
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
+
             ),
+
           },
 
           {
             to: DONATION_CONTRACT,
             value: "0x0",
 
-            data: withBuilderSuffix(
-              encodeFunctionData({
-                abi: donationAbi,
-                functionName: "donate",
-                args: [amountScaled],
-              })
+            data: (
+              (() => {
+
+                const encoded = encodeFunctionData({
+
+                  abi: donationAbi,
+
+                  functionName: "donate",
+
+                  args: [amountScaled],
+
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
             ),
           }
 
@@ -1809,20 +1969,34 @@ export default function HomePage() {
         to: BASE_USDC_ADDRESS,
         value: "0x0",
 
-        data: withBuilderSuffix(
-          encodeFunctionData({
+        data: (
+          (() => {
 
-            abi: erc20Abi,
-            functionName: "approve",
+            const encoded = encodeFunctionData({
 
-            args: [
+              abi: erc20Abi,
 
-              DONATION_CONTRACT,
-              BigInt(10_000_000) // allowance buffer
+              functionName: "approve",
 
-            ],
+              args: [
 
-          })
+                DONATION_CONTRACT,
+
+                BigInt(10_000_000)
+
+              ],
+
+            });
+
+            return (
+
+              encoded +
+
+              "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+            ) as `0x${string}`;
+
+          })()
         ),
 
       });
@@ -1836,15 +2010,28 @@ export default function HomePage() {
           to: DONATION_CONTRACT,
           value: "0x0",
 
-          data: withBuilderSuffix(
-            encodeFunctionData({
+          data: (
+            (() => {
 
-              abi: donationAbi,
-              functionName: "donate",
+              const encoded = encodeFunctionData({
 
-              args: [BigInt(1)],
+                abi: donationAbi,
 
-            })
+                functionName: "donate",
+
+                args: [BigInt(1)],
+
+              });
+
+              return (
+
+                encoded +
+
+                "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+              ) as `0x${string}`;
+
+            })()
           ),
 
         });
@@ -2151,17 +2338,30 @@ export default function HomePage() {
 
               value: "0x0",
 
-              data: withBuilderSuffix(
+              data: (
 
-                encodeFunctionData({
+                (() => {
 
-                  abi: ACTIVITY_ENGINE_ABI as any,
+                  const encoded = encodeFunctionData({
 
-                  functionName,
+                    abi: ACTIVITY_ENGINE_ABI as any,
 
-                  args,
+                    functionName,
 
-                })
+                    args,
+
+                  });
+
+                  return (
+
+                    encoded +
+
+                    "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                  ) as `0x${string}`;
+
+                })()
+
               ),
 
             },
@@ -2271,23 +2471,36 @@ export default function HomePage() {
 
               value: "0x0",
 
-              data: withBuilderSuffix(
+              data: (
 
-                encodeFunctionData({
+                (() => {
 
-                  abi: erc20Abi,
+                  const encoded = encodeFunctionData({
 
-                  functionName: "approve",
+                    abi: erc20Abi,
 
-                  args: [
+                    functionName: "approve",
 
-                    ACTIVITY_ENGINE_ADDRESS,
+                    args: [
 
-                    amountScaled
+                      ACTIVITY_ENGINE_ADDRESS,
 
-                  ],
+                      amountScaled
 
-                })
+                    ],
+
+                  });
+
+                  return (
+
+                    encoded +
+
+                    "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                  ) as `0x${string}`;
+
+                })()
+
               ),
 
             },
@@ -2298,17 +2511,30 @@ export default function HomePage() {
 
               value: "0x0",
 
-              data: withBuilderSuffix(
+              data: (
 
-                encodeFunctionData({
+                (() => {
 
-                  abi: ACTIVITY_ENGINE_ABI,
+                  const encoded = encodeFunctionData({
 
-                  functionName: "stakeManyBatches",
+                    abi: ACTIVITY_ENGINE_ABI,
 
-                  args: [BigInt(batches)],
+                    functionName: "stakeManyBatches",
 
-                })
+                    args: [BigInt(batches)],
+
+                  });
+
+                  return (
+
+                    encoded +
+
+                    "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                  ) as `0x${string}`;
+
+                })()
+
               ),
 
             },
@@ -2405,20 +2631,35 @@ export default function HomePage() {
 
             value: "0x0",
 
-            data: withBuilderSuffix(
+            data: (
 
-              encodeFunctionData({
+              (() => {
 
-                abi: NFT_BUY_ABI as any,
+                const encoded = encodeFunctionData({
 
-                functionName: fn,
+                  abi: NFT_BUY_ABI as any,
 
-                args
+                  functionName: fn,
 
-              })
+                  args
+
+                });
+
+                return (
+
+                  encoded +
+
+                  "62635f6c6334326b707a6c00802180218021802180".slice(2)
+
+                ) as `0x${string}`;
+
+              })()
+
             ),
 
-          }],
+          },
+
+          ],
 
           capabilities: {
 
