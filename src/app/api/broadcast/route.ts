@@ -1,9 +1,16 @@
+// app/api/broadcast/route.ts
+
 import { NextResponse } from "next/server";
 
 import {
+
   getNotificationUsers,
+
   sendBaseNotification
+
 } from "@/lib/baseNotifications";
+
+
 
 export async function GET() {
 
@@ -13,53 +20,105 @@ export async function GET() {
 
     let allAddresses: string[] = [];
 
+
+
+    // pagination support
+
     do {
 
       const data = await getNotificationUsers(cursor);
 
-      console.log("users page:", data);
 
-      const addresses =
-        data.users.map((u: any) => u.address);
+
+      const addresses = data.users.map(
+
+        (u: any) => u.address
+
+      );
+
+
 
       allAddresses.push(...addresses);
+
+
 
       cursor = data.nextCursor;
 
     }
+
     while (cursor);
 
-    console.log("all addresses:", allAddresses);
+
 
     if (!allAddresses.length) {
 
       return NextResponse.json({
+
         message: "no users opted in"
+
       });
 
     }
 
-    const result = await sendBaseNotification(
 
-      allAddresses.slice(0, 5),
 
-      "BaseDaily test 🔔",
+    // API limit = 1000 addresses per request
 
-      "Notifications working",
+    const chunkSize = 1000;
 
-      "/"
 
-    );
 
-    console.log("send result:", result);
+    let sentTotal = 0;
+
+
+
+    for (
+
+      let i = 0;
+
+      i < allAddresses.length;
+
+      i += chunkSize
+
+    ) {
+
+      const chunk = allAddresses.slice(
+
+        i,
+
+        i + chunkSize
+
+      );
+
+
+
+      const result = await sendBaseNotification(
+
+        chunk,
+
+        "BaseDaily streak alert 🔥",
+
+        "Check in today to keep your streak alive.",
+
+        "/"
+
+      );
+
+
+
+      sentTotal += result.sentCount || 0;
+
+    }
+
+
 
     return NextResponse.json({
 
       success: true,
 
-      total: allAddresses.length,
+      totalUsers: allAddresses.length,
 
-      result
+      sent: sentTotal
 
     });
 
@@ -69,13 +128,19 @@ export async function GET() {
 
     console.error("broadcast error:", err);
 
-    return NextResponse.json({
 
-      error: err.message || "failed"
 
-    },
+    return NextResponse.json(
 
-    { status: 500 });
+      {
+
+        error: err.message || "broadcast failed"
+
+      },
+
+      { status: 500 }
+
+    );
 
   }
 
