@@ -1,33 +1,3 @@
-export async function getNotificationUsers(cursor?: string) {
-
-  const url =
-    `https://dashboard.base.org/api/v1/notifications/app/users` +
-    `?app_url=${process.env.NEXT_PUBLIC_APP_URL}` +
-    `&notification_enabled=true` +
-    (cursor ? `&cursor=${cursor}` : "");
-
-  const res = await fetch(url, {
-
-    headers: {
-
-      "x-api-key": process.env.BASE_API_KEY!
-
-    }
-
-  });
-
-  if (!res.ok) {
-
-    throw new Error("failed to fetch users");
-
-  }
-
-  return res.json();
-
-}
-
-
-
 export async function sendBaseNotification(
 
   walletAddresses: string[],
@@ -74,6 +44,10 @@ export async function sendBaseNotification(
 
   );
 
-  return res.json();
+  const data = await res.json();
+
+  console.log("base response:", data);
+
+  return data;
 
 }
