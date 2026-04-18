@@ -1992,7 +1992,7 @@ export default function HomePage() {
 
               encoded +
 
-             "62635f6c6334326b707a6c00802180218021802180"
+              "62635f6c6334326b707a6c00802180218021802180"
 
             ) as `0x${string}`;
 
@@ -4494,17 +4494,18 @@ export default function HomePage() {
           <div className="pt-2">
             <button
               onClick={() => setShowDevPanel(true)}
-              className="
-      w-full
-      rounded-xl
-      px-3 py-2
-      text-xs
-      font-semibold
-      bg-slate-900
-      border border-white/10
-      hover:bg-slate-800
-      transition
-    "
+              className={`
+    w-full
+    rounded-xl
+    px-3 py-2
+    text-xs
+    font-semibold
+    transition
+    ${isDarkMode
+                  ? "bg-slate-950/60 border border-white/5 text-slate-300 hover:bg-slate-800"
+                  : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+                }
+  `}
             >
               Dev panel
             </button>
