@@ -237,8 +237,8 @@ export default function HomePage() {
   // থিম পরিবর্তন হলে localStorage এ সেভ
   useEffect(() => {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem("basedaily_theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode]);
+    const stored = window.localStorage.getItem("basedaily_theme"); if (stored === "light") { setIsDarkMode(false); } else { setIsDarkMode(true); }
+  }, []); 
 
 
   useEffect(() => {
