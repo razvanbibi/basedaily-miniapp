@@ -96,9 +96,9 @@ export async function GET() {
 
         chunk,
 
-        "BaseDaily streak alert 🔥",
+        "🔥 BaseDaily streak alert",
 
-        "Check in today to keep your streak alive.",
+        "Check in today to keep your streak alive! " + Date.now(),
 
         "/"
 
