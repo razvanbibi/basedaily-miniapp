@@ -849,6 +849,9 @@ export default function HomePage() {
             paymasterService: {
 
               url: PAYMASTER_RPC,
+              context: {
+      erc20: null
+    }
 
             },
 
@@ -2373,6 +2376,7 @@ export default function HomePage() {
             paymasterService: {
 
               url: PAYMASTER_RPC,
+              
 
             },
 
