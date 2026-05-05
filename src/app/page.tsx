@@ -224,21 +224,26 @@ export default function HomePage() {
 
   // প্রথমবার লোড হলে থিম পড়ে আনা
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem("basedaily_theme");
-    if (stored === "dark") {
-      setIsDarkMode(true);
-    } else {
-      setIsDarkMode(false);
-    }
-  }, []);
+  if (typeof window === "undefined") return;
+
+  const stored = window.localStorage.getItem("basedaily_theme");
+
+  if (stored === "dark") {
+    setIsDarkMode(true);
+  } else if (stored === "light") {
+    setIsDarkMode(false);
+  }
+}, []);
 
 
-  // থিম পরিবর্তন হলে localStorage এ সেভ
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem("basedaily_theme"); if (stored === "light") { setIsDarkMode(false); } else { setIsDarkMode(true); }
-  }, []); 
+  if (typeof window === "undefined") return;
+
+  window.localStorage.setItem(
+    "basedaily_theme",
+    isDarkMode ? "dark" : "light"
+  );
+}, [isDarkMode]);
 
 
   useEffect(() => {
