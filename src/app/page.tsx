@@ -7,8 +7,7 @@ import {
   getReadOnlyContract,
   formatToken,
   OXTXN_STREAK_CONTRACT,
-  OXTXN_STREAK_ABI,
-  ensureCeloNetwork
+  OXTXN_STREAK_ABI
 } from "@/lib/contract";
 
 
@@ -152,7 +151,6 @@ export default function HomePage() {
   const [fcPfp, setFcPfp] = useState<string | null>(null);
 
   const [ethReady, setEthReady] = useState(false);
-  const [isSmartWalletEnv, setIsSmartWalletEnv] = useState(false);
 
   const [topSupporters, setTopSupporters] = useState<Supporter[]>([]);
 
@@ -226,51 +224,32 @@ export default function HomePage() {
 
   // প্রথমবার লোড হলে থিম পড়ে আনা
   useEffect(() => {
-    if (typeof window === "undefined") return;
+  if (typeof window === "undefined") return;
 
-    const stored = window.localStorage.getItem("basedaily_theme");
+  const stored = window.localStorage.getItem("basedaily_theme");
 
-    if (stored === "dark") {
-      setIsDarkMode(true);
-    } else if (stored === "light") {
-      setIsDarkMode(false);
-    }
-  }, []);
-
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    window.localStorage.setItem(
-      "basedaily_theme",
-      isDarkMode ? "dark" : "light"
-    );
-  }, [isDarkMode]);
+  if (stored === "dark") {
+    setIsDarkMode(true);
+  } else if (stored === "light") {
+    setIsDarkMode(false);
+  }
+}, []);
 
 
   useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    if (typeof window === "undefined") {
-      return;
+  window.localStorage.setItem(
+    "basedaily_theme",
+    isDarkMode ? "dark" : "light"
+  );
+}, [isDarkMode]);
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).ethereum) {
+      setEthReady(true);
     }
-
-    const eth = (window as any).ethereum;
-
-    if (!eth) {
-      return;
-    }
-
-    setEthReady(true);
-
-    // Base Smart Wallet / Coinbase Wallet detect
-    const isSmart =
-      eth?.isCoinbaseWallet ||
-      eth?.providers?.some(
-        (p: any) => p?.isCoinbaseWallet
-      );
-
-    setIsSmartWalletEnv(!!isSmart);
-
   }, []);
 
 
@@ -709,58 +688,6 @@ export default function HomePage() {
     }
   }
 
-  async function connectMetaMaskCelo() {
-
-    try {
-
-      setStatus(null);
-
-      const eth = getEthereum();
-
-      if (!eth) {
-
-        setStatus("MetaMask not found.");
-
-        return;
-
-      }
-
-      // request wallet access
-      const accounts: string[] =
-        await eth.request({
-          method: "eth_requestAccounts",
-        });
-
-      if (!accounts.length) {
-
-        setStatus("No wallet selected.");
-
-        return;
-
-      }
-
-      // switch/add celo network
-      await ensureCeloNetwork();
-
-      setAccount(accounts[0]);
-
-      setStatus("Connected with MetaMask on Celo.");
-
-    }
-
-    catch (err: any) {
-
-      console.error(err);
-
-      setStatus(
-        err?.message ??
-        "MetaMask connection failed."
-      );
-
-    }
-
-  }
-
   async function refreshData(): Promise<{ pending: bigint | null } | void> {
     if (!account) return;
     try {
@@ -927,7 +854,7 @@ export default function HomePage() {
             paymasterService: {
 
               url: PAYMASTER_RPC,
-
+              
 
             },
 
@@ -2452,7 +2379,7 @@ export default function HomePage() {
             paymasterService: {
 
               url: PAYMASTER_RPC,
-
+              
 
             },
 
@@ -3037,64 +2964,22 @@ export default function HomePage() {
                   </span>
                 </div>
               ) : (
-
-                <div className="flex flex-col items-end gap-2">
-
-                  {/* PRIMARY → Base Smart Wallet */}
-                  {isSmartWalletEnv ? (
-
-                    <button
-                      onClick={connectWallet}
-                      className="
-          px-3 py-1.5
-          rounded-full
-          text-[11px] font-semibold
-          bg-sky-500/90
-          text-slate-950
-          shadow-md
-          hover:bg-sky-400
-          active:scale-95
-          transition
-        "
-                    >
-                      Continue with Base
-                    </button>
-
-                  ) : (
-
-                    <>
-                      {/* MetaMask fallback */}
-                      <button
-                        onClick={connectMetaMaskCelo}
-                        className="
-            px-3 py-1.5
-            rounded-full
-            text-[11px] font-semibold
-            bg-yellow-500/90
-            text-slate-950
-            shadow-md
-            hover:bg-yellow-400
-            active:scale-95
-            transition
-          "
-                      >
-                        Continue with MetaMask
-                      </button>
-
-                      <span
-                        className="
-            text-[9px]
-            text-slate-400
-          "
-                      >
-                        Celo Mainnet
-                      </span>
-                    </>
-
-                  )}
-
-                </div>
-
+                <button
+                  onClick={connectWallet}
+                  className="
+        px-3 py-1.5
+        rounded-full
+        text-[11px] font-semibold
+        bg-sky-500/90
+        text-slate-950
+        shadow-md
+        hover:bg-sky-400
+        active:scale-95
+        transition
+      "
+                >
+                  Connect
+                </button>
               )}
             </div>
 
