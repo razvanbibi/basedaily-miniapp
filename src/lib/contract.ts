@@ -8,6 +8,7 @@ export const OXTXN_STREAK_CONTRACT =
   "0x9D028f81d30C366079882aBb7255Edba0d34Ea80" as const;
 
 export const BASE_CHAIN_ID_HEX = "0x2105"; // 8453 dec
+export const CELO_CHAIN_ID_HEX = "0xa4ec"; // 42220
 
 // আমাদের দরকারি ফাংশনের মিনিমাল ABI
 export const OXTXN_STREAK_ABI = [
@@ -147,6 +148,63 @@ export const OXTXN_STREAK_ABI = [
 export function getEthereum() {
   if (typeof window === "undefined") return null;
   return (window as any).ethereum ?? null;
+}
+
+export async function ensureCeloNetwork() {
+  const eth = getEthereum();
+
+  if (!eth) {
+    throw new Error("MetaMask / wallet not found");
+  }
+
+  const chainId = await eth.request({
+    method: "eth_chainId",
+  });
+
+  // already celo
+  if (chainId === CELO_CHAIN_ID_HEX) {
+    return;
+  }
+
+  try {
+    // switch network
+    await eth.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: CELO_CHAIN_ID_HEX }],
+    });
+  } catch (err: any) {
+
+    // chain not added
+    if (err.code === 4902) {
+
+      await eth.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: CELO_CHAIN_ID_HEX,
+            chainName: "Celo Mainnet",
+
+            rpcUrls: [
+              "https://forno.celo.org"
+            ],
+
+            nativeCurrency: {
+              name: "CELO",
+              symbol: "CELO",
+              decimals: 18,
+            },
+
+            blockExplorerUrls: [
+              "https://celoscan.io"
+            ],
+          },
+        ],
+      });
+
+    } else {
+      throw err;
+    }
+  }
 }
 
 // provider + signer + contract পাওয়ার হেল্পার
