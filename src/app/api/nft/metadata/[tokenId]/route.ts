@@ -8,7 +8,6 @@ const NFT_CONTRACT = "0xe56bF68c390f3761fa3707D8Dbb411bACBa0fa96";
 const NFT_ABI = [
   "function ownerOf(uint256 tokenId) view returns (address)"
 ];
-
 export async function GET(
   req: Request,
   { params }: { params: { tokenId: string } }
