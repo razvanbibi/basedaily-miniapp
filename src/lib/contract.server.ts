@@ -5,7 +5,6 @@ import { OXTXN_STREAK_ABI } from "./contract.abi";
 
 // Base mainnet public RPC (simple & safe)
 const RPC_URL = "https://mainnet.base.org";
-
 export function getReadOnlyContractServer() {
   const provider = new JsonRpcProvider(RPC_URL);
 
