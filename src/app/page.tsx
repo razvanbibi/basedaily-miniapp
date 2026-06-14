@@ -58,7 +58,6 @@ const ACTIVITY_ENGINE_ADDRESS =
   "0xb8855CDC6890E71D94D9F1fC4984F86A54CC0C88";
 const NFT_BUY_CONTRACT =
   "0x3A7E487c6cA726d059B284910eD40236f949eB7b";
-
 function AvatarBubbleStream({ avatar }: { avatar: string }) {
   const [bubbles, setBubbles] = useState<
     { id: number; left: number; size: number }[]
