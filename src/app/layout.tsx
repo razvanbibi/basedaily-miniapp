@@ -21,7 +21,7 @@ export const metadata: Metadata = {
       },
     }),
     "base:app_id": "693871ce237206d0623c7a9f",
-    
+  
     "talentapp:project_verification":
   "bdfb38b8a5b69cf66debd1b89936871f2f24134c31c14156a7ab927fb79553414c9359602decc9d41fe12f4bc1ce4b181ec21c824cd3f00caaf8a70bf918d657",
 
