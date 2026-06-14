@@ -22,7 +22,6 @@ import { encodeFunctionData } from "viem";
 import { Attribution } from "ox/erc8021";
 
 type Status = string | null;
-
 type Toast =
   | { type: "checkin"; message: string }
   | { type: "claim"; message: string }
