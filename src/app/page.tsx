@@ -8,7 +8,6 @@ import {
   OXTXN_STREAK_CONTRACT,
   OXTXN_STREAK_ABI
 } from "@/lib/contract";
-
 import { ethers } from "ethers";
 
 import { sdk } from "@farcaster/miniapp-sdk";
