@@ -88,9 +88,7 @@ body {
     transform: translateY(0);
   }
 }
-
 @keyframes breathe {
-
   0%,
   100% {
     transform: scale(1);
