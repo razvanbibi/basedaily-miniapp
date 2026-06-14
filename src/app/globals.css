@@ -48,7 +48,6 @@ body {
     transform: scale(0.92);
     filter: blur(4px);
   }
-
   60% {
     opacity: 1;
     transform: scale(1.02);
