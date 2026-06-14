@@ -357,7 +357,6 @@ body {
 .you-row-highlight {
   position: relative;
 }
-
 .you-row-highlight::before {
   content: "";
   position: absolute;
