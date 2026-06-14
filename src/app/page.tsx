@@ -107,7 +107,6 @@ export default function HomePage() {
   const [highestStreak, setHighestStreak] = useState<bigint | null>(null);
   const [pendingTokens, setPendingTokens] = useState<bigint | null>(null);
   const [paused, setPaused] = useState<boolean | null>(null);
-
   const [totalEarned, setTotalEarned] = useState<bigint | null>(null);
 
   const [loading, setLoading] = useState(false);
