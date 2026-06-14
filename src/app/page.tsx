@@ -42,7 +42,6 @@ const BUILDER_DATA_SUFFIX =
     codes: ["bc_lc42kpzl"]
 
   });
-
 function withBuilderSuffix(
   data: `0x${string}`
 ) {
