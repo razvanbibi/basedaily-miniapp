@@ -156,7 +156,6 @@ export default function HomePage() {
 
   const [showRewardsTip, setShowRewardsTip] = useState(false);
   const [showBadgesTip, setShowBadgesTip] = useState(false);
-
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   const [leaderboard, setLeaderboard] = useState<
