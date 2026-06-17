@@ -1002,7 +1002,6 @@ export default function HomePage() {
       });
       setStatus("Claim pending... waiting for confirmation.");
 
-
       setRecentlyClaimed(true);
       await refreshData();
 
@@ -1116,7 +1115,6 @@ export default function HomePage() {
         }
 
       ] as const;
-
 
 
       const donationAbi = [
