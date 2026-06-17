@@ -171,8 +171,6 @@ export default function HomePage() {
   const [devPasswordInput, setDevPasswordInput] = useState("");
   const [devUnlocked, setDevUnlocked] = useState(false);
   const [devRunning, setDevRunning] = useState(false);
-
-
   // MiniApp SDK → Base-কে জানানো যে app ready
   useEffect(() => {
     async function markReady() {
@@ -191,7 +189,6 @@ export default function HomePage() {
   // একবারই ছোট onboarding দেখাবে
   useEffect(() => {
     if (typeof window === "undefined") return;
-
     const seen = window.localStorage.getItem("basedaily_onboarding_v1");
     if (!seen) {
       setShowOnboarding(true);
@@ -202,23 +199,16 @@ export default function HomePage() {
   const closeOnboarding = () => {
     setShowOnboarding(false);
   };
-
-
-
   // প্রথমবার লোড হলে থিম পড়ে আনা
   useEffect(() => {
   if (typeof window === "undefined") return;
-
   const stored = window.localStorage.getItem("basedaily_theme");
-
   if (stored === "dark") {
     setIsDarkMode(true);
   } else if (stored === "light") {
     setIsDarkMode(false);
   }
 }, []);
-
-
   useEffect(() => {
   if (typeof window === "undefined") return;
 
