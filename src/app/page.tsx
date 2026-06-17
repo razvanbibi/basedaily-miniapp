@@ -768,12 +768,7 @@ export default function HomePage() {
       const provider = sdk.getProvider();
 
       const fromAddress = await getBaseAccountAddress();
-
-
-
-
       await provider.request({
-
         method: "wallet_sendCalls",
 
         params: [{
@@ -843,7 +838,7 @@ export default function HomePage() {
         body: JSON.stringify({ address: account }),
       });
 
-      // আজকের দিন localStorage এ সেভ + UI state সেট
+      // আজকের দিন localStorage এ সেভ + UI state 
       const key = getStorageKey(account);
       try {
         window.localStorage.setItem(key, getTodayId());
