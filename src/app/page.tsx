@@ -116,12 +116,10 @@ export default function HomePage() {
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
   const [recentlyClaimed, setRecentlyClaimed] = useState(false);
   const [toast, setToast] = useState<Toast>(null);
-
   const [totalSilver, setTotalSilver] = useState<bigint | null>(null);
   const [totalGold, setTotalGold] = useState<bigint | null>(null);
   const [totalDiamond, setTotalDiamond] = useState<bigint | null>(null);
   const [totalLegendary, setTotalLegendary] = useState<bigint | null>(null);
-
   const [pendingSilver, setPendingSilver] = useState<bigint | null>(null);
   const [pendingGold, setPendingGold] = useState<bigint | null>(null);
   const [pendingDiamond, setPendingDiamond] = useState<bigint | null>(null);
@@ -130,7 +128,6 @@ export default function HomePage() {
 
   const [showDonate, setShowDonate] = useState(false);
   const [donationAmount, setDonationAmount] = useState<string>("1");
-
   // Farcaster / Neynar profile state
   const [fcUsername, setFcUsername] = useState<string | null>(null);
   const [fcDisplayName, setFcDisplayName] = useState<string | null>(null);
