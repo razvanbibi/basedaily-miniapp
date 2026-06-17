@@ -414,12 +414,8 @@ export default function HomePage() {
 
       await ensureBaseNetwork();
 
-
-
       const sdk = getBaseAccountSDK();
-
       const provider = sdk.getProvider();
-
       const fromAddress = await getBaseAccountAddress();
 
 
