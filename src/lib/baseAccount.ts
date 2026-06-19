@@ -2,10 +2,8 @@
 
 import { createBaseAccountSDK, getCryptoKeyAccount, base } from "@base-org/account";
 import { numberToHex } from "viem";
-
 export const PAYMASTER_RPC =
   "https://api.developer.coinbase.com/rpc/v1/base/KbNJVsE8r843PcyhzAPpKAcVzieP7RYH";
-
 
 
 export function getBaseAccountSDK() {
