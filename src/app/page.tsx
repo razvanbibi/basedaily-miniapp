@@ -250,11 +250,9 @@ export default function HomePage() {
     return `${hours}h ${minutes}m`;
   }
 
-
   function getStorageKey(acc: string) {
     return `basedaily:checkin:${acc.toLowerCase()}`;
-  }
-
+  } 
   useEffect(() => {
     const eth = getEthereum();
     if (!eth) {
