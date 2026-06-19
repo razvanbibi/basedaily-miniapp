@@ -3,7 +3,6 @@ type Props = {
   isDarkMode: boolean;
   account: string | null;
 };
-
 export default function TodayMessageLoop({ isDarkMode, account }: Props) {
   const slides = [
     {
@@ -20,7 +19,7 @@ export default function TodayMessageLoop({ isDarkMode, account }: Props) {
           </span>{" "}
           👋
         </>
-      ),
+      ), 
       second: "Check in every day to grow your streak and earn 0xtxn.",
       hero: true,
     },
